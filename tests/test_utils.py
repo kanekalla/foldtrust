@@ -1,6 +1,5 @@
 """Tests for utility functions."""
 
-from pathlib import Path
 from foldtrust.utils import compute_gc_content, format_structure_ascii
 
 
@@ -17,9 +16,9 @@ def test_format_structure_ascii():
     """Test ASCII structure formatting."""
     seq = "AAAACCCCGGGGTTTT"
     struct = "((((....))))(())"
-    
+
     result = format_structure_ascii(seq, struct, width=10)
-    
+
     assert "AAAACCCCGG" in result
     assert "GGTTTT" in result
     assert "((((....)" in result
