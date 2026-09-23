@@ -2,7 +2,9 @@
 
 **Ensemble-first RNA structure reliability reports for disease-relevant windows.**
 
-FoldTrust is a personal portfolio project that demonstrates RNA structure analysis expertise by turning ViennaRNA's minimum free energy (MFE) structure and base-pair probabilities into a **structure report card**. It identifies which stems you can trust, which look crisp in the MFE but are floppy in the thermodynamic ensemble, and recommends next steps.
+FoldTrust turns ViennaRNA's minimum free energy (MFE) structure and base-pair probabilities into a **structure report card**. It identifies which stems you can trust, which look crisp in the MFE but are floppy in the thermodynamic ensemble, and recommends next steps.
+
+Scientific notes (question, theory, results, interpretation): [NOTES.md](NOTES.md)
 
 [![CI](https://github.com/kanekalla/foldtrust/actions/workflows/ci.yml/badge.svg)](https://github.com/kanekalla/foldtrust/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
@@ -228,7 +230,6 @@ foldtrust/
 ## Author
 
 **Kishore Anekalla**  
-Personal portfolio project  
 GitHub: [@kanekalla](https://github.com/kanekalla)
 
 ## License
