@@ -118,7 +118,7 @@ The MVP ships five published windows (not invented sequence) so a reader can rep
 | `mapt-e10` | MAPT exon 10 splice regulatory region | Tauopathy / aging | [DOI:10.1093/hmg/10.10.1029](https://doi.org/10.1093/hmg/10.10.1029) |
 | `hcv-ires-dii` | HCV IRES Domain II | Hepatitis C / structured viral RNA | [DOI:10.1006/jmbi.1999.2918](https://doi.org/10.1006/jmbi.1999.2918) |
 
-Numbers below are from the committed demo outputs on branch `cursor/implement-foldtrust-mvp-1298` (`examples/out/*/report.md`). Re-running `foldtrust demo` after ViennaRNA upgrades can shift energies slightly; treat these as the recorded MVP snapshot.
+Numbers below are from the committed demo outputs on `main` (`examples/out/*/report.md`). Re-running `foldtrust demo` after ViennaRNA upgrades can shift energies slightly; treat these as the recorded MVP snapshot.
 
 ---
 
@@ -207,7 +207,6 @@ FoldTrust's application is to make ensemble thinking **operational**: same disea
 brew install viennarna   # or apt install vienna-rna
 git clone https://github.com/kanekalla/foldtrust.git
 cd foldtrust
-git checkout cursor/implement-foldtrust-mvp-1298
 pip install -e .
 foldtrust demo
 open examples/out/sars2-fse/report.html
