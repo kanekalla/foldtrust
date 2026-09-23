@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoldTrust Report - HCV IRES Domain II (hepatitis C virus internal ribosome entry site)</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+            color: #333;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #2c3e50;
+            margin-top: 30px;
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 5px;
+        }
+        h3 {
+            color: #34495e;
+            margin-top: 20px;
+        }
+        .metadata {
+            background: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .metadata-item {
+            margin: 8px 0;
+        }
+        .metadata-label {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        .verdict {
+            background: #e8f4f8;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 20px 0;
+            font-size: 1.1em;
+        }
+        .verdict.trust {
+            background: #d4edda;
+            border-left-color: #28a745;
+        }
+        .verdict.redesign {
+            background: #f8d7da;
+            border-left-color: #dc3545;
+        }
+        .verdict.probing {
+            background: #fff3cd;
+            border-left-color: #ffc107;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background: #34495e;
+            color: white;
+            font-weight: bold;
+        }
+        tr:hover {
+            background: #f5f5f5;
+        }
+        .flag-firm {
+            background: #28a745;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 0.85em;
+            font-weight: bold;
+        }
+        .flag-soft {
+            background: #ffc107;
+            color: #333;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 0.85em;
+            font-weight: bold;
+        }
+        .flag-floppy {
+            background: #dc3545;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 0.85em;
+            font-weight: bold;
+        }
+        .structure {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+            overflow-x: auto;
+            white-space: pre;
+            line-height: 1.4;
+        }
+        .heatmap {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .heatmap img {
+            max-width: 100%;
+            border-radius: 5px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .methods {
+            background: #fff9e6;
+            border-left: 4px solid #ff9800;
+            padding: 15px;
+            margin: 20px 0;
+            font-style: italic;
+        }
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid #ecf0f1;
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        .stem-counts {
+            display: flex;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .stem-count {
+            flex: 1;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .stem-count.firm {
+            background: #d4edda;
+        }
+        .stem-count.soft {
+            background: #fff3cd;
+        }
+        .stem-count.floppy {
+            background: #f8d7da;
+        }
+        .stem-count-value {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .stem-count-label {
+            font-size: 0.9em;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>FoldTrust Structure Reliability Report</h1>
+        
+        <div class="metadata">
+            <div class="metadata-item"><span class="metadata-label">Sequence:</span> HCV IRES Domain II (hepatitis C virus internal ribosome entry site)</div>
+            <div class="metadata-item"><span class="metadata-label">Length:</span> 268 nt</div>
+            <div class="metadata-item"><span class="metadata-label">GC Content:</span> 57.5%</div>
+            <div class="metadata-item"><span class="metadata-label">MFE:</span> -91.20 kcal/mol</div>
+            <div class="metadata-item"><span class="metadata-label">Disease:</span> Hepatitis C</div>
+            <div class="metadata-item"><span class="metadata-label">Gene:</span> HCV (Hepatitis C Virus) 5' UTR IRES</div>
+        </div>
+        
+        <div class="verdict redesign">
+            <strong>Verdict:</strong> REDESIGN - Contains floppy stems with low ensemble support
+        </div>
+        
+        <div class="metadata"><strong>Teaching Point:</strong> Structured viral RNA. Ensemble softness near functional loops can indicate flexibility
+required for ribosome binding, informing structure-based antiviral design.
+</div>
+        
+        <h2>Stem Reliability Summary</h2>
+        
+        <div class="stem-counts">
+            <div class="stem-count firm">
+                <div class="stem-count-value">12</div>
+                <div class="stem-count-label">Firm Stems</div>
+            </div>
+            <div class="stem-count soft">
+                <div class="stem-count-value">4</div>
+                <div class="stem-count-label">Soft Stems</div>
+            </div>
+            <div class="stem-count floppy">
+                <div class="stem-count-value">2</div>
+                <div class="stem-count-label">Floppy Stems</div>
+            </div>
+        </div>
+        
+        <h2>Stem Analysis</h2>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Stem ID</th>
+                    <th>Positions</th>
+                    <th>Length (bp)</th>
+                    <th>Mean P(pair)</th>
+                    <th>Flag</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+        <tr class="firm">
+            <td>1</td>
+            <td>5-267 ... 9-263</td>
+            <td>5</td>
+            <td>0.982</td>
+            <td><span class="flag-firm">FIRM</span></td>
+        </tr>
+        
+        <tr class="firm">
+            <td>2</td>
+            <td>10-94 ... 12-92</td>
+            <td>3</td>
+            <td>0.881</td>
+            <td><span class="flag-firm">FIRM</span></td>
+        </tr>
+        
+        <tr class="firm">
+            <td>3</td>
+            <td>16-89 ... 19-86</td>
+            <td>4</td>
+            <td>0.980</td>
+            <td><span class="flag-firm">FIRM</span></td>
+        </tr>
+        
+        <tr class="firm">
+            <td>4</td>
+            <td>21-84 ... 22-83</td>
+            <td>2</td>
+            <td>0.981</td>
+            <td><span class="flag-firm">FIRM</span></td>
+        </tr>
+        
+        <tr class="firm">
+            <td>5</td>
+            <td>24-81 ... 28-77</td>
+            <td>5</td>
+            <td>0.936</td>
+            <td><span class="flag-firm">FIRM</span></td>
+        </tr>
+        
+        <tr class="firm">
+            <td>6</td>
+            <td>30-75 ... 34-71</td>
+            <td>5</td>
+            <td>0.998</td>
+            <td><span class="flag-firm">FIRM</span></td>
+        </tr>
+        
+        <tr class="firm">
+            <td>7</td>
+            <td>37-66 ... 38-65</td>
+            <td>2</td>
+            <td>0.925</td>
+            <td><span class="flag-firm">FIRM</span></td>
+        </tr>
+        
+        <tr class="firm">
+            <td>8</td>
+            <td>40-63 ... 43-60</td>
+            <td>4</td>
+            <td>0.992</td>
+            <td><span class="flag-firm">FIRM</span></td>
+        </tr>
+        
+        <tr class="soft">
+            <td>9</td>
+            <td>44-55 ... 46-53</td>
+            <td>3</td>
+            <td>0.837</td>
+            <td><span class="flag-soft">SOFT</span></td>
+        </tr>
+        
+        <tr class="firm">
+            <td>10</td>
+            <td>95-119 ... 97-117</td>
+            <td>3</td>
+            <td>0.871</td>
+            <td><span class="flag-firm">FIRM</span></td>
+        </tr>
+        
+        <tr class="firm">
+            <td>11</td>
+            <td>99-115 ... 104-110</td>
+            <td>6</td>
+            <td>0.987</td>
+            <td><span class="flag-firm">FIRM</span></td>
+        </tr>
+        
+        <tr class="soft">
+            <td>12</td>
+            <td>120-187 ... 123-184</td>
+            <td>4</td>
+            <td>0.622</td>
+            <td><span class="flag-soft">SOFT</span></td>
+        </tr>
+        
+        <tr class="soft">
+            <td>13</td>
+            <td>124-182 ... 127-179</td>
+            <td>4</td>
+            <td>0.541</td>
+            <td><span class="flag-soft">SOFT</span></td>
+        </tr>
+        
+        <tr class="soft">
+            <td>14</td>
+            <td>130-178 ... 135-173</td>
+            <td>6</td>
+            <td>0.616</td>
+            <td><span class="flag-soft">SOFT</span></td>
+        </tr>
+        
+        <tr class="floppy">
+            <td>15</td>
+            <td>138-168 ... 143-163</td>
+            <td>6</td>
+            <td>0.480</td>
+            <td><span class="flag-floppy">FLOPPY</span></td>
+        </tr>
+        
+        <tr class="floppy">
+            <td>16</td>
+            <td>144-155 ... 147-152</td>
+            <td>4</td>
+            <td>0.309</td>
+            <td><span class="flag-floppy">FLOPPY</span></td>
+        </tr>
+        
+        <tr class="firm">
+            <td>17</td>
+            <td>188-202 ... 191-199</td>
+            <td>4</td>
+            <td>0.969</td>
+            <td><span class="flag-firm">FIRM</span></td>
+        </tr>
+        
+        <tr class="firm">
+            <td>18</td>
+            <td>243-258 ... 246-255</td>
+            <td>4</td>
+            <td>0.918</td>
+            <td><span class="flag-firm">FIRM</span></td>
+        </tr>
+        
+            </tbody>
+        </table>
+        
+        <div class="methods">
+            <strong>Legend:</strong>
+            <ul style="margin: 10px 0;">
+                <li><strong>FIRM</strong> (mean P ≥ 0.85): High confidence — stem is well-supported by ensemble</li>
+                <li><strong>SOFT</strong> (0.5 ≤ mean P < 0.85): Moderate confidence — alternative structures possible</li>
+                <li><strong>FLOPPY</strong> (mean P < 0.5): Low confidence — MFE stem not reliable in ensemble</li>
+            </ul>
+        </div>
+        
+        <h2>Base-Pair Probability Matrix</h2>
+        
+        <div class="heatmap">
+            <img src="pair_probabilities.png" alt="Base-pair probability heatmap">
+            <p><em>Upper triangle shows probability of base-pairing between positions i and j</em></p>
+        </div>
+        
+        <h2>MFE Structure</h2>
+        
+        <div class="structure">     1 CTGCGGAACCGGTGAGTACACCGGAATTGCCAGGACGACCGGGTCCTTTCTTGGATAAACCCGCTCAATG
+       ....((((((((.(.((((.((.(((((.(((((..((.(((((((......)))....)))).))....
+
+    71 CCTGGAGATTTGGGCGTGCCCCCGCAAGACTGCTAGCCGAGTAGTGTTGGGTCGCGAAAGGCCTTGTGGT
+       ))))).))))).)).)))).))))(((.((((((.....)))))).)))((((((((..((((((.((((
+
+   141 ACTGCCTGATAGGGTGCTTGCGAGTGCCCCGGGAGGTCTCGTAGACCGTGCACCATGAGCACGAATCCTA
+       (((((((....)))).......))))))..).)))))))))).))))((((.......))))........
+
+   211 AACCTCAAAGAAAAACCAAACGTAACACCAACCGTCGCCCACAGGACGTCAAGTTCCC
+       ................................((((........))))....))))).
+</div>
+        
+        <h2>Methods</h2>
+        
+        <div class="methods">
+            <p><strong>Key principle:</strong> Ask for base-pair probabilities (or the full ensemble), 
+            not only the minimum free energy structure.</p>
+            
+            <p>FoldTrust uses ViennaRNA's partition function to compute the Boltzmann ensemble 
+            of all possible secondary structures and their base-pairing probabilities. The MFE 
+            structure is parsed into stems, and each stem's reliability is assessed by averaging 
+            the pair probabilities of its constituent base pairs.</p>
+            
+            <p><strong>Limitations:</strong> Thermodynamic models operate under simplified assumptions 
+            (37°C in 1M NaCl). In-cell conditions, co-transcriptional folding, RNA-binding proteins, 
+            and post-transcriptional modifications can alter structure. Experimental probing (SHAPE, DMS) 
+            and functional assays remain essential for validation.</p>
+        </div>
+        
+        <h3>References</h3><ul><li><a href="https://doi.org/10.1006/jmbi.1999.2918" target="_blank">Structure of the hepatitis C virus IRES</a></li><li><a href="https://doi.org/10.1016/S0168-1702(98)00058-7" target="_blank">The hepatitis C virus internal ribosome entry site</a></li></ul>
+        
+        <div class="footer">
+            <p>Generated by <strong>FoldTrust v0.1.0</strong></p>
+            <p>Personal portfolio project by Kishore Anekalla</p>
+            <p>Energy model: ViennaRNA default parameters (Turner 2004)</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -39,8 +39,6 @@ rna.ps
 # Output directories
 out/
 output/
-examples/out/*
-!examples/out/.gitkeep
 
 # IDEs
 .vscode/
