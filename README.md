@@ -190,7 +190,6 @@ black src/ tests/
 
 - **Python:** 3.11+
 - **ViennaRNA:** 2.x (command-line `RNAfold` with partition function support)
-- **Memory:** Runs comfortably on a 16GB Mac
 
 No GPU or deep learning training required.
 
