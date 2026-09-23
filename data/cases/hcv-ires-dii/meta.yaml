@@ -1,0 +1,19 @@
+disease: Hepatitis C
+gene: HCV (Hepatitis C Virus) 5' UTR IRES
+region: Internal Ribosome Entry Site Domain II
+why_structure_matters: |
+  The HCV IRES is a highly structured RNA element essential for cap-independent translation
+  initiation. Domain II contains conserved stem-loops that bind ribosomal subunits and
+  initiation factors. Small-molecule and oligonucleotide-based inhibitors targeting IRES
+  structure are antiviral candidates.
+teaching_point: |
+  Structured viral RNA. Ensemble softness near functional loops can indicate flexibility
+  required for ribosome binding, informing structure-based antiviral design.
+coordinates: "HCV genotype 1a H77 strain (AF009606.1) 5' UTR domain II region, positions ~40-310"
+references:
+  - title: "Structure of the hepatitis C virus IRES"
+    doi: "10.1006/jmbi.1999.2918"
+    pmid: "10433278"
+  - title: "The hepatitis C virus internal ribosome entry site"
+    doi: "10.1016/S0168-1702(98)00058-7"
+    pmid: "9833891"

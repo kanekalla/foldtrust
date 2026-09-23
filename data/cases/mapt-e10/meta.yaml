@@ -1,0 +1,19 @@
+disease: Frontotemporal dementia, Progressive supranuclear palsy, Alzheimer's disease
+gene: MAPT (Microtubule-Associated Protein Tau)
+region: Exon 10 splice regulatory region
+why_structure_matters: |
+  Alternative splicing of MAPT exon 10 produces tau isoforms with 3 or 4 microtubule-binding
+  repeats (3R/4R tau). An extended stem-loop structure at the exon 10 5' splice site regulates
+  splicing. Mutations that stabilize or destabilize this stem cause familial tauopathies.
+  ASO-based splice modulation is under investigation.
+teaching_point: |
+  Disease splicing regulation via structure. Ensemble softness near the splice site affects
+  structure-aware oligonucleotide design for splice switching therapies.
+coordinates: "NM_001123066.4 exon 9-10 boundary region (positions ~980-1260)"
+references:
+  - title: "An extended stem-loop structure in the MAPT gene controls exon 10 splicing"
+    doi: "10.1093/hmg/10.10.1029"
+    pmid: "11331614"
+  - title: "Tau alternative splicing and frontotemporal dementia"
+    doi: "10.1016/j.nbd.2005.07.017"
+    pmid: "16337799"

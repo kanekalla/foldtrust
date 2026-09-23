@@ -1,0 +1,18 @@
+disease: Spinal Muscular Atrophy (SMA)
+gene: SMN2 (Survival Motor Neuron 2)
+region: Intron 7 intronic splicing silencer N1 (ISS-N1)
+why_structure_matters: |
+  Nusinersen (Spinraza) is an FDA-approved antisense oligonucleotide (ASO) that targets
+  ISS-N1 to restore SMN2 exon 7 inclusion. The local RNA structure affects ASO accessibility
+  and binding kinetics. Understanding ensemble pairing probabilities informs ASO design.
+teaching_point: |
+  ASO site selection requires assessing local pairing probability, not just MFE cartoons.
+  Stems that look firm in the MFE but are floppy in the ensemble may be better ASO targets.
+coordinates: "NM_017411.4 intron 7 ISS-N1 neighborhood (approx positions 840-1040)"
+references:
+  - title: "Nusinersen versus Sham Control in Infantile-Onset Spinal Muscular Atrophy"
+    doi: "10.1056/NEJMoa1702752"
+    pmid: "29091570"
+  - title: "An intronic splicing silencer causes skipping of the IVS7 donor site in SMN2"
+    doi: "10.1093/hmg/11.15.1833"
+    pmid: "12095918"
