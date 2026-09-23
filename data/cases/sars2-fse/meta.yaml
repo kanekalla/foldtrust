@@ -1,0 +1,18 @@
+disease: COVID-19
+gene: SARS-CoV-2 ORF1ab (nsp12 frameshift site)
+region: Frameshift stimulatory element (FSE) with slippery site
+why_structure_matters: |
+  Programmed -1 ribosomal frameshift is essential for SARS-CoV-2 viral replication.
+  The 3' pseudoknot structure downstream of the slippery sequence UUUAAAC modulates
+  frameshift efficiency. Antiviral strategies targeting this structure have been proposed.
+teaching_point: |
+  Competing structures and pseudoknot formation mean the MFE alone is insufficient.
+  This region demonstrates ensemble complexity relevant to antiviral RNA targeting.
+coordinates: "NC_045512.2:13468-13638 (shortened functional window)"
+references:
+  - title: "Programmed -1 Ribosomal Frameshift in SARS-CoV-2"
+    doi: "10.1126/science.abc3546"
+    pmid: "32754468"
+  - title: "Structure of the SARS-CoV-2 frameshifting pseudoknot"
+    doi: "10.1093/nar/gkaa1369"
+    pmid: "33517476"

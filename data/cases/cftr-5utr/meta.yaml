@@ -1,0 +1,18 @@
+disease: Cystic Fibrosis
+gene: CFTR (Cystic Fibrosis Transmembrane Conductance Regulator)
+region: 5' UTR
+why_structure_matters: |
+  The CFTR 5' UTR contains regulatory elements that influence translation efficiency.
+  Secondary structure in this region can affect ribosome scanning and AUG start site selection.
+  Understanding UTR structure is relevant for mRNA therapeutics and gene therapy approaches.
+teaching_point: |
+  Lung disease relevance. UTR structure predictions can bias translation/splicing hypotheses
+  and inform mRNA optimization strategies for therapeutic delivery.
+coordinates: "NM_000492.4 5' UTR region (positions 133-400)"
+references:
+  - title: "The Cystic Fibrosis Transmembrane Conductance Regulator"
+    doi: "10.1152/physrev.00025.2017"
+    pmid: "29537337"
+  - title: "Molecular basis of cystic fibrosis"
+    doi: "10.1056/NEJM199209033271007"
+    pmid: "1380403"
