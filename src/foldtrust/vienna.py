@@ -111,11 +111,12 @@ def compute_pair_probabilities(sequence: str) -> np.ndarray:
                         break
                     
                     parts = line.split()
-                    if len(parts) >= 3:
+                    if len(parts) >= 4 and parts[3] == "ubox":
                         try:
                             i = int(parts[0]) - 1
                             j = int(parts[1]) - 1
-                            prob = float(parts[2]) ** 2
+                            sqrt_prob = float(parts[2])
+                            prob = sqrt_prob * sqrt_prob
                             
                             if 0 <= i < n and 0 <= j < n:
                                 prob_matrix[i, j] = prob
