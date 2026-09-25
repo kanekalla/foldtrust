@@ -15,7 +15,7 @@ def main():
     for case_dir in case_dirs:
         print(f"  - {case_dir.name}")
     
-    run_robustness_analysis(case_dirs, output_dir)
+    run_robustness_analysis(output_dir, case_dirs)
     
     print("\n✓ Layer 5 complete!")
     print(f"Results in: {output_dir}")

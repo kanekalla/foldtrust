@@ -9,7 +9,7 @@ from foldtrust.benchmark.scoring import run_scoring_tests
 from foldtrust.benchmark.reference import run_reference_benchmark
 from foldtrust.benchmark.calibration import run_calibration_analysis
 from foldtrust.benchmark.probing_layer4 import run_probing_analysis
-from foldtrust.benchmark.robustness import run_robustness_analysis
+from foldtrust.benchmark.layer5_robustness import run_robustness_analysis
 from foldtrust.benchmark.synthesis import run_disease_window_synthesis
 from foldtrust.utils import find_case_directories
 

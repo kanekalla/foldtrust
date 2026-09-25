@@ -712,15 +712,15 @@ def analyze_case_robustness(
 
 
 def run_robustness_analysis(
-    case_dirs: List[Path],
     output_dir: Path,
+    case_dirs: List[Path],
 ) -> Dict:
     """
     Run complete robustness analysis for all cases.
     
     Args:
-        case_dirs: List of case directories
         output_dir: Output directory for results
+        case_dirs: List of case directories
         
     Returns:
         Summary dictionary
