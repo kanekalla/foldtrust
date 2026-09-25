@@ -392,8 +392,8 @@ def run_layer3_calibration(
             cov_values = tier_subset['coverage'].dropna().values
             
             if len(ppv_values) > 0:
-                ppv_mean, ppv_lower, ppv_upper = bootstrap_ci(ppv_values)
-                cov_mean, cov_lower, cov_upper = bootstrap_ci(cov_values)
+                ppv_mean, ppv_lower, ppv_upper = bootstrap_ci(ppv_values, seed=0)
+                cov_mean, cov_lower, cov_upper = bootstrap_ci(cov_values, seed=0)
                 
                 tier_summaries.append({
                     'tier': tier,
@@ -423,6 +423,8 @@ def run_layer3_calibration(
         'n_structures': int(len(all_structures)),
         'n_candidate_pairs': int(len(y_prob)),
         'n_positive_pairs': int(np.sum(y_true)),
+        'bootstrap_seed': 0,
+        'bootstrap_iterations': 1000,
         'ece': float(ece),
         'auroc': float(auroc),
         'auprc': float(auprc),

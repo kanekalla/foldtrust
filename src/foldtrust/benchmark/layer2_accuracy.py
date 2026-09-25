@@ -222,9 +222,15 @@ def predict_structure_vienna(
     return parse_dotbracket(structure)
 
 
-def bootstrap_ci(values: List[float], n_bootstrap: int = 1000, ci: float = 0.95) -> Tuple[float, float, float]:
+def bootstrap_ci(values: List[float], n_bootstrap: int = 1000, ci: float = 0.95, seed: int = 0) -> Tuple[float, float, float]:
     """
     Compute bootstrap confidence interval.
+    
+    Args:
+        values: List of values to bootstrap
+        n_bootstrap: Number of bootstrap iterations
+        ci: Confidence level (default 0.95)
+        seed: Random seed for reproducibility (default 0)
     
     Returns:
         (mean, lower_ci, upper_ci)
@@ -235,10 +241,11 @@ def bootstrap_ci(values: List[float], n_bootstrap: int = 1000, ci: float = 0.95)
     
     mean = np.mean(values)
     
-    # Bootstrap resampling
+    # Bootstrap resampling with seeded RNG
+    rng = np.random.default_rng(seed)
     bootstrap_means = []
     for _ in range(n_bootstrap):
-        sample = np.random.choice(values, size=len(values), replace=True)
+        sample = rng.choice(values, size=len(values), replace=True)
         bootstrap_means.append(np.mean(sample))
     
     alpha = 1 - ci
@@ -341,7 +348,7 @@ def compute_summary_stats(df: pd.DataFrame, group_cols: List[str], metric: str =
         values = group_df[metric].values
         
         if len(values) > 0:
-            mean, lower, upper = bootstrap_ci(values, n_bootstrap=1000, ci=0.95)
+            mean, lower, upper = bootstrap_ci(values, n_bootstrap=1000, ci=0.95, seed=0)
             
             summary = dict(zip(group_cols, group_vals))
             summary.update({
@@ -470,7 +477,7 @@ def run_layer2_benchmark(
     for method in ['mfe', 'mea', 'centroid']:
         method_df = results_df[results_df['method'] == method]
         for metric in ['sensitivity', 'ppv', 'f1', 'mcc']:
-            mean, lower, upper = bootstrap_ci(method_df[metric].values)
+            mean, lower, upper = bootstrap_ci(method_df[metric].values, seed=0)
             overall.append({
                 'method': method,
                 'metric': metric,
@@ -495,6 +502,8 @@ def run_layer2_benchmark(
             'bpRNA_TS0': len(bprna),
             'Rfam_seed': len(rfam)
         },
+        'bootstrap_seed': 0,
+        'bootstrap_iterations': 1000,
         'mfe_f1_mean': mfe_f1['mean'],
         'mfe_f1_ci': (mfe_f1['ci_lower'], mfe_f1['ci_upper']),
         'mea_f1_mean': mea_f1['mean'],
