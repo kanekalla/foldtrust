@@ -1,0 +1,16 @@
+name,length,source,mfe_sensitivity,mfe_ppv,mfe_f1,mfe_mcc
+tRNA-Phe_yeast,76,PDB_1EHZ,0.0,0.0,0.0,-0.007625272331154684
+5S_rRNA_fragment,68,Comparative,0.0,0.0,0.0,-0.008667883211678832
+hairpin_ribozyme,30,Comparative,0.0,0.0,0.0,-0.022529723639826114
+SRP_domain_IV,52,Comparative,0.0,0.0,0.0,-0.01230006717392528
+ribozyme_p5abc,35,Comparative,0.0,0.0,0.0,-0.020266847105461554
+hammerhead_ribozyme,31,Comparative,0.0,0.0,0.0,-0.011946314428672725
+hairpin_small,12,Manual,0.0,0.0,0.0,0.0
+pseudoknot_simple,20,Manual,0.0,0.0,0.0,-0.021505376344086023
+rnase_p_fragment,29,Comparative,0.0,0.0,0.0,-0.022670025188916875
+iron_response_element,25,NMR,0.0,0.0,0.0,-0.023145043271820476
+selenocysteine_insertion,27,Comparative,0.0,0.0,0.0,-0.012065427226646004
+sarcin_ricin_loop,22,NMR,0.0,0.0,0.0,-0.01974457771116521
+tetraloop_GNRA,12,NMR,1.0,1.0,1.0,1.0
+kissing_hairpin,18,Comparative,0.0,0.0,0.0,-0.03531751911012556
+internal_loop_2x2,12,Manual,0.0,0.0,0.0,-0.07142857142857142

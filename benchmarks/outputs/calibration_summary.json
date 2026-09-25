@@ -1,0 +1,19 @@
+{
+  "calibration": {
+    "n_sequences": 10,
+    "ece_mean": 0.03356791667102257,
+    "ece_std": 0.01361882247559183,
+    "auroc_mean": 0.5211817942788937,
+    "auroc_std": 0.10706521349527562,
+    "auprc_mean": 0.04898457619411156,
+    "auprc_std": 0.08164899675681873
+  },
+  "tier_accuracy": {
+    "firm_ppv_mean": 0.0,
+    "soft_ppv_mean": 0.0,
+    "floppy_ppv_mean": 0.0,
+    "firm_total_pairs": 45,
+    "soft_total_pairs": 34,
+    "floppy_total_pairs": 16
+  }
+}

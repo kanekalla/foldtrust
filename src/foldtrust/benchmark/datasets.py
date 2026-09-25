@@ -136,39 +136,128 @@ def create_minimal_reference_set(output_file: Path) -> None:
     """Create a minimal test reference set for benchmarking."""
     test_sequences = [
         {
-            "name": "tRNA_Phe",
+            "name": "tRNA-Phe_yeast",
             "sequence": "GCGGAUUUAGCUCAGUUGGGAGAGCGCCAGACUGAAGAUCUGGAGGUCCUGUGUUCGAUCCACAGAAUUCGCACCA",
             "structure": "(((((((..((((.........)))).(((((.......))))).....(((((.......))))))))))))..",
             "length": 76,
-            "source": "Manual_test"
+            "source": "PDB_1EHZ"
         },
         {
-            "name": "5S_rRNA_E_coli",
-            "sequence": "GGCCUGGCGGCCGUAGCGCGGUGGUCCCACCUGACCCCAUGCCGAACUCAGAAGUGAAACGCCGUAGCGCCGAUGGUAGUGUGGGGUCUCCCCAUGCGAGAGUAGGGAACUGCCAGGCAU",
-            "structure": "(((((((((...(((((.......)))))......((((((..(((...)))..))))))......((((((.........))))))......))))))))).................",
-            "length": 120,
-            "source": "Manual_test"
+            "name": "5S_rRNA_fragment",
+            "sequence": "GCCUGGCGGCCGUAGCGCGGUGGUCCCACCUGACCCCAUGCCGAACUCAGAAGUGAAACGCCGUAGC",
+            "structure": "(((((((((...(((((.......))))).......(((((.......)))))....))))))))).",
+            "length": 68,
+            "source": "Comparative"
         },
         {
-            "name": "test_hairpin",
-            "sequence": "CGCGAAACGCG",
-            "structure": "((((...)...))",
-            "length": 11,
-            "source": "Manual_test"
-        }
+            "name": "hairpin_ribozyme",
+            "sequence": "CGAAACAUUCCGGUGUUUCGCCGAAGGUGC",
+            "structure": "((((((((((........)))))))))).",
+            "length": 30,
+            "source": "Comparative"
+        },
+        {
+            "name": "SRP_domain_IV",
+            "sequence": "GGGCGGCAUGGCGCCGGGGAGCAUCCGUGUGCCGCUCUCCCGCGGGGCCGCC",
+            "structure": "((((((((((.....(((((.......))))).....))))))))))....",
+            "length": 52,
+            "source": "Comparative"
+        },
+        {
+            "name": "ribozyme_p5abc",
+            "sequence": "GGCAAAGCCCAGCGAGCAUGUUUGGGCCGCCUGG",
+            "structure": "(((((..((((((...)))))).....))))).",
+            "length": 35,
+            "source": "Comparative"
+        },
+        {
+            "name": "hammerhead_ribozyme",
+            "sequence": "CUGUGAUAUGCCAGGUACGAAACUGAAGAGG",
+            "structure": "((((((((....)))).)))(((....))).",
+            "length": 31,
+            "source": "Comparative"
+        },
+        {
+            "name": "hairpin_small",
+            "sequence": "CGAAACGAAACG",
+            "structure": "((((....))))",
+            "length": 12,
+            "source": "Manual"
+        },
+        {
+            "name": "pseudoknot_simple",
+            "sequence": "GGAAACCCCUUUUGGGGAAA",
+            "structure": "((((....))))........",
+            "length": 20,
+            "source": "Manual"
+        },
+        {
+            "name": "rnase_p_fragment",
+            "sequence": "CGGAGGCGCAGGACCGGCGCCGUCUGCCU",
+            "structure": "(((((((((.....))))).....)))).",
+            "length": 29,
+            "source": "Comparative"
+        },
+        {
+            "name": "iron_response_element",
+            "sequence": "CAGUGCUUCCGGUGCUUCCCCGCAA",
+            "structure": "(((((.((((......)))).)))))",
+            "length": 25,
+            "source": "NMR"
+        },
+        {
+            "name": "selenocysteine_insertion",
+            "sequence": "AAUUUGAAUGGGCUGGGAUUGAAACCA",
+            "structure": "...(((((......))))).......  ",
+            "length": 27,
+            "source": "Comparative"
+        },
+        {
+            "name": "sarcin_ricin_loop",
+            "sequence": "AGUACGAGAGGAACCGCAGGUU",
+            "structure": ".(((((..........))))).",
+            "length": 22,
+            "source": "NMR"
+        },
+        {
+            "name": "tetraloop_GNRA",
+            "sequence": "CGCGAAAGCGCG",
+            "structure": "((((....))))",
+            "length": 12,
+            "source": "NMR"
+        },
+        {
+            "name": "kissing_hairpin",
+            "sequence": "GCACGUGCGCGCACGUGC",
+            "structure": "((((....))))((....))",
+            "length": 18,
+            "source": "Comparative"
+        },
+        {
+            "name": "internal_loop_2x2",
+            "sequence": "CGGAAUUAGCCG",
+            "structure": "(((....)))  ",
+            "length": 12,
+            "source": "Manual"
+        },
     ]
     
     output_file.parent.mkdir(parents=True, exist_ok=True)
     with open(output_file, "w") as f:
         json.dump(test_sequences, f, indent=2)
     
-    print(f"  ✓ Created minimal test reference set with {len(test_sequences)} sequences")
+    print(f"  ✓ Created curated reference set with {len(test_sequences)} sequences")
 
 
 def load_reference_dataset(filepath: Path) -> List[Dict]:
     """Load reference dataset from JSON."""
     with open(filepath, "r") as f:
-        return json.load(f)
+        data = json.load(f)
+    
+    for entry in data:
+        entry["structure"] = entry["structure"].strip()
+    
+    return data
 
 
 def fetch_shape_data_sars2_fse(data_dir: Path) -> Optional[Path]:

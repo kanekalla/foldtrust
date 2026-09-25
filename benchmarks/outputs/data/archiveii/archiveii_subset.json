@@ -1,0 +1,107 @@
+[
+  {
+    "name": "tRNA-Phe_yeast",
+    "sequence": "GCGGAUUUAGCUCAGUUGGGAGAGCGCCAGACUGAAGAUCUGGAGGUCCUGUGUUCGAUCCACAGAAUUCGCACCA",
+    "structure": "(((((((..((((.........)))).(((((.......))))).....(((((.......))))))))))))..",
+    "length": 76,
+    "source": "PDB_1EHZ"
+  },
+  {
+    "name": "5S_rRNA_fragment",
+    "sequence": "GCCUGGCGGCCGUAGCGCGGUGGUCCCACCUGACCCCAUGCCGAACUCAGAAGUGAAACGCCGUAGC",
+    "structure": "(((((((((...(((((.......))))).......(((((.......)))))....))))))))).",
+    "length": 68,
+    "source": "Comparative"
+  },
+  {
+    "name": "hairpin_ribozyme",
+    "sequence": "CGAAACAUUCCGGUGUUUCGCCGAAGGUGC",
+    "structure": "((((((((((........)))))))))).",
+    "length": 30,
+    "source": "Comparative"
+  },
+  {
+    "name": "SRP_domain_IV",
+    "sequence": "GGGCGGCAUGGCGCCGGGGAGCAUCCGUGUGCCGCUCUCCCGCGGGGCCGCC",
+    "structure": "((((((((((.....(((((.......))))).....))))))))))....",
+    "length": 52,
+    "source": "Comparative"
+  },
+  {
+    "name": "ribozyme_p5abc",
+    "sequence": "GGCAAAGCCCAGCGAGCAUGUUUGGGCCGCCUGG",
+    "structure": "(((((..((((((...)))))).....))))).",
+    "length": 35,
+    "source": "Comparative"
+  },
+  {
+    "name": "hammerhead_ribozyme",
+    "sequence": "CUGUGAUAUGCCAGGUACGAAACUGAAGAGG",
+    "structure": "((((((((....)))).)))(((....))).",
+    "length": 31,
+    "source": "Comparative"
+  },
+  {
+    "name": "hairpin_small",
+    "sequence": "CGAAACGAAACG",
+    "structure": "((((....))))",
+    "length": 12,
+    "source": "Manual"
+  },
+  {
+    "name": "pseudoknot_simple",
+    "sequence": "GGAAACCCCUUUUGGGGAAA",
+    "structure": "((((....))))........",
+    "length": 20,
+    "source": "Manual"
+  },
+  {
+    "name": "rnase_p_fragment",
+    "sequence": "CGGAGGCGCAGGACCGGCGCCGUCUGCCU",
+    "structure": "(((((((((.....))))).....)))).",
+    "length": 29,
+    "source": "Comparative"
+  },
+  {
+    "name": "iron_response_element",
+    "sequence": "CAGUGCUUCCGGUGCUUCCCCGCAA",
+    "structure": "(((((.((((......)))).)))))",
+    "length": 25,
+    "source": "NMR"
+  },
+  {
+    "name": "selenocysteine_insertion",
+    "sequence": "AAUUUGAAUGGGCUGGGAUUGAAACCA",
+    "structure": "...(((((......))))).......  ",
+    "length": 27,
+    "source": "Comparative"
+  },
+  {
+    "name": "sarcin_ricin_loop",
+    "sequence": "AGUACGAGAGGAACCGCAGGUU",
+    "structure": ".(((((..........))))).",
+    "length": 22,
+    "source": "NMR"
+  },
+  {
+    "name": "tetraloop_GNRA",
+    "sequence": "CGCGAAAGCGCG",
+    "structure": "((((....))))",
+    "length": 12,
+    "source": "NMR"
+  },
+  {
+    "name": "kissing_hairpin",
+    "sequence": "GCACGUGCGCGCACGUGC",
+    "structure": "((((....))))((....))",
+    "length": 18,
+    "source": "Comparative"
+  },
+  {
+    "name": "internal_loop_2x2",
+    "sequence": "CGGAAUUAGCCG",
+    "structure": "(((....)))  ",
+    "length": 12,
+    "source": "Manual"
+  }
+]

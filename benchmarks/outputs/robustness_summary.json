@@ -1,0 +1,10 @@
+{
+  "n_cases": 5,
+  "baseline_distribution": {
+    "firm_mean": 5.2,
+    "soft_mean": 5.6,
+    "floppy_mean": 4.2,
+    "total_mean": 15.0
+  },
+  "note": "Temperature and parameter set sweep requires ViennaRNA Python library (future enhancement)"
+}

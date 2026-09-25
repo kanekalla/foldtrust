@@ -1,0 +1,29 @@
+{
+  "overall": {
+    "n_sequences": 15,
+    "mfe_sensitivity_mean": 0.06666666666666667,
+    "mfe_sensitivity_std": 0.25819888974716115,
+    "mfe_ppv_mean": 0.06666666666666667,
+    "mfe_ppv_std": 0.25819888974716115,
+    "mfe_f1_mean": 0.06666666666666667,
+    "mfe_f1_std": 0.25819888974716115,
+    "mfe_mcc_mean": 0.04738582345519662,
+    "mfe_mcc_std": 0.26404291693461773
+  },
+  "by_length": {
+    "0-50": {
+      "n_sequences": 12,
+      "mfe_sensitivity_mean": 0.08333333333333333,
+      "mfe_ppv_mean": 0.08333333333333333,
+      "mfe_f1_mean": 0.08333333333333333,
+      "mfe_mcc_mean": 0.06161504787872566
+    },
+    "50-100": {
+      "n_sequences": 3,
+      "mfe_sensitivity_mean": 0.0,
+      "mfe_ppv_mean": 0.0,
+      "mfe_f1_mean": 0.0,
+      "mfe_mcc_mean": -0.0095310742389196
+    }
+  }
+}

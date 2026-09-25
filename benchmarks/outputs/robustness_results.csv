@@ -1,0 +1,6 @@
+case_name,length,baseline_firm,baseline_soft,baseline_floppy,baseline_total,temp_note
+cftr-5utr,268,3,9,5,17,Temperature sweep requires ViennaRNA Python bindings (future work)
+hcv-ires-dii,268,12,4,2,18,Temperature sweep requires ViennaRNA Python bindings (future work)
+mapt-e10,268,7,10,2,19,Temperature sweep requires ViennaRNA Python bindings (future work)
+sars2-fse,181,1,0,7,8,Temperature sweep requires ViennaRNA Python bindings (future work)
+smn2-iss-n1,201,3,5,5,13,Temperature sweep requires ViennaRNA Python bindings (future work)
