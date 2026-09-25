@@ -1,0 +1,4 @@
+  File "/workspace/scripts/build_rfam_dataset.py", line 145
+    elif char in ')]}>'':
+                       ^
+SyntaxError: unterminated string literal (detected at line 145)

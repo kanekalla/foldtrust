@@ -19,7 +19,8 @@ def run_reference_benchmark(
     output_dir: Path,
     max_length: int = 500,
     max_sequences: Optional[int] = None,
-    allow_slip: bool = False,
+    allow_slip: bool = True,
+    dataset_path: Optional[Path] = None,
 ) -> Dict:
     """
     Benchmark MFE, MEA, and centroid structures against reference structures.
@@ -28,15 +29,20 @@ def run_reference_benchmark(
         output_dir: Directory for benchmark outputs
         max_length: Maximum sequence length to include
         max_sequences: Maximum number of sequences to process (None = all)
-        allow_slip: Allow one-nucleotide slippage in pair matching
+        allow_slip: Allow one-nucleotide slippage in pair matching (default True)
+        dataset_path: Path to curated dataset JSON (if None, uses default)
         
     Returns:
         Dictionary with benchmark results
     """
     print("\n=== Reference Structure Accuracy Benchmark ===\n")
     
-    data_dir = output_dir / "data"
-    dataset_file = fetch_archiveii(data_dir, max_length=max_length)
+    if dataset_path and dataset_path.exists():
+        dataset_file = dataset_path
+        print(f"Using curated dataset: {dataset_file}")
+    else:
+        data_dir = output_dir / "data"
+        dataset_file = fetch_archiveii(data_dir, max_length=max_length)
     
     entries = load_reference_dataset(dataset_file)
     
