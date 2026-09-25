@@ -2,105 +2,238 @@
 """
 Fetch benchmark data from original URLs and verify SHA256 checksums.
 
-This script downloads the benchmark data from the sources listed in MANIFEST.md
-and verifies integrity. The actual data is cached in data/_cache/ (gitignored).
+Downloads files listed in data/_cache/MANIFEST.md into data/_cache/,
+verifying each file against data/_cache/SHA256SUMS.
+
+Usage:
+    python scripts/fetch_benchmark_data.py [--verify-only]
+
+Options:
+    --verify-only  Only verify existing files, do not download
 """
 
+import argparse
 import hashlib
 import sys
-import tarfile
 from pathlib import Path
 from urllib.request import urlretrieve
-
-# SHA256 checksums from MANIFEST.md
-CHECKSUMS = {
-    "foldtrust_bench_data.tar.gz": "PLACEHOLDER_TO_BE_COMPUTED",
-    "bprna_TS0_canonicals.tar.gz": "PLACEHOLDER_TO_BE_COMPUTED",
-}
-
-# Original URLs from MANIFEST.md
-SOURCES = {
-    # Main benchmark bundle - to be uploaded to a permanent location
-    "foldtrust_bench_data.tar.gz": None,  # Not yet on a public URL
-    # bpRNA TS0 canonicals - extracted from MXfold2 Zenodo release
-    "bprna_TS0_canonicals.tar.gz": None,  # Extracted locally, not a direct download
-}
+from urllib.error import URLError
 
 
-def compute_sha256(filepath: Path) -> str:
-    """Compute SHA256 checksum of a file."""
-    sha256 = hashlib.sha256()
-    with open(filepath, "rb") as f:
-        for chunk in iter(lambda: f.read(65536), b""):
-            sha256.update(chunk)
-    return sha256.hexdigest()
+def sha256_file(path: Path) -> str:
+    """Compute SHA256 hash of a file."""
+    h = hashlib.sha256()
+    with open(path, 'rb') as f:
+        while chunk := f.read(8192):
+            h.update(chunk)
+    return h.hexdigest()
 
 
-def verify_archive(filepath: Path, expected_sha256: str) -> bool:
-    """Verify archive integrity."""
-    if not filepath.exists():
+def load_checksums(checksums_path: Path) -> dict:
+    """Load SHA256SUMS file."""
+    checksums = {}
+    with open(checksums_path) as f:
+        for line in f:
+            line = line.strip()
+            if not line or line.startswith('#'):
+                continue
+            parts = line.split(maxsplit=1)
+            if len(parts) == 2:
+                sha256, filepath = parts
+                checksums[filepath] = sha256
+    return checksums
+
+
+def parse_manifest(manifest_path: Path) -> list:
+    """
+    Parse MANIFEST.md to extract file paths and source URLs.
+    
+    Returns list of (relative_path, url, sha256) tuples.
+    """
+    files = []
+    
+    with open(manifest_path) as f:
+        in_table = False
+        for line in f:
+            if line.startswith('| file |'):
+                in_table = True
+                continue
+            if in_table:
+                if line.startswith('|---'):
+                    continue
+                if not line.startswith('| `'):
+                    in_table = False
+                    continue
+                
+                # Parse table row: | `path` | size | sha256 | url | citation | notes |
+                parts = [p.strip() for p in line.split('|')]
+                if len(parts) < 5:
+                    continue
+                
+                filepath = parts[1].strip('`')
+                sha256 = parts[3]
+                url = parts[4]
+                
+                # Extract URL from markdown link or plain text
+                if url.startswith('http'):
+                    # Plain URL
+                    url_clean = url.split()[0]
+                elif 'http' in url:
+                    # Extract from various formats
+                    import re
+                    match = re.search(r'https?://[^\s\)]+', url)
+                    if match:
+                        url_clean = match.group(0)
+                    else:
+                        print(f"Warning: Could not parse URL from: {url}")
+                        continue
+                else:
+                    # Derived file, no URL
+                    continue
+                
+                files.append((filepath, url_clean, sha256))
+    
+    return files
+
+
+def download_file(url: str, dest: Path, expected_sha256: str) -> bool:
+    """
+    Download a file and verify its checksum.
+    
+    Returns True if successful, False otherwise.
+    """
+    print(f"Downloading: {dest.name}")
+    print(f"  URL: {url}")
+    
+    try:
+        urlretrieve(url, dest)
+    except URLError as e:
+        print(f"  ERROR: Download failed: {e}")
         return False
-    actual = compute_sha256(filepath)
-    return actual == expected_sha256
+    
+    # Verify checksum
+    actual_sha256 = sha256_file(dest)
+    
+    if actual_sha256 == expected_sha256:
+        print(f"  ✓ SHA256 verified")
+        return True
+    else:
+        print(f"  ERROR: SHA256 mismatch")
+        print(f"    Expected: {expected_sha256}")
+        print(f"    Got:      {actual_sha256}")
+        dest.unlink()
+        return False
+
+
+def verify_file(path: Path, expected_sha256: str) -> bool:
+    """Verify an existing file's checksum."""
+    if not path.exists():
+        return False
+    
+    actual_sha256 = sha256_file(path)
+    return actual_sha256 == expected_sha256
 
 
 def main():
-    """Main entry point."""
-    cache_dir = Path("data/_cache")
-    uploads_dir = Path.home() / ".cursor/projects/workspace/uploads"
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--verify-only', action='store_true',
+                       help='Only verify existing files, do not download')
+    parser.add_argument('--cache-dir', type=Path, default=Path('data/_cache'),
+                       help='Cache directory (default: data/_cache)')
+    args = parser.parse_args()
     
-    print("FoldTrust Benchmark Data Fetcher")
-    print("=" * 60)
-    print()
+    cache_dir = args.cache_dir
+    manifest_path = cache_dir / 'MANIFEST.md'
+    checksums_path = cache_dir / 'SHA256SUMS'
     
-    # For now, since the data is in uploads/, copy it to cache
-    # In production, this would download from permanent URLs
-    
-    if not cache_dir.exists():
-        cache_dir.mkdir(parents=True)
-    
-    # Extract foldtrust_bench_data
-    bundle_path = uploads_dir / "foldtrust_bench_data.tar_b5b8.gz"
-    if bundle_path.exists():
-        print(f"Extracting {bundle_path.name}...")
-        with tarfile.open(bundle_path, "r:gz") as tar:
-            tar.extractall(cache_dir)
-        print(f"  ✓ Extracted to {cache_dir}")
-    else:
-        print(f"  ✗ {bundle_path} not found")
-        return 1
-    
-    # Extract bpRNA TS0
-    bprna_path = uploads_dir / "bprna_TS0_canonicals.tar_dd45.gz"
-    if bprna_path.exists():
-        print(f"Extracting {bprna_path.name}...")
-        with tarfile.open(bprna_path, "r:gz") as tar:
-            tar.extractall(cache_dir)
-        print(f"  ✓ Extracted to {cache_dir}")
-    else:
-        print(f"  ✗ {bprna_path} not found")
-        return 1
-    
-    # Verify MANIFEST and SHA256SUMS are present
-    manifest_path = cache_dir / "MANIFEST.md"
     if not manifest_path.exists():
-        print(f"  ✗ MANIFEST.md not found in {cache_dir}")
-        return 1
+        print(f"ERROR: {manifest_path} not found")
+        print("Extract the benchmark data bundle first.")
+        sys.exit(1)
     
-    sha256sums_path = cache_dir / "SHA256SUMS"
-    if not sha256sums_path.exists():
-        print(f"  ✗ SHA256SUMS not found in {cache_dir}")
-        return 1
+    if not checksums_path.exists():
+        print(f"ERROR: {checksums_path} not found")
+        sys.exit(1)
     
-    print()
-    print("Data extracted successfully.")
-    print(f"Cache directory: {cache_dir.absolute()}")
-    print()
-    print("To verify bundle integrity, run:")
-    print(f"  cd {cache_dir} && python3 scripts/verify_bundle.py")
+    # Load checksums
+    checksums = load_checksums(checksums_path)
+    print(f"Loaded {len(checksums)} checksums from {checksums_path}")
     
-    return 0
+    # Parse manifest
+    files = parse_manifest(manifest_path)
+    print(f"Found {len(files)} downloadable files in {manifest_path}\n")
+    
+    if args.verify_only:
+        print("=== Verification Mode ===\n")
+        
+        missing = []
+        invalid = []
+        valid = []
+        
+        for filepath, url, expected_sha256 in files:
+            full_path = cache_dir / filepath
+            
+            if not full_path.exists():
+                missing.append(filepath)
+                print(f"✗ Missing: {filepath}")
+            elif verify_file(full_path, expected_sha256):
+                valid.append(filepath)
+                print(f"✓ Valid: {filepath}")
+            else:
+                invalid.append(filepath)
+                print(f"✗ Invalid checksum: {filepath}")
+        
+        print(f"\n=== Summary ===")
+        print(f"Valid: {len(valid)}/{len(files)}")
+        print(f"Missing: {len(missing)}")
+        print(f"Invalid: {len(invalid)}")
+        
+        if missing or invalid:
+            sys.exit(1)
+        else:
+            print("\n✓ All files verified")
+            sys.exit(0)
+    
+    # Download mode
+    print("=== Download Mode ===\n")
+    
+    success = 0
+    skipped = 0
+    failed = 0
+    
+    for filepath, url, expected_sha256 in files:
+        full_path = cache_dir / filepath
+        
+        # Check if already exists and valid
+        if full_path.exists():
+            if verify_file(full_path, expected_sha256):
+                print(f"✓ Already exists: {filepath}")
+                skipped += 1
+                continue
+            else:
+                print(f"! Invalid checksum, re-downloading: {filepath}")
+        
+        # Create parent directory
+        full_path.parent.mkdir(parents=True, exist_ok=True)
+        
+        # Download
+        if download_file(url, full_path, expected_sha256):
+            success += 1
+        else:
+            failed += 1
+    
+    print(f"\n=== Summary ===")
+    print(f"Downloaded: {success}")
+    print(f"Skipped (already valid): {skipped}")
+    print(f"Failed: {failed}")
+    
+    if failed > 0:
+        print("\n✗ Some downloads failed")
+        sys.exit(1)
+    else:
+        print("\n✓ All files downloaded and verified")
+        sys.exit(0)
 
 
-if __name__ == "__main__":
-    sys.exit(main())
+if __name__ == '__main__':
+    main()
