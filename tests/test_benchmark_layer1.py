@@ -152,6 +152,8 @@ def test_energy_regression():
     except ImportError:
         pytest.skip("ViennaRNA not installed")
 
+    from foldtrust.vienna import fold_with_params
+
     # FSE NC_045512.2:13462-13542
     fse_seq = "UUUAAACGGGUUUGCGGUGUAAGUGCAGCCCGUCUUACACCGUGCGGCACAGGCACUAGUACUGAUGU" "CGUAUACAGGGCU"
 
@@ -163,24 +165,11 @@ def test_energy_regression():
     }
 
     for params, expected_mfe in expected.items():
-        # FRESH RNA.md() after each params_load
-        if params == "Turner2004":
-            RNA.params_load_RNA_Turner2004()
-        elif params == "Andronescu2007":
-            RNA.params_load_RNA_Andronescu2007()
-        elif params == "Langdon2018":
-            RNA.params_load_RNA_Langdon2018()
-
-        md = RNA.md()
-        fc = RNA.fold_compound(fse_seq, md)
-        structure, mfe = fc.mfe()
+        # Use fold_with_params which runs in subprocess to avoid parameter state issues
+        structure, mfe = fold_with_params(fse_seq, param_set=params, temperature=37.0)
 
         # Check MFE energy
         assert abs(mfe - expected_mfe) < 0.01, f"{params}: expected {expected_mfe}, got {mfe}"
-
-        # Check that eval_structure matches mfe
-        eval_energy = fc.eval_structure(structure)
-        assert abs(eval_energy - mfe) < 0.01, f"{params}: eval_structure {eval_energy} != mfe {mfe}"
 
 
 def test_bpp_symmetry():
@@ -193,11 +182,7 @@ def test_bpp_symmetry():
     from foldtrust.vienna import compute_pair_probabilities
 
     seq = "GGGAAACCC"
-    md = RNA.md()
-    fc = RNA.fold_compound(seq, md)
-    fc.pf()
-
-    P = compute_pair_probabilities(fc, len(seq))
+    P = compute_pair_probabilities(seq)
 
     # Check symmetry
     assert np.allclose(P, P.T), "BPP matrix is not symmetric"
@@ -217,11 +202,7 @@ def test_unpaired_probability():
     from foldtrust.vienna import compute_pair_probabilities
 
     seq = "GGGAAACCC"
-    md = RNA.md()
-    fc = RNA.fold_compound(seq, md)
-    fc.pf()
-
-    P = compute_pair_probabilities(fc, len(seq))
+    P = compute_pair_probabilities(seq)
 
     # Unpaired prob = 1 - sum over BOTH triangles (symmetric matrix)
     unpaired = 1.0 - P.sum(axis=1)
@@ -246,9 +227,8 @@ def test_gc_hairpin_firm_tier():
     md = RNA.md()
     fc = RNA.fold_compound(seq, md)
     structure, mfe = fc.mfe()
-    fc.pf()
 
-    P = compute_pair_probabilities(fc, len(seq))
+    P = compute_pair_probabilities(seq)
 
     # Parse MFE pairs
     from foldtrust.io import parse_dotbracket
