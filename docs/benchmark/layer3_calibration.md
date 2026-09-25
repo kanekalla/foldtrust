@@ -101,11 +101,37 @@ This represents all pairs with predicted probability > 0.001 across all 600 stru
 
 | Metric | Value  | Interpretation                               |
 |--------|--------|---------------------------------------------|
-| ECE    | 0.0692 | Good calibration (< 0.1)                    |
+| ECE    | 0.0692 | Small overall error                          |
 | AUROC  | 0.8870 | Strong discrimination (> 0.8)               |
 | AUPRC  | 0.6028 | Good precision-recall trade-off             |
 
-**Interpretation**: ViennaRNA pair probabilities are **well-calibrated** (ECE = 0.069). The model discriminates true pairs from false pairs effectively (AUROC = 0.887).
+**Interpretation**: ViennaRNA pair probabilities **rank pairs well** (AUROC = 0.887), effectively discriminating true pairs from false pairs. However, **probabilities are overconfident** at high values.
+
+### Calibration Detail: Overconfidence at High Probabilities
+
+The small overall ECE (0.069) is driven by the large fraction (~74%) of candidate pairs in the lowest bin [0, 0.1), where calibration is good. When restricted to **p ≥ 0.5**, the model is systematically **overconfident by 25–44 percentage points**:
+
+- FIRM pairs have **mean predicted probability ~0.95** but are correct only **~65%** of the time (overconfident by ~30 points)
+- SOFT pairs (mean p ~0.65–0.75) are correct only **~30–35%** of the time
+
+Full per-bin calibration table:
+
+| Bin          | Mean Predicted p | Observed Accuracy | Count    | Calibration Gap |
+|--------------|------------------|-------------------|----------|-----------------|
+| [0.0, 0.1)   | 0.014            | 0.027             | 138,095  | +0.013          |
+| [0.1, 0.2)   | 0.143            | 0.108             | 9,138    | -0.035          |
+| [0.2, 0.3)   | 0.248            | 0.156             | 5,027    | -0.092          |
+| [0.3, 0.4)   | 0.350            | 0.187             | 3,698    | -0.163          |
+| [0.4, 0.5)   | 0.452            | 0.224             | 3,359    | -0.228          |
+| [0.5, 0.6)   | 0.548            | 0.279             | 2,695    | -0.269          |
+| [0.6, 0.7)   | 0.650            | 0.278             | 2,611    | -0.372          |
+| [0.7, 0.8)   | 0.750            | 0.358             | 2,839    | -0.392          |
+| [0.8, 0.9)   | 0.853            | 0.441             | 3,833    | -0.412          |
+| [0.9, 1.0]   | 0.976            | 0.700             | 14,358   | -0.276          |
+
+**ECE restricted to p ≥ 0.5**: 0.317 (large miscalibration)
+
+**Practical implication**: Do not interpret p = 0.95 as "95% confidence this pair is correct." Use probabilities for **ranking** (which pairs are more vs less reliable), not as direct confidence estimates.
 
 ### Tier PPV and Coverage (95% CI)
 
@@ -132,25 +158,24 @@ Generated in `benchmarks/outputs/figures/`:
 
 ### Answers to Key Questions
 
-1. **Is ECE < 0.1?** ✓ Yes (0.069) — probabilities are well-calibrated
-2. **Are AUROC and AUPRC > 0.7?** ✓ Yes (0.887, 0.603) — good discrimination
+1. **Do probabilities rank pairs well?** ✓ Yes — AUROC 0.887, strong discrimination
+2. **Are probabilities well-calibrated?** ✗ **No at high p** — overconfident by 25–44 points for p ≥ 0.5
 3. **Are FIRM pairs more accurate than SOFT and FLOPPY?** ✓ **Strongly yes**
    - FIRM: 66.4%
    - SOFT: 33.5%
    - FLOPPY: 17.7%
 4. **How big is the PPV gap?** **48.7 percentage points** (FIRM vs FLOPPY)
 
-### Validation of the Core FoldTrust Claim
+### Core Finding
 
-The results **validate** the FoldTrust hypothesis:
-
-> **Ensemble probabilities provide actionable reliability tiers. High-probability MFE pairs are trustworthy; low-probability pairs are floppy.**
+Probabilities **rank pairs well** (AUROC ~0.887) but are **overconfident** for p ≥ 0.5. FIRM pairs (p ≥ 0.85, mean predicted p ~0.95) are correct ~65% of the time, not 95%.
 
 **Evidence**:
 - FIRM pairs are correct 66% of the time
 - FLOPPY pairs are correct only 18% of the time
 - The gap is statistically significant (non-overlapping 95% CIs)
 - FIRM pairs recover ~50% of reference pairs (high coverage)
+- But: Predicted probabilities systematically overestimate correctness at high p
 
 ### Practical Implications
 
@@ -165,14 +190,6 @@ The results **validate** the FoldTrust hypothesis:
 #### Structure-Guided Mutagenesis
 - Prioritize experiments on FIRM vs FLOPPY pairs
 - Use tiers to stratify hypotheses by confidence
-
-### Comparison to "No Information" Baseline
-
-If pair probabilities were uninformative, all tiers would have PPV ≈ 11.3% (the base rate in this dataset). Instead:
-- FIRM is **5.9× better** than baseline (66.4% / 11.3%)
-- FLOPPY is **1.6× better** than baseline (still better than random, but not much)
-
-**Conclusion**: Probabilities are highly informative, especially at the high end (FIRM).
 
 ### Comparison to Published Work
 
