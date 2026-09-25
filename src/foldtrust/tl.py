@@ -89,25 +89,9 @@ def compute_ensemble(fd: FoldData, temperature: float = 37.0, in_place: bool = T
         fd = fd.copy()
     
     try:
-        import RNA
+        from foldtrust.vienna import compute_pair_probabilities
         
-        # Create fold compound
-        md = RNA.md()
-        md.temperature = temperature
-        fc = RNA.fold_compound(fd.sequence, md)
-        
-        # Compute partition function
-        fc.pf()
-        
-        # Get base pair probabilities
-        bpp = fc.bpp()
-        n = len(fd.sequence)
-        prob_matrix = np.zeros((n, n))
-        
-        for i in range(n):
-            for j in range(n):
-                if i < len(bpp) and j < len(bpp[i]):
-                    prob_matrix[i, j] = bpp[i][j]
+        prob_matrix = compute_pair_probabilities(fd.sequence)
         
         fd.obsp['pair_probs'] = prob_matrix
         fd.uns['ensemble_temperature'] = temperature
@@ -228,13 +212,8 @@ def compute_unpaired_probs(fd: FoldData, in_place: bool = True) -> Optional[Fold
         raise ValueError("Pair probabilities not found. Run ft.tl.compute_ensemble first.")
     
     prob_matrix = fd.obsp['pair_probs']
-    n = fd.n_obs
-    unpaired = np.zeros(n)
-    
-    for i in range(n):
-        # Sum all pairing probabilities involving position i
-        paired_prob = np.sum(prob_matrix[i, :]) + np.sum(prob_matrix[:, i]) - prob_matrix[i, i]
-        unpaired[i] = max(0.0, min(1.0, 1.0 - paired_prob / 2.0))
+    unpaired = 1.0 - prob_matrix.sum(axis=1)
+    unpaired = np.clip(unpaired, 0.0, 1.0)
     
     fd.obs['unpaired_prob'] = unpaired
     
