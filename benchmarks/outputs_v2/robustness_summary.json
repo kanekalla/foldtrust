@@ -1,0 +1,28 @@
+{
+  "n_cases": 5,
+  "temperatures_tested": [
+    24,
+    37,
+    42
+  ],
+  "baseline_distribution": {
+    "firm_mean": 5.2,
+    "soft_mean": 5.6,
+    "floppy_mean": 4.2,
+    "total_mean": 15.0
+  },
+  "temperature_stability": {
+    "24C": {
+      "tier_stability_mean": 0.8023593767026261,
+      "structure_jaccard_mean": 0.6323422330097087
+    },
+    "37C": {
+      "tier_stability_mean": 1.0,
+      "structure_jaccard_mean": 1.0
+    },
+    "42C": {
+      "tier_stability_mean": 0.8506575202653635,
+      "structure_jaccard_mean": 0.9709473684210526
+    }
+  }
+}

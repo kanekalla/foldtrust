@@ -1,0 +1,100 @@
+{
+  "benchmark_version": "v2",
+  "timestamp": "2026-09-25 20:38:37",
+  "layers": {
+    "reference_accuracy": {
+      "status": "completed",
+      "summary": {
+        "overall": {
+          "n_sequences": 15,
+          "mfe_sensitivity_mean": 0.21333333333333335,
+          "mfe_sensitivity_std": 0.41034248181360944,
+          "mfe_ppv_mean": 0.21282051282051284,
+          "mfe_ppv_std": 0.4103651412690653,
+          "mfe_f1_mean": 0.21307189542483662,
+          "mfe_f1_std": 0.4103528326723002,
+          "mfe_mcc_mean": 0.20566515526916618,
+          "mfe_mcc_std": 0.41428211831524164
+        },
+        "by_length": {
+          "0-50": {
+            "n_sequences": 6,
+            "mfe_sensitivity_mean": 0.3333333333333333,
+            "mfe_ppv_mean": 0.3333333333333333,
+            "mfe_f1_mean": 0.3333333333333333,
+            "mfe_mcc_mean": 0.32341856275130637
+          },
+          "50-100": {
+            "n_sequences": 6,
+            "mfe_sensitivity_mean": 0.19999999999999998,
+            "mfe_ppv_mean": 0.1987179487179487,
+            "mfe_f1_mean": 0.19934640522875816,
+            "mfe_mcc_mean": 0.19345267151473042
+          },
+          "100-200": {
+            "n_sequences": 3,
+            "mfe_sensitivity_mean": 0.0,
+            "mfe_ppv_mean": 0.0,
+            "mfe_f1_mean": 0.0,
+            "mfe_mcc_mean": -0.00541669218624289
+          }
+        }
+      }
+    },
+    "calibration": {
+      "status": "completed",
+      "summary": {
+        "calibration": {
+          "n_sequences": 15,
+          "ece_mean": 0.014851733376780222,
+          "ece_std": 0.009020967249230029,
+          "auroc_mean": 0.5658365530444477,
+          "auroc_std": 0.23881168664729793,
+          "auprc_mean": 0.19213853739993222,
+          "auprc_std": 0.3733260991788869
+        },
+        "tier_accuracy": {
+          "firm_ppv_mean": 0.2222222222222222,
+          "soft_ppv_mean": 0.11875,
+          "floppy_ppv_mean": 0.125,
+          "firm_total_pairs": 105,
+          "soft_total_pairs": 87,
+          "floppy_total_pairs": 71
+        }
+      }
+    },
+    "robustness": {
+      "status": "completed",
+      "summary": {
+        "n_cases": 5,
+        "temperatures_tested": [
+          24,
+          37,
+          42
+        ],
+        "baseline_distribution": {
+          "firm_mean": 5.2,
+          "soft_mean": 5.6,
+          "floppy_mean": 4.2,
+          "total_mean": 15.0
+        },
+        "temperature_stability": {
+          "24C": {
+            "tier_stability_mean": 0.8023593767026261,
+            "structure_jaccard_mean": 0.6323422330097087
+          },
+          "37C": {
+            "tier_stability_mean": 1.0,
+            "structure_jaccard_mean": 1.0
+          },
+          "42C": {
+            "tier_stability_mean": 0.8506575202653635,
+            "structure_jaccard_mean": 0.9709473684210526
+          }
+        }
+      }
+    }
+  },
+  "runtime_seconds": 8.543739080429077,
+  "runtime_formatted": "0.1 minutes"
+}

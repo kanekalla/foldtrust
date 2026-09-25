@@ -1,0 +1,60 @@
+======================================================================
+FoldTrust Benchmark Suite
+======================================================================
+
+======================================================================
+LAYER 1: Reference Structure Accuracy
+======================================================================
+
+=== Reference Structure Accuracy Benchmark ===
+
+Using curated dataset: benchmarks/data/curated_references.json
+
+Benchmarking 15 sequences...
+  Progress: 10/15
+
+✓ Completed 15/15 sequences
+
+✓ Saved results to benchmarks/outputs_v2/reference_benchmark.csv
+✓ Saved summary to benchmarks/outputs_v2/reference_benchmark_summary.json
+✓ Saved report to benchmarks/outputs_v2/reference_benchmark_report.md
+
+======================================================================
+LAYER 2: Calibration Analysis
+======================================================================
+
+=== Calibration Analysis ===
+
+Analyzing calibration on 15 sequences...
+  Progress: 10/15
+
+✓ Completed 15 sequences
+✓ Saved reliability diagram to benchmarks/outputs_v2/reliability_diagram.png
+✓ Saved calibration report to benchmarks/outputs_v2/calibration_report.md
+
+======================================================================
+LAYER 3: Robustness Analysis (Temperature)
+======================================================================
+
+=== Robustness Analysis ===
+
+Analyzing sars2-fse...
+Analyzing mapt-e10...
+Analyzing hcv-ires-dii...
+Analyzing cftr-5utr...
+Analyzing smn2-iss-n1...
+✓ Saved robustness report to benchmarks/outputs_v2/robustness_report.md
+
+✓ Completed robustness analysis for 5 cases
+
+======================================================================
+BENCHMARK COMPLETE
+======================================================================
+
+Total runtime: 0.1 minutes
+Summary saved to: benchmarks/outputs_v2/benchmark_summary.json
+
+Layer Status:
+  ✓ reference_accuracy: completed
+  ✓ calibration: completed
+  ✓ robustness: completed

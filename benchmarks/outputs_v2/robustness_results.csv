@@ -1,0 +1,6 @@
+case_name,length,baseline_firm,baseline_soft,baseline_floppy,baseline_total,temp24_firm,temp24_soft,temp24_floppy,temp24_total,temp24_tier_stability,temp24_structure_jaccard,temp24_mfe_energy,temp37_firm,temp37_soft,temp37_floppy,temp37_total,temp37_tier_stability,temp37_structure_jaccard,temp37_mfe_energy,temp42_firm,temp42_soft,temp42_floppy,temp42_total,temp42_tier_stability,temp42_structure_jaccard,temp42_mfe_energy
+sars2-fse,181,1,0,7,8,7,5,0,12,1.0,0.06796116504854369,-55.85,1,0,7,8,1.0,1.0,-39.5,1,0,7,8,1.0,1.0,-33.73
+mapt-e10,268,7,10,2,19,13,6,1,20,0.6428571428571429,0.875,-112.39,7,10,2,19,1.0,1.0,-86.0,2,15,1,18,0.6944444444444444,0.96,-75.64
+hcv-ires-dii,268,12,4,2,18,12,4,3,19,0.88,0.5,-117.64,12,4,2,18,1.0,1.0,-91.2,11,6,1,18,0.8783783783783784,1.0,-81.06
+cftr-5utr,268,3,9,5,17,8,7,3,18,0.5942028985507246,0.71875,-79.5,3,9,5,17,1.0,1.0,-55.1,2,8,7,17,0.8765432098765432,1.0,-45.49
+smn2-iss-n1,201,3,5,5,13,4,5,4,13,0.8947368421052632,1.0,-45.07,3,5,5,13,1.0,1.0,-29.4,2,4,6,12,0.803921568627451,0.8947368421052632,-23.31

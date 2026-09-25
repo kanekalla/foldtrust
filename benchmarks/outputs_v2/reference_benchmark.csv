@@ -1,0 +1,16 @@
+name,length,source,mfe_sensitivity,mfe_ppv,mfe_f1,mfe_mcc
+tRNA-Phe_yeast_PDB,76,PDB_1EHZ,1.0,1.0,1.0,1.0
+5S_rRNA_E.coli,120,Rfam_RF00001_comparative,0.0,0.0,0.0,-0.005398941587258434
+TPP_riboswitch_E.coli,78,Rfam_RF00059_comparative,0.0,0.0,0.0,-0.007400304898842878
+FMN_riboswitch_B.subtilis,120,Rfam_RF00050_comparative,0.0,0.0,0.0,-0.004909446531446606
+U1_snRNA_human_5prime,43,Rfam_RF01846_comparative,0.0,0.0,0.0,-0.01233183856502242
+SRP_RNA_E.coli,108,Rfam_RF00017_comparative,0.0,0.0,0.0,-0.005941688440023628
+P4-P6_Tetrahymena_groupI,99,PDB_1GID_derived,0.0,0.0,0.0,-0.005176127751734096
+Hammerhead_ribozyme_consensus,31,Rfam_RF00163_comparative,0.0,0.0,0.0,-0.011946314428672725
+HDV_ribozyme,54,PDB_1SJF_derived,0.0,0.0,0.0,-0.009778701667280346
+IRE_ferritin_human,25,Rfam_RF00037_comparative,0.0,0.0,0.0,-0.023145043271820476
+SECIS_element_consensus,27,Rfam_RF00031_comparative,0.0,0.0,0.0,-0.012065427226646004
+GNRA_tetraloop_GAAA,12,NMR_consensus,1.0,1.0,1.0,1.0
+GC_hairpin_stable,20,Synthetic_control,1.0,1.0,1.0,1.0
+RNaseP_bacteria_consensus,82,Rfam_RF00010_comparative,0.2,0.19230769230769232,0.19607843137254902,0.18974060900857428
+tmRNA_pseudoknot_region,68,Rfam_RF00023_comparative,0.0,0.0,0.0,-0.006669445602334306

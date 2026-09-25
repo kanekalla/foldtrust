@@ -1,0 +1,16 @@
+name,length,firm_ppv,firm_count,soft_ppv,soft_count,floppy_ppv,floppy_count
+tRNA-Phe_yeast_PDB,76,1.0,7,0.0,0,1.0,14
+5S_rRNA_E.coli,120,0.0,23,0.0,11,0.0,8
+TPP_riboswitch_E.coli,78,0.0,14,0.0,4,0.0,3
+FMN_riboswitch_B.subtilis,120,0.0,16,0.0,17,0.0,0
+U1_snRNA_human_5prime,43,0.0,0,0.0,8,0.0,3
+SRP_RNA_E.coli,108,0.0,17,0.0,0,0.0,17
+P4-P6_Tetrahymena_groupI,99,0.0,9,0.0,0,0.0,15
+Hammerhead_ribozyme_consensus,31,0.0,0,0.0,3,0.0,0
+HDV_ribozyme,54,0.0,8,0.0,0,0.0,4
+IRE_ferritin_human,25,0.0,0,0.0,6,0.0,0
+SECIS_element_consensus,27,0.0,0,0.0,3,0.0,0
+GNRA_tetraloop_GAAA,12,0.0,0,1.0,4,0.0,0
+GC_hairpin_stable,20,1.0,8,0.0,0,0.0,0
+RNaseP_bacteria_consensus,82,0.0,3,0.1875,16,0.0,7
+tmRNA_pseudoknot_region,68,0.0,0,0.0,15,0.0,0
