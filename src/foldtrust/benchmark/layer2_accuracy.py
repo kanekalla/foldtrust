@@ -26,6 +26,29 @@ from foldtrust.benchmark.layer1_scoring import (
 )
 
 
+def save_sample_ids(archiveii: List[Dict], bprna: List[Dict], rfam: List[Dict], output_dir: Path):
+    """Save sample IDs to CSV for Layer 3 consistency."""
+    import csv
+    
+    sample_ids_path = output_dir / 'sample_ids.csv'
+    
+    with open(sample_ids_path, 'w', newline='') as f:
+        writer = csv.writer(f)
+        writer.writerow(['dataset', 'name', 'length', 'seq_sha1'])
+        
+        for struct in archiveii:
+            writer.writerow(['ArchiveII', struct['name'], struct['length'], 
+                           sequence_sha1(struct['sequence'])])
+        for struct in bprna:
+            writer.writerow(['bpRNA_TS0', struct['name'], struct['length'],
+                           sequence_sha1(struct['sequence'])])
+        for struct in rfam:
+            writer.writerow(['Rfam_seed', struct['name'], struct['length'],
+                           sequence_sha1(struct['sequence'])])
+    
+    print(f"  Saved sample IDs to {sample_ids_path}")
+
+
 def load_archiveii(
     cache_dir: Path,
     max_length: Optional[int] = 500
@@ -386,6 +409,10 @@ def run_layer2_benchmark(
         random.seed(42)
         rfam = random.sample(rfam, sample_size)
     print(f"  Loaded {len(rfam)} structures")
+    
+    # Save sample IDs for Layer 3 consistency
+    if sample_size:
+        save_sample_ids(archiveii, bprna, rfam, output_dir)
     
     # Combine all structures
     all_structures = archiveii + bprna + rfam

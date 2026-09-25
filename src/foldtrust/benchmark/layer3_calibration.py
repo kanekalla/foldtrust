@@ -21,7 +21,49 @@ from foldtrust.benchmark.layer2_accuracy import (
     remove_pseudoknots,
     bootstrap_ci
 )
-from foldtrust.benchmark.layer1_scoring import parse_dotbracket
+from foldtrust.benchmark.layer1_scoring import (
+    parse_dotbracket,
+    sequence_sha1,
+)
+
+
+def load_sample_ids(layer2_output_dir: Path) -> Dict[str, Set[str]]:
+    """Load sample IDs from Layer 2's sample_ids.csv."""
+    import csv
+    
+    sample_ids_path = layer2_output_dir / 'sample_ids.csv'
+    
+    if not sample_ids_path.exists():
+        raise FileNotFoundError(
+            f"sample_ids.csv not found at {sample_ids_path}. "
+            "Run Layer 2 first to generate the sample."
+        )
+    
+    # Build a dict mapping dataset to set of sha1s
+    dataset_ids = defaultdict(set)
+    
+    with open(sample_ids_path, 'r') as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            dataset_ids[row['dataset']].add(row['seq_sha1'])
+    
+    return dict(dataset_ids)
+
+
+def filter_by_sample_ids(structures: List[Dict], dataset_name: str, sample_ids: Dict[str, Set[str]]) -> List[Dict]:
+    """Filter structures to match Layer 2 sample IDs."""
+    if dataset_name not in sample_ids:
+        return structures
+    
+    allowed_sha1s = sample_ids[dataset_name]
+    filtered = []
+    
+    for struct in structures:
+        sha1 = sequence_sha1(struct['sequence'])
+        if sha1 in allowed_sha1s:
+            filtered.append(struct)
+    
+    return filtered
 
 
 def compute_pair_probabilities(sequence: str, temperature: float = 37.0) -> np.ndarray:
@@ -282,15 +324,17 @@ def run_layer3_calibration(
     rfam = load_rfam_seed(cache_dir, max_length)
     
     if sample_size:
-        import random
-        random.seed(42)
-        if len(archiveii) > sample_size:
-            archiveii = random.sample(archiveii, sample_size)
-        if len(bprna) > sample_size:
-            bprna = random.sample(bprna, sample_size)
-        if len(rfam) > sample_size:
-            rfam = random.sample(rfam, sample_size)
-        print(f"  Sampled {len(archiveii)} ArchiveII, {len(bprna)} bpRNA, {len(rfam)} Rfam")
+        # Load sample IDs from Layer 2
+        print("  Loading sample IDs from Layer 2...")
+        layer2_output_dir = output_dir.parent / 'layer2'
+        sample_ids = load_sample_ids(layer2_output_dir)
+        
+        # Filter to match Layer 2 sample
+        archiveii = filter_by_sample_ids(archiveii, 'ArchiveII', sample_ids)
+        bprna = filter_by_sample_ids(bprna, 'bpRNA_TS0', sample_ids)
+        rfam = filter_by_sample_ids(rfam, 'Rfam_seed', sample_ids)
+        
+        print(f"  Loaded {len(archiveii)} ArchiveII, {len(bprna)} bpRNA, {len(rfam)} Rfam (matching Layer 2)")
     
     all_structures = archiveii + bprna + rfam
     print(f"Total structures: {len(all_structures)}")
