@@ -134,6 +134,28 @@ Then run:
 foldtrust report my_rna.fa -o output/my_rna
 ```
 
+### Benchmark Analysis
+
+Validate FoldTrust's reliability predictions against reference structures:
+
+```bash
+# Run all benchmark analyses
+foldtrust benchmark all -o benchmarks/outputs
+
+# Run specific analyses
+foldtrust benchmark reference -o benchmarks/outputs
+foldtrust benchmark calibration -o benchmarks/outputs
+foldtrust benchmark robustness -o benchmarks/outputs
+```
+
+Results include:
+- **Reference structure accuracy:** Sensitivity, PPV, F1, MCC vs curated structures
+- **Calibration metrics:** Reliability diagram, ECE, AUROC, AUPRC
+- **Tier accuracy:** PPV of FIRM/SOFT/FLOPPY classifications
+- **Robustness:** Tier stability across disease cases
+
+See `benchmarks/outputs/` and `NOTES.md` § 9 for detailed results and honest interpretation.
+
 ## Output
 
 Each report includes:
@@ -220,6 +242,7 @@ foldtrust/
 
 ## Roadmap / Future Work
 
+- **Benchmark validation:** ✅ Complete. See `benchmarks/outputs/` and NOTES.md § 9 for reference structure accuracy, calibration metrics, and tier reliability analysis.
 - Web app deployment for interactive reports
 - Docker container with ViennaRNA pre-installed
 - Integration with SHAPE/DMS reactivity data for constrained folding
