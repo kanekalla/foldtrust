@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-
-=======
 name,dataset,family,tier,pairs_tp,pairs_total,stems_correct,stems_total,pair_ppv
 16s_E.coli_domain2,ArchiveII,16s,FIRM,40,60,8,13,0.6666666666666666
 16s_E.coli_domain2,ArchiveII,16s,SOFT,4,33,1,9,0.12121212121212122
@@ -2402,4 +2399,3 @@ AAFX01031538.1/449-804,Rfam_seed,RF00023,FIRM,32,78,4,12,0.41025641025641024
 AAFX01031538.1/449-804,Rfam_seed,RF00023,SOFT,8,24,2,5,0.3333333333333333
 AAFX01031538.1/449-804,Rfam_seed,RF00023,FLOPPY,0,10,0,3,0.0
 AAFX01031538.1/449-804,Rfam_seed,RF00023,LONELY,1,2,0,0,0.5
->>>>>>> 3fc6732 (Fix Layer 3 bugs: MEA gamma parameter and bpRNA loader)

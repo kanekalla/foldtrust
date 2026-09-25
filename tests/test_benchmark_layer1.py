@@ -114,6 +114,37 @@ def test_metrics_toy_cases():
     assert abs(metrics["f1"] - 0.5) < 1e-6, "Half overlap F1 failed"
 
 
+def test_mcc_computation():
+    """Test MCC computation using sqrt(sensitivity * PPV) formula."""
+    from foldtrust.benchmark.layer1_scoring import compute_exact_metrics, compute_slip_metrics
+
+    # Perfect prediction: MCC should be 1.0
+    ref = {(0, 10), (1, 9), (2, 8), (3, 7), (4, 6)}
+    pred = {(0, 10), (1, 9), (2, 8), (3, 7), (4, 6)}
+    metrics = compute_exact_metrics(pred, ref)
+    assert abs(metrics["mcc"] - 1.0) < 1e-6, "Perfect match MCC should be 1.0"
+
+    # Half overlap: MCC = sqrt(0.5 * 0.5) = 0.5
+    ref = {(0, 10), (1, 9), (2, 8), (3, 7)}
+    pred = {(2, 8), (3, 7), (11, 20), (12, 19)}
+    metrics = compute_exact_metrics(pred, ref)
+    expected_mcc = np.sqrt(0.5 * 0.5)
+    assert abs(metrics["mcc"] - expected_mcc) < 1e-6, f"Half overlap MCC should be {expected_mcc}"
+
+    # MCC should never be negative
+    ref = {(0, 10), (1, 9), (2, 8)}
+    pred = {(11, 20), (12, 19)}
+    metrics = compute_exact_metrics(pred, ref)
+    assert metrics["mcc"] >= 0.0, "MCC should never be negative"
+
+    # Slip-tolerant MCC >= exact MCC
+    ref = {(0, 10), (1, 9), (2, 8), (3, 7)}
+    pred = {(1, 10), (2, 9), (11, 20), (12, 19)}
+    exact_metrics = compute_exact_metrics(pred, ref)
+    slip_metrics = compute_slip_metrics(pred, ref)
+    assert slip_metrics["mcc"] >= exact_metrics["mcc"] - 1e-9, "Slip MCC should be >= exact MCC"
+
+
 def test_slip_tolerant_greater_equal_exact():
     """Test that slip-tolerant F1 >= exact F1."""
     from foldtrust.benchmark.metrics import compute_slip_tolerant_metrics, compute_structure_metrics
