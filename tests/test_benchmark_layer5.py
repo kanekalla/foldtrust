@@ -108,6 +108,103 @@ def test_retention_of_self_is_one():
 
 
 @pytest.mark.skipif(not HAS_RNA, reason="ViennaRNA not available")
+def test_mfe_stems_retained_in_same_mfe():
+    """Self-retention: MFE stems retained in the same MFE structure = 1.0."""
+    import pandas as pd
+
+    cases_dir = Path("data/cases")
+    if not cases_dir.exists():
+        pytest.skip("data/cases not found")
+
+    for case_name in CASE_COORDS.keys():
+        seq_file = cases_dir / case_name / "sequence.fa"
+        if not seq_file.exists():
+            continue
+
+        _, sequence = read_fasta(seq_file)
+
+        # Compute MFE structure and stems
+        mfe_structure, _ = fold_with_params(sequence, "Turner2004", 37.0)
+        prob_matrix = compute_pair_probs_with_params(sequence, "Turner2004", 37.0)
+        stems = parse_stems(mfe_structure, prob_matrix)
+
+        # MFE structure as pairs
+        mfe_pairs = []
+        for i, char in enumerate(mfe_structure):
+            if char == "(":
+                # Find matching closing bracket
+                depth = 0
+                for j in range(i, len(mfe_structure)):
+                    if mfe_structure[j] == "(":
+                        depth += 1
+                    elif mfe_structure[j] == ")":
+                        depth -= 1
+                        if depth == 0:
+                            mfe_pairs.append((i, j))
+                            break
+
+        # Compute retention of MFE stems in MFE structure
+        retention = compute_stem_retention(stems, prob_matrix, mfe_pairs)
+
+        # All tiers should have retention = 1.0
+        for tier_name, tier_data in retention.items():
+            if tier_data["count"] > 0:
+                assert (
+                    abs(tier_data["retention"] - 1.0) < 0.01
+                ), f"{case_name} {tier_name}: self-retention should be 1.0, got {tier_data['retention']}"
+
+
+@pytest.mark.skipif(not HAS_RNA, reason="ViennaRNA not available")
+def test_baseline_retention_equals_saved():
+    """Baseline retention (37C Turner2004 MFE stems in MEA) equals saved baseline row."""
+    import pandas as pd
+
+    output_dir = Path("benchmarks/outputs/layer5")
+    csv_file = output_dir / "temperature_stem_retention.csv"
+
+    if not csv_file.exists():
+        pytest.skip("temperature_stem_retention.csv not found")
+
+    df = pd.read_csv(csv_file)
+    baseline_df = df[df["temperature"] == "37C_baseline"]
+
+    cases_dir = Path("data/cases")
+    if not cases_dir.exists():
+        pytest.skip("data/cases not found")
+
+    for case_name in CASE_COORDS.keys():
+        seq_file = cases_dir / case_name / "sequence.fa"
+        if not seq_file.exists():
+            continue
+
+        _, sequence = read_fasta(seq_file)
+
+        # Compute MFE stems
+        mfe_structure, _ = fold_with_params(sequence, "Turner2004", 37.0)
+        prob_matrix = compute_pair_probs_with_params(sequence, "Turner2004", 37.0)
+        stems = parse_stems(mfe_structure, prob_matrix)
+
+        # Compute MEA structure
+        mea_pairs, _ = compute_mea_structure(sequence, "Turner2004", 37.0)
+
+        # Compute retention
+        retention = compute_stem_retention(stems, prob_matrix, mea_pairs)
+
+        # Compare with saved baseline
+        case_baseline = baseline_df[baseline_df["case"] == case_name]
+
+        for tier_name in ["FIRM", "SOFT", "FLOPPY"]:
+            if tier_name in retention and retention[tier_name]["count"] > 0:
+                tier_row = case_baseline[case_baseline["tier"] == tier_name]
+                if not tier_row.empty:
+                    saved_retention = tier_row["retention"].values[0]
+                    computed_retention = retention[tier_name]["retention"]
+                    assert (
+                        abs(computed_retention - saved_retention) < 0.01
+                    ), f"{case_name} {tier_name}: computed {computed_retention:.4f} != saved {saved_retention:.4f}"
+
+
+@pytest.mark.skipif(not HAS_RNA, reason="ViennaRNA not available")
 def test_mea_structure_is_paired():
     """MEA structure should produce valid pairs."""
 
@@ -203,3 +300,107 @@ def test_flank_extraction_is_exact_substring():
     # Verify right flank is substring
     if right_flank:
         assert right_flank in full_seq, "Right flank should be substring of record"
+
+
+@pytest.mark.skipif(not HAS_RNA, reason="ViennaRNA not available")
+def test_flank_boundaries_match_core():
+    """Left flank ends exactly where core starts, right flank begins exactly where core ends."""
+    import pandas as pd
+    from foldtrust.benchmark.layer5_robustness import (
+        CASE_COORDS,
+        extract_sequence_from_fasta,
+        fetch_fasta_from_ncbi,
+        get_flanking_sequences,
+    )
+
+    cache_dir = Path("data/_cache")
+    cache_dir.mkdir(parents=True, exist_ok=True)
+
+    output_dir = Path("benchmarks/outputs/layer5")
+    csv_file = output_dir / "window_context_metrics.csv"
+
+    if not csv_file.exists():
+        pytest.skip("window_context_metrics.csv not found")
+
+    df = pd.read_csv(csv_file)
+
+    cases_dir = Path("data/cases")
+    if not cases_dir.exists():
+        pytest.skip("data/cases not found")
+
+    for case_name in CASE_COORDS.keys():
+        coords = CASE_COORDS[case_name]
+        seq_file = cases_dir / case_name / "sequence.fa"
+        if not seq_file.exists():
+            continue
+
+        # Get core sequence
+        _, core_seq = read_fasta(seq_file)
+        core_seq = core_seq.upper().replace("T", "U")
+
+        # Fetch full record
+        fasta_content = fetch_fasta_from_ncbi(coords["accession"], cache_dir)
+        if not fasta_content:
+            continue
+
+        full_seq = extract_sequence_from_fasta(fasta_content).upper().replace("T", "U")
+
+        # Check each flank size with recorded coordinates
+        case_df = df[df["case"] == case_name]
+
+        for _, row in case_df.iterrows():
+            flank_size = row["flank_size"]
+            if flank_size == 0:
+                continue
+
+            left_coords = row["left_coords"]
+            right_coords = row["right_coords"]
+
+            if pd.isna(left_coords) and pd.isna(right_coords):
+                continue
+
+            # Get flanks
+            left_flank, right_flank = get_flanking_sequences(case_name, flank_size, cache_dir)
+
+            # Test: left flank ends exactly where core starts
+            if not pd.isna(left_coords) and left_flank:
+                # Parse coordinates
+                parts = left_coords.split(":")
+                accession = parts[0]
+                start, end = map(int, parts[1].split("-"))
+
+                # Left flank should end at core_start - 1
+                assert (
+                    end == coords["start"] - 1
+                ), f"{case_name} flank {flank_size}: left flank end {end} != core start - 1 ({coords['start'] - 1})"
+
+                # Verify left flank + core is contiguous
+                extended_with_left = left_flank + core_seq
+                # Should be a substring of full record
+                assert (
+                    extended_with_left in full_seq
+                ), f"{case_name} flank {flank_size}: left flank not contiguous with core"
+
+            # Test: right flank begins exactly where core ends
+            if not pd.isna(right_coords) and right_flank:
+                parts = right_coords.split(":")
+                accession = parts[0]
+                start, end = map(int, parts[1].split("-"))
+
+                # Right flank should start at core_end + 1
+                assert (
+                    start == coords["end"] + 1
+                ), f"{case_name} flank {flank_size}: right flank start {start} != core end + 1 ({coords['end'] + 1})"
+
+                # Verify core + right flank is contiguous
+                extended_with_right = core_seq + right_flank
+                assert (
+                    extended_with_right in full_seq
+                ), f"{case_name} flank {flank_size}: right flank not contiguous with core"
+
+            # Test: full extended sequence is contiguous
+            if left_flank and right_flank:
+                extended_full = left_flank + core_seq + right_flank
+                assert (
+                    extended_full in full_seq
+                ), f"{case_name} flank {flank_size}: extended sequence not contiguous"
