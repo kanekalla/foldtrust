@@ -123,11 +123,10 @@ def compute_unpaired_probabilities(sequence: str) -> np.ndarray:
     """
     Compute unpaired probability for each nucleotide.
     
-    Uses ViennaRNA partition function.
+    Uses ViennaRNA partition function with default parameters.
     """
-    md = RNA.md()
-    md.uniq_ML = 1
-    fc = RNA.fold_compound(sequence, md)
+    # Use defaults (no md modifications) to match standard ViennaRNA behavior
+    fc = RNA.fold_compound(sequence)
     fc.pf()
     
     # Get base-pair probabilities
@@ -137,9 +136,9 @@ def compute_unpaired_probabilities(sequence: str) -> np.ndarray:
     unpaired = np.zeros(n)
     for i in range(1, n + 1):
         # Sum all pairing probabilities for position i (1-based indexing)
-        # bpp[i][j] already contains the symmetric probability
-        paired_prob = sum(bpp[i][j] for j in range(1, n + 1) if i != j)
-        unpaired[i - 1] = max(0.0, 1.0 - paired_prob)
+        # bpp is upper-triangular: must use bpp[min(i,j)][max(i,j)]
+        paired_prob = sum(bpp[min(i, j)][max(i, j)] for j in range(1, n + 1) if i != j)
+        unpaired[i - 1] = 1.0 - paired_prob
     
     return unpaired
 

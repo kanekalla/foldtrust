@@ -27,9 +27,9 @@
 
 1. **ViennaRNA unpaired probability**  
    - Partition function via `RNA.fold_compound(sequence).pf()`  
-   - Base-pair probability matrix from `fc.bpp()` (1-based indexing)  
-   - Unpaired probability: `1 - sum(pairing probabilities)` for each position  
-   - Parameters: default Turner2004 (no parameter loading)
+   - Base-pair probability matrix from `fc.bpp()` (1-based indexing, upper-triangular)  
+   - Unpaired probability: `1 - sum(bpp[min(i,j)][max(i,j)] for all j != i)` for each position  
+   - Parameters: ViennaRNA 2.7.2 defaults (Turner2004)
 
 2. **Correlation metrics**  
    - **Spearman ρ**: correlation between unpaired probability and normalized SHAPE reactivity (positions with valid reactivity)  
@@ -39,32 +39,38 @@
      - Middle positions excluded
 
 3. **Tier analysis**  
-   - Classify each position by its strongest base-pairing probability:  
+   - Classify nucleotides by pairing probability in MEA or MFE structure:  
      - **FIRM:** p ≥ 0.85  
      - **SOFT:** 0.5 ≤ p < 0.85  
      - **FLOPPY:** 0 < p < 0.5  
-     - **unpaired:** p = 0 (no pairing partner above threshold)  
-   - Compute mean SHAPE reactivity per tier (Incarnato in vitro)
+     - **unpaired:** no pairing partner in structure  
+   - Report mean SHAPE reactivity per tier for all 5 datasets  
+   - Statistical test: Mann-Whitney U for FIRM vs SOFT, FIRM vs FLOPPY, SOFT vs FLOPPY  
+   - If any tier has n < 5, report "insufficient data" and test paired vs unpaired instead
 
 4. **SHAPE-directed folding**  
    - RNAfold with soft constraints: `fc.sc_add_SHAPE_deigan(reactivity, slope=1.8, intercept=-0.6)`  
    - Deigan et al. default parameters (ViennaRNA standard)  
    - Compare MFE and MEA structures: unconstrained vs SHAPE-directed  
    - **Base-pair distance:** number of differing pairs (symmetric difference of pair sets)  
+   - **F1 score:** harmonic mean of precision and recall for base pairs  
+   - **Tier changes:** number of pairs that change tier assignment  
+   - Report for all 5 datasets  
    - Note: FSE pseudoknot cannot be represented in dot-bracket notation
 
 5. **Genome-context control**  
-   - Sample 50 random 81-nt windows across NC_045512.2 (seed=42, no replacement)  
+   - Tile entire 29,903-nt genome with non-overlapping 81-nt windows (369 windows)  
    - Compute Spearman correlation per window/dataset  
-   - FSE percentile = fraction of control windows with lower correlation
+   - FSE percentile = fraction of control windows with lower correlation  
+   - Empirical p-value = fraction of windows with correlation ≥ FSE
+   - Report for all 5 datasets
 
 **Reproducibility:**  
 ```bash
-foldtrust benchmark layer4_shape --cache-dir data/_cache \
-    --output-dir benchmarks/outputs/layer4_shape --n-windows 50 --seed 42
+python3 src/foldtrust/benchmark/shape.py
 ```
 
-Runtime: ~4 seconds (single-threaded, genome controls dominate).
+Runtime: ~10 seconds (single-threaded, genome controls dominate).
 
 ## Results
 
@@ -72,160 +78,165 @@ Runtime: ~4 seconds (single-threaded, genome controls dominate).
 
 | Dataset | Spearman ρ | p-value | AUROC | Coverage |
 |---------|------------|---------|-------|----------|
-| incarnato_invitro | **0.349** | 1.40×10⁻³ | 0.726 | 100% (81/81) |
-| incarnato_invivo | **0.419** | 1.11×10⁻⁴ | 0.794 | 98.8% (80/81) |
-| pyle | 0.122 | 2.78×10⁻¹ | 0.599 | 100% (81/81) |
-| zhang_invitro | **0.437** | 4.52×10⁻⁵ | 0.803 | 100% (81/81) |
-| zhang_invivo | **0.489** | 3.55×10⁻⁶ | 0.812 | 100% (81/81) |
+| incarnato_invitro | 0.294 | 7.68×10⁻³ | 0.705 | 100% (81/81) |
+| incarnato_invivo | 0.355 | 1.25×10⁻³ | 0.785 | 98.8% (80/81) |
+| pyle | 0.163 | 1.45×10⁻¹ | 0.644 | 100% (81/81) |
+| zhang_invitro | 0.497 | 2.39×10⁻⁶ | 0.850 | 100% (81/81) |
+| zhang_invivo | 0.547 | 1.24×10⁻⁷ | 0.864 | 100% (81/81) |
 
 **Core (13462-13542) identical to window:** slippery site + stem-loops span the full 81 nt.
 
 **Interpretation:**  
-- **Moderate positive correlation** for 4/5 datasets (ρ = 0.35–0.49, all p < 0.01)  
-- Pyle (in vivo SHAPE-MaP) shows weak correlation (ρ = 0.12, n.s.)  
-- AUROC > 0.7 for all datasets except Pyle: unpaired probability discriminates reactive vs unreactive positions  
-- Zhang in vivo (icSHAPE) shows strongest correlation (ρ = 0.489)
+- **Positive correlation** for all datasets, statistically significant for 4/5  
+- Zhang datasets (icSHAPE) show strongest correlation (ρ = 0.50, 0.55)  
+- Incarnato datasets (SHAPE-MaP) show moderate correlation (ρ = 0.29, 0.36)  
+- Pyle (in vivo SHAPE-MaP) shows weakest correlation (ρ = 0.16, n.s.)  
+- AUROC 0.64–0.86: unpaired probability discriminates reactive vs unreactive positions
 
 ### Dataset Agreement (Pairwise Spearman on FSE Window)
 
 **Within-lab:**  
-- **Incarnato:** in vitro ↔ in vivo: ρ = **0.852** (p = 1.35×10⁻²³) — excellent agreement  
-- **Zhang:** in vitro ↔ in vivo: ρ = **0.826** (p = 2.44×10⁻²¹) — excellent agreement
+- **Incarnato:** in vitro ↔ in vivo: ρ = 0.852 (p = 1.35×10⁻²³) — excellent agreement  
+- **Zhang:** in vitro ↔ in vivo: ρ = 0.826 (p = 2.44×10⁻²¹) — excellent agreement
 
 **Cross-lab:**  
 - Incarnato ↔ Zhang: ρ = 0.516–0.556  
 - Incarnato ↔ Pyle: ρ = 0.270–0.287  
-- Zhang ↔ Pyle: ρ = 0.316–0.359  
-- Pyle shows weaker agreement with other labs
+- Zhang ↔ Pyle: ρ = 0.316–0.359
 
 **Interpretation:**  
-- Within-lab replicates (in vitro vs in vivo) are highly consistent  
+- Within-lab replicates are highly consistent (ρ > 0.8)  
 - Cross-lab agreement is moderate (ρ ~ 0.3–0.6)  
-- Pyle dataset diverges from Incarnato/Zhang (possible differences in experimental protocol, normalization, or biological context)
+- Pyle shows weaker agreement with other datasets (possible experimental or analytical differences)
 
-### Tier Reactivity (Incarnato in vitro)
+### Tier Reactivity (All Datasets, MEA Structure)
 
-| Tier | Mean reactivity ± SD | Positions |
-|------|----------------------|-----------|
-| **FIRM** (p ≥ 0.85) | 0.160 ± 0.208 | 30 |
-| **SOFT** (0.5 ≤ p < 0.85) | 0.219 ± 0.300 | 18 |
-| **FLOPPY** (p < 0.5) | 0.409 ± 0.377 | 33 |
-| **unpaired** | — | 0 |
+| Dataset | FIRM (n) | SOFT (n) | FLOPPY (n) | unpaired (n) | FIRM vs unpaired p-value |
+|---------|----------|----------|------------|--------------|--------------------------|
+| incarnato_invitro | 0.160 (30) | 0.219 (18) | n/a (0) | 0.409 (33) | < 0.001 |
+| incarnato_invivo | 0.190 (30) | 0.296 (18) | n/a (0) | 0.467 (32) | < 0.001 |
+| pyle | 0.054 (30) | 0.196 (18) | n/a (0) | 0.215 (33) | 0.051 |
+| zhang_invitro | 0.079 (30) | 0.158 (18) | n/a (0) | 0.450 (33) | < 0.001 |
+| zhang_invivo | 0.112 (30) | 0.249 (18) | n/a (0) | 0.525 (33) | < 0.001 |
 
-**Interpretation:**  
-- **FLOPPY pairs show highest reactivity** (mean = 0.41), consistent with unstable pairing  
-- **FIRM pairs show lowest reactivity** (mean = 0.16), consistent with stable pairing  
-- All 81 positions have at least one predicted pairing partner (no unpaired positions by ViennaRNA)  
-- Gradient: FLOPPY > SOFT > FIRM supports structure-reactivity relationship
-
-### SHAPE-Directed Folding (Incarnato in vitro)
-
-| Structure | Energy (kcal/mol) |
-|-----------|-------------------|
-| MFE unconstrained | **-26.00** |
-| MFE SHAPE-directed | **-51.80** |
-
-| Comparison | Base-pair distance |
-|------------|-------------------|
-| MFE unconstrained ↔ MFE SHAPE | **4** |
-| MEA unconstrained ↔ MEA SHAPE | **1** |
+**FLOPPY tier:** 0 positions in MEA structure (all pairs have p ≥ 0.5)  
+**Statistical test:** FIRM vs unpaired (Mann-Whitney U), because FLOPPY n < 5
 
 **Interpretation:**  
-- SHAPE constraints stabilize the structure (ΔΔG = -25.8 kcal/mol)  
-- Modest structural changes: 4 base-pair differences (MFE), 1 difference (MEA)  
-- MEA is less sensitive to SHAPE constraints than MFE  
-- **Limitation:** FSE pseudoknot is not captured in dot-bracket structures; only the nested stem-loops are modeled
+- **FIRM pairs show lower reactivity than unpaired positions** for all datasets (statistically significant for 4/5)  
+- **SOFT pairs show intermediate reactivity** between FIRM and unpaired  
+- Gradient FIRM < SOFT < unpaired consistent across datasets (except Pyle)  
+- Pyle shows attenuated tier separation (p = 0.051 for FIRM vs unpaired)  
+- MEA structure has no FLOPPY pairs: all predicted pairs have p ≥ 0.5
 
-### Genome-Context Control
+### SHAPE-Directed Folding (All Datasets, MEA Structure)
 
-**FSE correlation percentiles** (position relative to 50 random 81-nt windows):
-
-| Dataset | FSE percentile |
-|---------|----------------|
-| incarnato_invitro | **65.3%** |
-| incarnato_invivo | **78.0%** |
-| pyle | 44.0% |
-| zhang_invitro | **92.0%** |
-| zhang_invivo | **78.0%** |
+| Dataset | Chemistry | BP distance (MEA) | F1 (MEA) | Tier changes | Common pairs |
+|---------|-----------|-------------------|----------|--------------|--------------|
+| incarnato_invitro | SHAPE-MaP | 1 | 0.980 | 0 | 24 |
+| incarnato_invivo | SHAPE-MaP | 1 | 0.979 | 0 | 23 |
+| pyle | SHAPE-MaP | 2 | 0.957 | 0 | 22 |
+| zhang_invitro | icSHAPE | 1 | 0.980 | 0 | 24 |
+| zhang_invivo | icSHAPE | 8 | 0.826 | 0 | 19 |
 
 **Interpretation:**  
-- FSE correlation is **above median** for 4/5 datasets (65–92th percentile)  
-- Zhang in vitro shows FSE at 92nd percentile: exceptionally strong agreement  
-- Pyle shows FSE below median (44th percentile), consistent with weak FSE-specific correlation  
-- **Conclusion:** FSE structure-reactivity agreement is **better than typical** for most datasets, supporting functionally important folding
+- **Minimal structural changes** for 4/5 datasets (BP distance ≤ 2, F1 ≥ 0.96)  
+- Zhang in vivo shows larger change (BP distance = 8, F1 = 0.83), but still high agreement  
+- No tier changes: SHAPE constraints do not reclassify FIRM/SOFT pairs  
+- **ViennaRNA unconstrained MEA is already highly consistent with SHAPE data**  
+- icSHAPE chemistry produces similar results to SHAPE-MaP (both chemistries compatible with Deigan model)
+
+### Genome-Context Control (369 Non-Overlapping 81-nt Windows)
+
+| Dataset | FSE Spearman | FSE percentile | Empirical p-value |
+|---------|--------------|----------------|-------------------|
+| incarnato_invitro | 0.294 | 44.6% | 0.554 |
+| incarnato_invivo | 0.355 | 62.8% | 0.372 |
+| pyle | 0.163 | 43.1% | 0.569 |
+| zhang_invitro | 0.497 | 82.1% | 0.179 |
+| zhang_invivo | 0.547 | 75.9% | 0.241 |
+
+**Interpretation:**  
+- **FSE is not exceptional** for Incarnato/Pyle datasets (43–63rd percentile)  
+- **FSE shows above-average correlation** for Zhang datasets (76–82nd percentile)  
+- None reach statistical significance threshold (empirical p > 0.05)  
+- Conclusion: FSE structure-reactivity agreement is typical to above-average, not an outlier
 
 ## Figures
 
-1. **SHAPE tracks vs unpaired probability** (`benchmarks/figures/layer4_shape_tracks.png`)  
-   - Top panel: ViennaRNA unpaired probability (black)  
-   - 5 dataset panels: normalized SHAPE reactivity (colored)  
-   - Visual agreement strongest for Zhang/Incarnato, weakest for Pyle
+1. **SHAPE tracks vs unpaired probability** (`benchmarks/outputs/figures/layer4_shape_tracks.png`)  
+   - Top panel: ViennaRNA unpaired probability (black line)  
+   - 5 dataset panels: normalized SHAPE reactivity (colored lines)  
+   - Visual agreement strongest for Zhang datasets, weakest for Pyle
 
-2. **Genome-control distribution** (`benchmarks/figures/layer4_genome_control.png`)  
-   - Histogram of Spearman correlation across 50 random windows  
-   - FSE marked in red (vertical line)  
+2. **Genome-control distribution** (`benchmarks/outputs/figures/layer4_genome_control.png`)  
+   - Histogram of Spearman correlation across 369 windows per dataset  
+   - FSE marked with red vertical line  
    - FSE percentile annotated
+
+3. **Arc diagrams** (`benchmarks/outputs/figures/layer4_arc_diagrams.png`)  
+   - MEA and MFE structures: unconstrained vs SHAPE-directed  
+   - Pairs colored by tier (FIRM/SOFT)  
+   - Shows minimal structural differences for most datasets
+
+4. **Dataset agreement heatmap** (`benchmarks/outputs/figures/layer4_dataset_agreement.png`)  
+   - Pairwise Spearman correlation between datasets on FSE window  
+   - Within-lab pairs show strongest agreement (ρ > 0.8)
 
 ## Interpretation
 
-1. **Structure-reactivity relationship holds for FSE:**  
-   - 4/5 datasets show significant positive correlation (ρ = 0.35–0.49)  
-   - Higher unpaired probability → higher SHAPE reactivity (reactive nucleotides are flexible/exposed)
+1. **Structure-reactivity relationship:**  
+   - Positive correlation for all datasets (ρ = 0.16–0.55), significant for 4/5  
+   - Zhang datasets show strongest correlation (ρ ~ 0.5), Pyle weakest (ρ = 0.16)  
+   - Higher unpaired probability → higher SHAPE reactivity (as expected)
 
-2. **Tier gradient confirms FoldTrust tiers:**  
-   - FLOPPY pairs (p < 0.5) are most reactive  
-   - FIRM pairs (p ≥ 0.85) are least reactive  
-   - FoldTrust tier boundaries align with experimental behavior
+2. **Tier gradient:**  
+   - FIRM pairs show lower reactivity than unpaired positions (p < 0.001 for 4/5 datasets)  
+   - SOFT pairs show intermediate reactivity  
+   - Supports FoldTrust tier definitions based on experimental behavior
 
 3. **Dataset heterogeneity:**  
-   - Within-lab agreement is excellent (ρ ~ 0.83–0.85)  
+   - Within-lab agreement is excellent (ρ > 0.8)  
    - Cross-lab agreement is moderate (ρ ~ 0.3–0.6)  
-   - Pyle dataset shows weaker correlation with structure predictions (possible differences in protocol or analysis)
+   - Pyle dataset diverges from Incarnato/Zhang (possible experimental or normalization differences)
 
 4. **SHAPE-directed folding:**  
-   - Modest structural changes (4 bp MFE, 1 bp MEA) suggest ViennaRNA unconstrained MFE is already reasonably consistent with SHAPE  
-   - SHAPE constraints do not dramatically alter the fold (unlike some riboswitch cases)  
-   - Pseudoknot limitation: dot-bracket cannot represent the -1 frameshift pseudoknot structure
+   - MEA structures show minimal changes (BP distance ≤ 2 for 4/5 datasets)  
+   - ViennaRNA unconstrained predictions are already consistent with SHAPE  
+   - icSHAPE and SHAPE-MaP produce similar folding constraints
 
 5. **Genome-context control:**  
-   - FSE shows above-median correlation for most datasets  
-   - Not an outlier, but consistently better than random windows  
-   - Supports hypothesis that FSE folding is functionally constrained
+   - FSE is not exceptional for most datasets (43–63rd percentile)  
+   - Zhang datasets show FSE above 75th percentile (better than typical)  
+   - Interpretation: FSE structure-reactivity agreement is ordinary to good, not outstanding
 
 ## Limitations
 
 1. **Pseudoknot representation:**  
    - FSE contains a programmed -1 ribosomal frameshift pseudoknot  
    - ViennaRNA dot-bracket notation cannot model pseudoknots  
-   - Only nested stem-loops are captured; pseudoknot structure is missing  
-   - Base-pair probabilities are for nested pairs only
+   - Only nested stem-loops are captured; base-pair probabilities are for nested pairs only
 
 2. **Normalization choice:**  
-   - 90th-percentile scaling chosen for simplicity and genome-wide consistency  
-   - DasLab descriptions.txt mentions outlier removal and 0–2 winsorization for visualization, not applied here  
-   - Alternate normalizations (2–8% winsorization, 0.5–2.0 cap) produce similar correlations (tested: ±0.02 difference)
+   - 90th-percentile scaling applied genome-wide before window extraction  
+   - Alternate normalizations (Deigan box-plot, winsorization) produce similar correlations (tested: ±0.03)
 
 3. **AUROC threshold sensitivity:**  
-   - Top-quartile vs bottom-quartile threshold is arbitrary  
-   - Tested 0.6/0.4 and 0.8/0.2 thresholds: AUROC varies ±0.05 (conclusion unchanged)
+   - Top-quartile vs bottom-quartile classification is arbitrary  
+   - Tested 0.6/0.4 and 0.8/0.2 thresholds: AUROC varies ±0.05 (conclusions unchanged)
 
 4. **Pyle dataset:**  
-   - Weak correlation with unpaired probability (ρ = 0.12, n.s.)  
-   - Possible explanations: different normalization, in vivo vs in vitro folding context, or technical variation  
+   - Weakest correlation (ρ = 0.16, n.s.) and tier separation (p = 0.051)  
+   - Possible causes: in vivo folding heterogeneity, normalization differences, or technical variation  
    - Does not invalidate other datasets' agreement
 
-5. **Genome-control window selection:**  
-   - Random sampling may miss structured elements  
-   - Fixed length (81 nt) may not match all functional elements  
-   - 50 windows chosen as trade-off between coverage and runtime
-
-6. **Single-parameter set:**  
-   - Only Turner2004 parameters tested (ViennaRNA default)  
-   - Andronescu2007/Langdon2018 would produce different MFE energies but similar correlation trends (tested on other cases)
+5. **Single-parameter set:**  
+   - Only ViennaRNA 2.7.2 defaults (Turner2004) tested  
+   - Andronescu2007 or Langdon2018 parameters would produce different MFE energies but similar correlation trends
 
 ## Conclusion
 
-ViennaRNA unpaired probability shows **moderate to strong positive correlation** with experimental SHAPE reactivity on the SARS-CoV-2 FSE (ρ = 0.35–0.49 for 4/5 datasets, p < 0.01). FIRM-tiered pairs are less reactive than FLOPPY pairs, validating FoldTrust's reliability stratification. The FSE shows above-median structure-reactivity agreement compared to random genome windows, consistent with functionally important folding. Dataset agreement is high within labs (ρ ~ 0.83–0.85) but moderate across labs (ρ ~ 0.3–0.6), reflecting experimental and analytical variation.
+ViennaRNA unpaired probability shows **positive correlation** with experimental SHAPE reactivity on the SARS-CoV-2 FSE (ρ = 0.29–0.55, significant for 4/5 datasets). FIRM-tiered pairs are less reactive than unpaired positions (p < 0.001 for 4/5 datasets), validating FoldTrust's reliability stratification. SHAPE-directed folding produces minimal structural changes (BP distance ≤ 2 for 4/5 datasets), indicating unconstrained ViennaRNA predictions are already consistent with experimental constraints. The FSE shows typical to above-average structure-reactivity agreement compared to random genome windows (44–82nd percentile), with strongest agreement for Zhang icSHAPE datasets (76–82nd percentile). Dataset agreement is high within labs (ρ > 0.8) but moderate across labs (ρ ~ 0.3–0.6), reflecting experimental and analytical variation.
 
 ---
 
@@ -236,6 +247,12 @@ ViennaRNA unpaired probability shows **moderate to strong positive correlation**
 
 **Output files:**  
 - `benchmarks/outputs/layer4_shape/layer4_shape_results.json` — full results  
-- `benchmarks/outputs/layer4_shape/genome_control.csv` — per-window correlations  
-- `benchmarks/figures/layer4_shape_tracks.png` — SHAPE tracks  
-- `benchmarks/figures/layer4_genome_control.png` — genome-control distribution
+- `benchmarks/outputs/layer4_shape/per_dataset_metrics.csv` — Spearman/AUROC per dataset  
+- `benchmarks/outputs/layer4_shape/dataset_agreement.csv` — pairwise correlations  
+- `benchmarks/outputs/layer4_shape/tier_analysis.csv` — tier reactivity statistics  
+- `benchmarks/outputs/layer4_shape/shape_directed_folding.csv` — structural comparison  
+- `benchmarks/outputs/layer4_shape/genome_control_full.csv` — per-window correlations (369 windows)  
+- `benchmarks/outputs/figures/layer4_shape_tracks.png` — SHAPE tracks  
+- `benchmarks/outputs/figures/layer4_genome_control.png` — genome-control distribution  
+- `benchmarks/outputs/figures/layer4_arc_diagrams.png` — structure comparison  
+- `benchmarks/outputs/figures/layer4_dataset_agreement.png` — dataset correlation heatmap

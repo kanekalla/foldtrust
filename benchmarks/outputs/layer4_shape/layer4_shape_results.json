@@ -5,9 +5,9 @@
   "datasets": {
     "incarnato_invitro": {
       "dataset": "incarnato_invitro",
-      "spearman": 0.11776858987493795,
-      "spearman_pvalue": 0.29505703020575363,
-      "auroc": 0.5997732426303855,
+      "spearman": 0.29418613209302896,
+      "spearman_pvalue": 0.007680757220310764,
+      "auroc": 0.7052154195011338,
       "n_reactive": 21,
       "n_unreactive": 21,
       "coverage": 1.0,
@@ -15,9 +15,9 @@
     },
     "incarnato_invivo": {
       "dataset": "incarnato_invivo",
-      "spearman": 0.03978938963279338,
-      "spearman_pvalue": 0.7260199143105697,
-      "auroc": 0.55,
+      "spearman": 0.3545781230938378,
+      "spearman_pvalue": 0.0012506696596566473,
+      "auroc": 0.785,
       "n_reactive": 20,
       "n_unreactive": 20,
       "coverage": 0.9876543209876543,
@@ -25,9 +25,9 @@
     },
     "pyle": {
       "dataset": "pyle",
-      "spearman": 0.029674334144587585,
-      "spearman_pvalue": 0.7925691507099452,
-      "auroc": 0.5714285714285714,
+      "spearman": 0.16343691381719466,
+      "spearman_pvalue": 0.1448701877332387,
+      "auroc": 0.6439909297052154,
       "n_reactive": 21,
       "n_unreactive": 21,
       "coverage": 1.0,
@@ -35,9 +35,9 @@
     },
     "zhang_invitro": {
       "dataset": "zhang_invitro",
-      "spearman": 0.10974527677560662,
-      "spearman_pvalue": 0.3294086678230317,
-      "auroc": 0.528344671201814,
+      "spearman": 0.4968225680144986,
+      "spearman_pvalue": 2.3860921554308983e-06,
+      "auroc": 0.8503401360544217,
       "n_reactive": 21,
       "n_unreactive": 21,
       "coverage": 1.0,
@@ -45,9 +45,9 @@
     },
     "zhang_invivo": {
       "dataset": "zhang_invivo",
-      "spearman": 0.11880241116304076,
-      "spearman_pvalue": 0.290808576287107,
-      "auroc": 0.5292207792207793,
+      "spearman": 0.5472763680992379,
+      "spearman_pvalue": 1.2448766082300512e-07,
+      "auroc": 0.8636363636363636,
       "n_reactive": 21,
       "n_unreactive": 22,
       "coverage": 1.0,
@@ -642,33 +642,33 @@
   ],
   "genome_control": {
     "incarnato_invitro": {
-      "spearman": 0.11776858987493795,
-      "percentile": 55.64738292011019,
-      "empirical_pvalue": 0.44352617079889806,
+      "spearman": 0.29418613209302896,
+      "percentile": 44.62809917355372,
+      "empirical_pvalue": 0.5537190082644629,
       "n_windows": 363
     },
     "incarnato_invivo": {
-      "spearman": 0.03978938963279338,
-      "percentile": 38.58695652173913,
-      "empirical_pvalue": 0.6141304347826086,
+      "spearman": 0.3545781230938378,
+      "percentile": 62.77173913043478,
+      "empirical_pvalue": 0.37228260869565216,
       "n_windows": 368
     },
     "pyle": {
-      "spearman": 0.029674334144587585,
-      "percentile": 50.67750677506775,
-      "empirical_pvalue": 0.4932249322493225,
+      "spearman": 0.16343691381719466,
+      "percentile": 43.08943089430895,
+      "empirical_pvalue": 0.5691056910569106,
       "n_windows": 369
     },
     "zhang_invitro": {
-      "spearman": 0.10974527677560662,
-      "percentile": 48.78048780487805,
-      "empirical_pvalue": 0.5121951219512195,
+      "spearman": 0.4968225680144986,
+      "percentile": 82.11382113821138,
+      "empirical_pvalue": 0.17886178861788618,
       "n_windows": 369
     },
     "zhang_invivo": {
-      "spearman": 0.11880241116304076,
-      "percentile": 46.34146341463415,
-      "empirical_pvalue": 0.5365853658536586,
+      "spearman": 0.5472763680992379,
+      "percentile": 75.88075880758808,
+      "empirical_pvalue": 0.24119241192411925,
       "n_windows": 369
     }
   }
