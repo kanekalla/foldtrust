@@ -7,7 +7,7 @@
     "baseline_floppy_pairs": 15119,
     "conditions": {
       "param_Andronescu2007": {
-        "tier_agreement": 0.7388059701492538,
+        "tier_agreement": 0.6305970149253731,
         "mea_jaccard": 0.4307692307692308,
         "mfe_jaccard": 0.3445378151260504,
         "unpaired_spearman": 0.8390726705638925,
@@ -16,7 +16,7 @@
         "mfe_energy": -52.619998931884766
       },
       "param_Langdon2018": {
-        "tier_agreement": 0.6902985074626866,
+        "tier_agreement": 0.5932835820895522,
         "mea_jaccard": 0.29577464788732394,
         "mfe_jaccard": 0.234375,
         "unpaired_spearman": 0.7334161654864226,
@@ -25,7 +25,7 @@
         "mfe_energy": -56.0
       },
       "temp_24.0C": {
-        "tier_agreement": 0.7089552238805971,
+        "tier_agreement": 0.6529850746268657,
         "mea_jaccard": 0.780952380952381,
         "mfe_jaccard": 0.71875,
         "unpaired_spearman": 0.9780037617351609,
@@ -34,7 +34,7 @@
         "mfe_energy": -79.5
       },
       "temp_30.0C": {
-        "tier_agreement": 0.7910447761194029,
+        "tier_agreement": 0.753731343283582,
         "mea_jaccard": 0.86,
         "mfe_jaccard": 0.9642857142857143,
         "unpaired_spearman": 0.9912377879201794,
@@ -43,7 +43,7 @@
         "mfe_energy": -67.86000061035156
       },
       "temp_42.0C": {
-        "tier_agreement": 0.9552238805970149,
+        "tier_agreement": 0.9253731343283582,
         "mea_jaccard": 0.9081632653061225,
         "mfe_jaccard": 1.0,
         "unpaired_spearman": 0.9952788166431531,
@@ -52,7 +52,7 @@
         "mfe_energy": -45.4900016784668
       },
       "temp_45.0C": {
-        "tier_agreement": 0.8805970149253731,
+        "tier_agreement": 0.8507462686567164,
         "mea_jaccard": 0.9081632653061225,
         "mfe_jaccard": 0.8823529411764706,
         "unpaired_spearman": 0.9869735737169796,
@@ -61,7 +61,7 @@
         "mfe_energy": -40.06999969482422
       },
       "jitter_extend_left_10": {
-        "tier_agreement": 0.3283582089552239,
+        "tier_agreement": 0.21641791044776118,
         "mea_jaccard": 0.0,
         "mfe_jaccard": 0.0,
         "unpaired_spearman": 0.0,
@@ -79,7 +79,7 @@
         "mfe_energy": -57.70000076293945
       },
       "jitter_extend_both_10": {
-        "tier_agreement": 0.31343283582089554,
+        "tier_agreement": 0.2126865671641791,
         "mea_jaccard": 0.0,
         "mfe_jaccard": 0.0,
         "unpaired_spearman": 0.0,
@@ -88,7 +88,7 @@
         "mfe_energy": -61.20000076293945
       },
       "jitter_shrink_left_10": {
-        "tier_agreement": 0.937984496124031,
+        "tier_agreement": 0.9147286821705426,
         "mea_jaccard": 0.0,
         "mfe_jaccard": 0.0,
         "unpaired_spearman": 0.9889414085414449,
@@ -97,7 +97,7 @@
         "mfe_energy": -54.400001525878906
       },
       "jitter_shrink_right_10": {
-        "tier_agreement": 0.9496124031007752,
+        "tier_agreement": 0.9108527131782945,
         "mea_jaccard": 0.84,
         "mfe_jaccard": 0.8604651162790697,
         "unpaired_spearman": 0.962915356635382,
@@ -106,7 +106,7 @@
         "mfe_energy": -52.599998474121094
       },
       "jitter_extend_left_25": {
-        "tier_agreement": 0.45149253731343286,
+        "tier_agreement": 0.29850746268656714,
         "mea_jaccard": 0.0,
         "mfe_jaccard": 0.0,
         "unpaired_spearman": 0.0,
@@ -124,7 +124,7 @@
         "mfe_energy": -61.29999923706055
       },
       "jitter_extend_both_25": {
-        "tier_agreement": 0.48880597014925375,
+        "tier_agreement": 0.3582089552238806,
         "mea_jaccard": 0.0,
         "mfe_jaccard": 0.0,
         "unpaired_spearman": 0.0,
@@ -133,7 +133,7 @@
         "mfe_energy": -64.80000305175781
       },
       "jitter_shrink_left_25": {
-        "tier_agreement": 0.9259259259259259,
+        "tier_agreement": 0.8847736625514403,
         "mea_jaccard": 0.0,
         "mfe_jaccard": 0.0,
         "unpaired_spearman": 0.9518717561439866,
@@ -142,7 +142,7 @@
         "mfe_energy": -50.400001525878906
       },
       "jitter_shrink_right_25": {
-        "tier_agreement": 0.5802469135802469,
+        "tier_agreement": 0.43621399176954734,
         "mea_jaccard": 0.15789473684210525,
         "mfe_jaccard": 0.3508771929824561,
         "unpaired_spearman": 0.7169735105651647,
@@ -160,7 +160,7 @@
     "baseline_floppy_pairs": 12571,
     "conditions": {
       "param_Andronescu2007": {
-        "tier_agreement": 0.44402985074626866,
+        "tier_agreement": 0.3619402985074627,
         "mea_jaccard": 0.06626506024096386,
         "mfe_jaccard": 0.06756756756756757,
         "unpaired_spearman": 0.46702185160409887,
@@ -169,7 +169,7 @@
         "mfe_energy": -81.87999725341797
       },
       "param_Langdon2018": {
-        "tier_agreement": 0.5671641791044776,
+        "tier_agreement": 0.5,
         "mea_jaccard": 0.19727891156462585,
         "mfe_jaccard": 0.21774193548387097,
         "unpaired_spearman": 0.7178910593018782,
@@ -178,7 +178,7 @@
         "mfe_energy": -88.80000305175781
       },
       "temp_24.0C": {
-        "tier_agreement": 0.8059701492537313,
+        "tier_agreement": 0.746268656716418,
         "mea_jaccard": 0.5042735042735043,
         "mfe_jaccard": 0.5,
         "unpaired_spearman": 0.9883363766772418,
@@ -187,7 +187,7 @@
         "mfe_energy": -117.63999938964844
       },
       "temp_30.0C": {
-        "tier_agreement": 0.835820895522388,
+        "tier_agreement": 0.7649253731343284,
         "mea_jaccard": 0.6923076923076923,
         "mfe_jaccard": 0.5,
         "unpaired_spearman": 0.9963691836959888,
@@ -214,7 +214,7 @@
         "mfe_energy": -75.19999694824219
       },
       "jitter_extend_left_10": {
-        "tier_agreement": 0.5597014925373134,
+        "tier_agreement": 0.44029850746268656,
         "mea_jaccard": 0.0056179775280898875,
         "mfe_jaccard": 0.0,
         "unpaired_spearman": 0.0,
@@ -223,7 +223,7 @@
         "mfe_energy": -91.19999694824219
       },
       "jitter_extend_right_10": {
-        "tier_agreement": 0.7313432835820896,
+        "tier_agreement": 0.6268656716417911,
         "mea_jaccard": 0.41732283464566927,
         "mfe_jaccard": 0.2857142857142857,
         "unpaired_spearman": 0.0,
@@ -232,7 +232,7 @@
         "mfe_energy": -91.80000305175781
       },
       "jitter_extend_both_10": {
-        "tier_agreement": 0.5074626865671642,
+        "tier_agreement": 0.3358208955223881,
         "mea_jaccard": 0.00558659217877095,
         "mfe_jaccard": 0.0,
         "unpaired_spearman": 0.0,
@@ -241,7 +241,7 @@
         "mfe_energy": -93.5
       },
       "jitter_shrink_left_10": {
-        "tier_agreement": 0.7906976744186046,
+        "tier_agreement": 0.6976744186046512,
         "mea_jaccard": 0.0,
         "mfe_jaccard": 0.0,
         "unpaired_spearman": 0.9483992957886722,
@@ -250,7 +250,7 @@
         "mfe_energy": -85.19999694824219
       },
       "jitter_shrink_right_10": {
-        "tier_agreement": 0.7170542635658915,
+        "tier_agreement": 0.6550387596899225,
         "mea_jaccard": 0.7474747474747475,
         "mfe_jaccard": 0.8875,
         "unpaired_spearman": 0.9292679185901518,
@@ -259,7 +259,7 @@
         "mfe_energy": -86.69999694824219
       },
       "jitter_extend_left_25": {
-        "tier_agreement": 0.45149253731343286,
+        "tier_agreement": 0.27611940298507465,
         "mea_jaccard": 0.0,
         "mfe_jaccard": 0.0,
         "unpaired_spearman": 0.0,
@@ -268,7 +268,7 @@
         "mfe_energy": -99.9000015258789
       },
       "jitter_extend_right_25": {
-        "tier_agreement": 0.7723880597014925,
+        "tier_agreement": 0.7201492537313433,
         "mea_jaccard": 0.6909090909090909,
         "mfe_jaccard": 0.7777777777777778,
         "unpaired_spearman": 0.0,
@@ -277,7 +277,7 @@
         "mfe_energy": -102.4000015258789
       },
       "jitter_extend_both_25": {
-        "tier_agreement": 0.3582089552238806,
+        "tier_agreement": 0.19776119402985073,
         "mea_jaccard": 0.0,
         "mfe_jaccard": 0.0,
         "unpaired_spearman": 0.0,
@@ -286,7 +286,7 @@
         "mfe_energy": -111.80000305175781
       },
       "jitter_shrink_left_25": {
-        "tier_agreement": 0.691358024691358,
+        "tier_agreement": 0.6049382716049383,
         "mea_jaccard": 0.0,
         "mfe_jaccard": 0.0,
         "unpaired_spearman": 0.8487750497189145,
@@ -295,7 +295,7 @@
         "mfe_energy": -73.80000305175781
       },
       "jitter_shrink_right_25": {
-        "tier_agreement": 0.7283950617283951,
+        "tier_agreement": 0.6625514403292181,
         "mea_jaccard": 0.696969696969697,
         "mfe_jaccard": 0.8375,
         "unpaired_spearman": 0.9223314449345248,
@@ -313,7 +313,7 @@
     "baseline_floppy_pairs": 11778,
     "conditions": {
       "param_Andronescu2007": {
-        "tier_agreement": 0.458955223880597,
+        "tier_agreement": 0.373134328358209,
         "mea_jaccard": 0.22818791946308725,
         "mfe_jaccard": 0.3135593220338983,
         "unpaired_spearman": 0.6607418610551934,
@@ -322,7 +322,7 @@
         "mfe_energy": -83.69000244140625
       },
       "param_Langdon2018": {
-        "tier_agreement": 0.6343283582089553,
+        "tier_agreement": 0.6082089552238806,
         "mea_jaccard": 0.6972477064220184,
         "mfe_jaccard": 0.6382978723404256,
         "unpaired_spearman": 0.9145274421510091,
@@ -331,7 +331,7 @@
         "mfe_energy": -89.9000015258789
       },
       "temp_24.0C": {
-        "tier_agreement": 0.8059701492537313,
+        "tier_agreement": 0.7985074626865671,
         "mea_jaccard": 0.8585858585858586,
         "mfe_jaccard": 0.8658536585365854,
         "unpaired_spearman": 0.979861562659947,
@@ -349,7 +349,7 @@
         "mfe_energy": -99.62999725341797
       },
       "temp_42.0C": {
-        "tier_agreement": 0.8208955223880597,
+        "tier_agreement": 0.8134328358208955,
         "mea_jaccard": 0.978494623655914,
         "mfe_jaccard": 0.9605263157894737,
         "unpaired_spearman": 0.9932371058952759,
@@ -358,7 +358,7 @@
         "mfe_energy": -75.63999938964844
       },
       "temp_45.0C": {
-        "tier_agreement": 0.7238805970149254,
+        "tier_agreement": 0.7164179104477612,
         "mea_jaccard": 0.978494623655914,
         "mfe_jaccard": 0.9605263157894737,
         "unpaired_spearman": 0.9783790624588928,
@@ -367,7 +367,7 @@
         "mfe_energy": -69.80999755859375
       },
       "jitter_extend_left_10": {
-        "tier_agreement": 0.43656716417910446,
+        "tier_agreement": 0.29850746268656714,
         "mea_jaccard": 0.0,
         "mfe_jaccard": 0.0,
         "unpaired_spearman": 0.0,
@@ -376,7 +376,7 @@
         "mfe_energy": -87.30000305175781
       },
       "jitter_extend_right_10": {
-        "tier_agreement": 0.8805970149253731,
+        "tier_agreement": 0.8283582089552238,
         "mea_jaccard": 0.7075471698113207,
         "mfe_jaccard": 0.5816326530612245,
         "unpaired_spearman": 0.0,
@@ -385,7 +385,7 @@
         "mfe_energy": -87.4000015258789
       },
       "jitter_extend_both_10": {
-        "tier_agreement": 0.4626865671641791,
+        "tier_agreement": 0.29850746268656714,
         "mea_jaccard": 0.0,
         "mfe_jaccard": 0.0,
         "unpaired_spearman": 0.0,
@@ -394,7 +394,7 @@
         "mfe_energy": -88.4000015258789
       },
       "jitter_shrink_left_10": {
-        "tier_agreement": 0.8294573643410853,
+        "tier_agreement": 0.8178294573643411,
         "mea_jaccard": 0.0,
         "mfe_jaccard": 0.0,
         "unpaired_spearman": 0.8370873685324866,
@@ -403,7 +403,7 @@
         "mfe_energy": -84.30000305175781
       },
       "jitter_shrink_right_10": {
-        "tier_agreement": 0.7209302325581395,
+        "tier_agreement": 0.6666666666666666,
         "mea_jaccard": 0.6542056074766355,
         "mfe_jaccard": 0.6896551724137931,
         "unpaired_spearman": 0.9141767774470696,
@@ -412,7 +412,7 @@
         "mfe_energy": -81.80000305175781
       },
       "jitter_extend_left_25": {
-        "tier_agreement": 0.39552238805970147,
+        "tier_agreement": 0.25,
         "mea_jaccard": 0.0,
         "mfe_jaccard": 0.0,
         "unpaired_spearman": 0.0,
@@ -421,7 +421,7 @@
         "mfe_energy": -89.69999694824219
       },
       "jitter_extend_right_25": {
-        "tier_agreement": 0.8171641791044776,
+        "tier_agreement": 0.7761194029850746,
         "mea_jaccard": 0.672566371681416,
         "mfe_jaccard": 0.5643564356435643,
         "unpaired_spearman": 0.0,
@@ -430,7 +430,7 @@
         "mfe_energy": -89.80000305175781
       },
       "jitter_extend_both_25": {
-        "tier_agreement": 0.40671641791044777,
+        "tier_agreement": 0.25,
         "mea_jaccard": 0.0,
         "mfe_jaccard": 0.0,
         "unpaired_spearman": 0.0,
@@ -439,7 +439,7 @@
         "mfe_energy": -95.0999984741211
       },
       "jitter_shrink_left_25": {
-        "tier_agreement": 0.551440329218107,
+        "tier_agreement": 0.43621399176954734,
         "mea_jaccard": 0.0,
         "mfe_jaccard": 0.0,
         "unpaired_spearman": 0.7819125181271231,
@@ -448,7 +448,7 @@
         "mfe_energy": -74.9000015258789
       },
       "jitter_shrink_right_25": {
-        "tier_agreement": 0.9259259259259259,
+        "tier_agreement": 0.9135802469135802,
         "mea_jaccard": 0.8913043478260869,
         "mfe_jaccard": 0.881578947368421,
         "unpaired_spearman": 0.9556326637797078,
@@ -466,7 +466,7 @@
     "baseline_floppy_pairs": 6921,
     "conditions": {
       "param_Andronescu2007": {
-        "tier_agreement": 0.6740331491712708,
+        "tier_agreement": 0.580110497237569,
         "mea_jaccard": 0.29411764705882354,
         "mfe_jaccard": 0.2558139534883721,
         "unpaired_spearman": 0.7302025782688766,
@@ -475,7 +475,7 @@
         "mfe_energy": -36.15999984741211
       },
       "param_Langdon2018": {
-        "tier_agreement": 0.5911602209944752,
+        "tier_agreement": 0.4530386740331492,
         "mea_jaccard": 0.23300970873786409,
         "mfe_jaccard": 0.49230769230769234,
         "unpaired_spearman": 0.7144901139376277,
@@ -520,7 +520,7 @@
         "mfe_energy": -30.3700008392334
       },
       "jitter_extend_left_10": {
-        "tier_agreement": 0.3756906077348066,
+        "tier_agreement": 0.23756906077348067,
         "mea_jaccard": 0.0,
         "mfe_jaccard": 0.0,
         "unpaired_spearman": 0.0,
@@ -529,7 +529,7 @@
         "mfe_energy": -41.900001525878906
       },
       "jitter_extend_right_10": {
-        "tier_agreement": 0.7624309392265194,
+        "tier_agreement": 0.7182320441988951,
         "mea_jaccard": 0.6962025316455697,
         "mfe_jaccard": 0.0707070707070707,
         "unpaired_spearman": 0.0,
@@ -538,7 +538,7 @@
         "mfe_energy": -41.20000076293945
       },
       "jitter_extend_both_10": {
-        "tier_agreement": 0.2596685082872928,
+        "tier_agreement": 0.15469613259668508,
         "mea_jaccard": 0.0,
         "mfe_jaccard": 0.0,
         "unpaired_spearman": 0.0,
@@ -547,7 +547,7 @@
         "mfe_energy": -43.599998474121094
       },
       "jitter_shrink_left_10": {
-        "tier_agreement": 0.8596491228070176,
+        "tier_agreement": 0.8011695906432749,
         "mea_jaccard": 0.0,
         "mfe_jaccard": 0.0,
         "unpaired_spearman": 0.9556963544291647,
@@ -556,7 +556,7 @@
         "mfe_energy": -39.5
       },
       "jitter_shrink_right_10": {
-        "tier_agreement": 0.6432748538011696,
+        "tier_agreement": 0.4444444444444444,
         "mea_jaccard": 0.09322033898305085,
         "mfe_jaccard": 0.36,
         "unpaired_spearman": 0.5700962392300862,
@@ -565,7 +565,7 @@
         "mfe_energy": -34.599998474121094
       },
       "jitter_extend_left_25": {
-        "tier_agreement": 0.39779005524861877,
+        "tier_agreement": 0.287292817679558,
         "mea_jaccard": 0.0,
         "mfe_jaccard": 0.0,
         "unpaired_spearman": 0.0,
@@ -574,7 +574,7 @@
         "mfe_energy": -44.29999923706055
       },
       "jitter_extend_right_25": {
-        "tier_agreement": 0.6850828729281768,
+        "tier_agreement": 0.6353591160220995,
         "mea_jaccard": 0.6470588235294118,
         "mfe_jaccard": 0.06481481481481481,
         "unpaired_spearman": 0.0,
@@ -583,7 +583,7 @@
         "mfe_energy": -42.5
       },
       "jitter_extend_both_25": {
-        "tier_agreement": 0.3425414364640884,
+        "tier_agreement": 0.2430939226519337,
         "mea_jaccard": 0.0,
         "mfe_jaccard": 0.0,
         "unpaired_spearman": 0.0,
@@ -592,7 +592,7 @@
         "mfe_energy": -47.099998474121094
       },
       "jitter_shrink_left_25": {
-        "tier_agreement": 0.6923076923076923,
+        "tier_agreement": 0.6794871794871795,
         "mea_jaccard": 0.0,
         "mfe_jaccard": 0.0,
         "unpaired_spearman": 0.9274327891134959,
@@ -601,7 +601,7 @@
         "mfe_energy": -38.599998474121094
       },
       "jitter_shrink_right_25": {
-        "tier_agreement": 0.6538461538461539,
+        "tier_agreement": 0.47435897435897434,
         "mea_jaccard": 0.07142857142857142,
         "mfe_jaccard": 0.42857142857142855,
         "unpaired_spearman": 0.7021415814512176,
@@ -619,7 +619,7 @@
     "baseline_floppy_pairs": 7878,
     "conditions": {
       "param_Andronescu2007": {
-        "tier_agreement": 0.7412935323383084,
+        "tier_agreement": 0.5124378109452736,
         "mea_jaccard": 0.44086021505376344,
         "mfe_jaccard": 0.8548387096774194,
         "unpaired_spearman": 0.8835155903650066,
@@ -628,7 +628,7 @@
         "mfe_energy": -26.139999389648438
       },
       "param_Langdon2018": {
-        "tier_agreement": 0.746268656716418,
+        "tier_agreement": 0.6666666666666666,
         "mea_jaccard": 0.5227272727272727,
         "mfe_jaccard": 0.4927536231884058,
         "unpaired_spearman": 0.8331313728387765,
@@ -637,7 +637,7 @@
         "mfe_energy": -31.0
       },
       "temp_24.0C": {
-        "tier_agreement": 0.9601990049751243,
+        "tier_agreement": 0.900497512437811,
         "mea_jaccard": 0.8108108108108109,
         "mfe_jaccard": 0.9827586206896551,
         "unpaired_spearman": 0.990623614600266,
@@ -664,7 +664,7 @@
         "mfe_energy": -23.309999465942383
       },
       "temp_45.0C": {
-        "tier_agreement": 0.8706467661691543,
+        "tier_agreement": 0.8109452736318408,
         "mea_jaccard": 0.8108108108108109,
         "mfe_jaccard": 0.7833333333333333,
         "unpaired_spearman": 0.9930840845278558,
@@ -673,7 +673,7 @@
         "mfe_energy": -20.09000015258789
       },
       "jitter_extend_left_10": {
-        "tier_agreement": 0.4079601990049751,
+        "tier_agreement": 0.22388059701492538,
         "mea_jaccard": 0.007462686567164179,
         "mfe_jaccard": 0.0,
         "unpaired_spearman": 0.0,
@@ -682,7 +682,7 @@
         "mfe_energy": -30.0
       },
       "jitter_extend_right_10": {
-        "tier_agreement": 0.7412935323383084,
+        "tier_agreement": 0.5522388059701493,
         "mea_jaccard": 0.36633663366336633,
         "mfe_jaccard": 0.23232323232323232,
         "unpaired_spearman": 0.0,
@@ -691,7 +691,7 @@
         "mfe_energy": -33.400001525878906
       },
       "jitter_extend_both_10": {
-        "tier_agreement": 0.44776119402985076,
+        "tier_agreement": 0.2736318407960199,
         "mea_jaccard": 0.007352941176470588,
         "mfe_jaccard": 0.0,
         "unpaired_spearman": 0.0,
@@ -700,7 +700,7 @@
         "mfe_energy": -34.79999923706055
       },
       "jitter_shrink_left_10": {
-        "tier_agreement": 0.8429319371727748,
+        "tier_agreement": 0.806282722513089,
         "mea_jaccard": 0.007633587786259542,
         "mfe_jaccard": 0.0,
         "unpaired_spearman": 0.9620022733535408,
@@ -709,7 +709,7 @@
         "mfe_energy": -29.399999618530273
       },
       "jitter_shrink_right_10": {
-        "tier_agreement": 0.7958115183246073,
+        "tier_agreement": 0.6387434554973822,
         "mea_jaccard": 0.26732673267326734,
         "mfe_jaccard": 0.8070175438596491,
         "unpaired_spearman": 0.9299342105263158,
@@ -718,7 +718,7 @@
         "mfe_energy": -26.899999618530273
       },
       "jitter_extend_left_25": {
-        "tier_agreement": 0.527363184079602,
+        "tier_agreement": 0.3383084577114428,
         "mea_jaccard": 0.0,
         "mfe_jaccard": 0.0,
         "unpaired_spearman": 0.0,
@@ -727,7 +727,7 @@
         "mfe_energy": -35.099998474121094
       },
       "jitter_extend_right_25": {
-        "tier_agreement": 0.7711442786069652,
+        "tier_agreement": 0.5970149253731343,
         "mea_jaccard": 0.16393442622950818,
         "mfe_jaccard": 0.1320754716981132,
         "unpaired_spearman": 0.0,
@@ -736,7 +736,7 @@
         "mfe_energy": -33.900001525878906
       },
       "jitter_extend_both_25": {
-        "tier_agreement": 0.472636815920398,
+        "tier_agreement": 0.2935323383084577,
         "mea_jaccard": 0.0,
         "mfe_jaccard": 0.0,
         "unpaired_spearman": 0.0,
@@ -745,7 +745,7 @@
         "mfe_energy": -41.79999923706055
       },
       "jitter_shrink_left_25": {
-        "tier_agreement": 0.9034090909090909,
+        "tier_agreement": 0.7727272727272727,
         "mea_jaccard": 0.0,
         "mfe_jaccard": 0.0,
         "unpaired_spearman": 0.8403081664098614,
@@ -754,7 +754,7 @@
         "mfe_energy": -23.100000381469727
       },
       "jitter_shrink_right_25": {
-        "tier_agreement": 0.8295454545454546,
+        "tier_agreement": 0.7329545454545454,
         "mea_jaccard": 0.5180722891566265,
         "mfe_jaccard": 0.4925373134328358,
         "unpaired_spearman": 0.8997292537970504,

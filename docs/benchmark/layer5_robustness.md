@@ -119,16 +119,16 @@ MFE free energies (kcal/mol) for each case under three parameter sets:
 
 | Condition Type | Tier Agreement | MEA Jaccard | MFE Jaccard | Unpaired Spearman | FIRM Retention | FLOPPY Retention |
 |----------------|----------------|-------------|-------------|-------------------|----------------|------------------|
-| **Parameter sets** | 0.629 ± 0.112 | 0.341 ± 0.183 | 0.391 ± 0.232 | 0.749 ± 0.129 | 0.478 ± 0.334 | 0.998 ± 0.001 |
-| **Temperatures** | 0.844 ± 0.097 | 0.905 ± 0.133 | 0.801 ± 0.293 | 0.990 ± 0.006 | 0.827 ± 0.269 | 1.000 ± 0.000 |
-| **Window jitter** | 0.638 ± 0.204 | 0.223 ± 0.326 | 0.223 ± 0.334 | 0.877 ± 0.109† | 0.284 ± 0.377 | 0.594 ± 0.282 |
+| **Parameter sets** | 0.528 ± 0.106 | 0.341 ± 0.183 | 0.391 ± 0.232 | 0.749 ± 0.129 | 0.478 ± 0.334 | 0.998 ± 0.001 |
+| **Temperatures** | 0.823 ± 0.101 | 0.905 ± 0.133 | 0.801 ± 0.293 | 0.990 ± 0.006 | 0.827 ± 0.269 | 1.000 ± 0.000 |
+| **Window jitter** | 0.534 ± 0.245 | 0.223 ± 0.326 | 0.223 ± 0.334 | 0.877 ± 0.109† | 0.284 ± 0.377 | 0.594 ± 0.282 |
 
 † Unpaired Spearman for jitter excludes failed comparisons (extended windows with no overlap).
 
 **Key observations:**
-- **Temperature** shows highest robustness: tier agreement 84%, MEA Jaccard 91%, unpaired Spearman 99%
-- **Parameter sets** show moderate divergence: tier agreement 63%, MEA Jaccard 34%
-- **Window jitter** has largest impact: tier agreement 64%, but MEA Jaccard only 22%
+- **Temperature** shows highest robustness: tier agreement 82%, MEA Jaccard 91%, unpaired Spearman 99%
+- **Parameter sets** show moderate divergence: tier agreement 53%, MEA Jaccard 34%
+- **Window jitter** has largest impact: tier agreement 53%, but MEA Jaccard only 22%
 - **FLOPPY retention** is very high for parameters (100%) and temperature (100%), indicating low-probability pairs remain low
 - **FIRM retention** varies widely: 83% for temperature, but only 48% for parameters and 28% for jitter
 
@@ -138,18 +138,18 @@ MFE free energies (kcal/mol) for each case under three parameter sets:
 
 | Case | Mean Tier Agreement | Std | Baseline FIRM Pairs | Baseline FLOPPY Pairs | Interpretation |
 |------|---------------------|-----|---------------------|----------------------|----------------|
-| smn2-iss-n1 | 0.746 | 0.179 | 18 | 7,878 | Most stable: ASO target region shows consistent tiers |
-| cftr-5utr | 0.721 | 0.218 | 21 | 15,119 | UTR regulatory region, moderate stability |
-| hcv-ires-dii | 0.680 | 0.176 | 47 | 12,571 | IRES domain: higher FIRM count, moderate stability |
-| mapt-e10 | 0.670 | 0.183 | 34 | 11,778 | Splice regulatory region |
-| sars2-fse | 0.626 | 0.183 | 14 | 6,921 | Least stable: pseudoknot region shows tier shifts |
+| cftr-5utr | 0.652 | 0.260 | 21 | 15,119 | Most stable: UTR regulatory region |
+| smn2-iss-n1 | 0.625 | 0.234 | 18 | 7,878 | ASO target region shows consistent tiers |
+| mapt-e10 | 0.606 | 0.237 | 34 | 11,778 | Splice regulatory region, moderate stability |
+| hcv-ires-dii | 0.595 | 0.220 | 47 | 12,571 | IRES domain: higher FIRM count, moderate stability |
+| sars2-fse | 0.549 | 0.222 | 14 | 6,921 | Least stable: pseudoknot region shows tier shifts |
 
 **Observations:**
-- **SMN2 ISS-N1** (most stable) has fewer FIRM pairs (18) but highest tier agreement (75%), suggesting its low-probability regions are robustly low
-- **SARS-CoV-2 FSE** (least stable) shows expected instability due to pseudoknot formation, which ViennaRNA's nested-only partition function cannot fully capture
-- **HCV IRES Domain II** has the highest FIRM pair count (47), consistent with a highly structured IRES
+- **CFTR 5' UTR** (most stable, 65% tier agreement) shows highest consistency across conditions despite moderate FIRM count (21)
+- **SARS-CoV-2 FSE** (least stable, 55%) shows expected instability due to pseudoknot formation, which ViennaRNA's nested-only partition function cannot fully capture
+- **HCV IRES Domain II** has the highest FIRM pair count (47), consistent with a highly structured IRES, but moderate stability (60%)
 - **No clear correlation** between FIRM pair count and stability: structural complexity matters more than pair count
-- All cases show **moderate to high std** (0.18–0.22), indicating condition-dependent variability is substantial
+- All cases show **substantial variability** (std 0.22–0.26), indicating condition-dependent tier shifts are common
 
 ### Figures
 
@@ -163,28 +163,28 @@ MFE free energies (kcal/mol) for each case under three parameter sets:
 
 ### Key Findings
 
-1. **Temperature robustness is high** (tier agreement 84%, MEA Jaccard 91%). Physiological temperature variations (24–45°C) produce consistent tier classifications. This suggests FoldTrust's FIRM/SOFT/FLOPPY tiers are thermodynamically robust for in vivo applications.
+1. **Temperature robustness is high** (tier agreement 82%, MEA Jaccard 91%). Physiological temperature variations (24–45°C) produce consistent tier classifications. This suggests FoldTrust's FIRM/SOFT/FLOPPY tiers are thermodynamically robust for in vivo applications.
 
-2. **Parameter sets show moderate divergence** (tier agreement 63%, MEA Jaccard 34%). Andronescu2007 and Langdon2018 produce noticeably different MFE structures from Turner2004, but **FLOPPY pairs remain FLOPPY** (99.8% retention). This means low-confidence regions are consistently low across parameter sets — valuable for ruling out targets.
+2. **Parameter sets show moderate divergence** (tier agreement 53%, MEA Jaccard 34%). Andronescu2007 and Langdon2018 produce noticeably different MEA structures from Turner2004, but **FLOPPY pairs remain FLOPPY** (99.8% retention). This means low-confidence regions are consistently low across parameter sets — valuable for ruling out targets.
 
-3. **Window boundary jitter has large structural impact** (MEA Jaccard 22%, FIRM retention 28%). Adding or removing 10–25 nt of flanking sequence dramatically changes predicted structures. This underscores the importance of:
+3. **Window boundary jitter has large structural impact** (tier agreement 53%, MEA Jaccard 22%, FIRM retention 28%). Adding or removing 10–25 nt of flanking sequence dramatically changes predicted structures. This underscores the importance of:
    - Using biochemical/conservation evidence to define window boundaries
    - Testing multiple window definitions for the same functional element
    - Reporting tier classifications with explicit window coordinates
 
-4. **SARS-CoV-2 FSE is least stable** (tier agreement 63%), consistent with its known pseudoknot, which ViennaRNA's nested-only model cannot fully capture. **SMN2 ISS-N1 is most stable** (75%), appropriate for an ASO target where accessibility prediction must be reliable.
+4. **SARS-CoV-2 FSE is least stable** (tier agreement 55%), consistent with its known pseudoknot, which ViennaRNA's nested-only model cannot fully capture. **CFTR 5' UTR is most stable** (65%), showing consistent tier classifications across conditions.
 
 5. **FIRM retention varies more than FLOPPY retention** across conditions. High-probability pairs (FIRM) are more sensitive to parameter/window changes than low-probability pairs (FLOPPY). For ASO design, this means: avoid FIRM regions (stable helices), prefer FLOPPY regions (ensemble-accessible).
 
 ### Practical Implications
 
 **For antisense oligonucleotide (ASO) design:**
-- **SMN2 ISS-N1** shows high tier stability (75%), making it a reliable ASO target. FoldTrust's tier classifications can guide ASO site selection with confidence that temperature and parameter uncertainty won't flip the verdict.
+- **SMN2 ISS-N1** shows moderate tier stability (63%), making it a reasonable ASO target. FoldTrust's tier classifications can guide ASO site selection, though parameter and window uncertainty introduce ~40% tier shift rate.
 - **Target FLOPPY regions:** 99.8% of FLOPPY pairs remain FLOPPY across parameter sets. Low ensemble support is robust — a FLOPPY region is consistently accessible.
 - **Avoid FIRM regions:** Only 48% of FIRM pairs remain FIRM across parameter sets (drops to 28% with window jitter). High-probability regions may shift under alternative models or window definitions.
 
 **For antiviral RNA targeting:**
-- **SARS-CoV-2 FSE** tier agreement (63%) is lower than other cases, reflecting pseudoknot uncertainty. Antiviral strategies targeting this element should account for structural heterogeneity.
+- **SARS-CoV-2 FSE** tier agreement (55%) is lower than other cases, reflecting pseudoknot uncertainty. Antiviral strategies targeting this element should account for structural heterogeneity.
 - **Temperature robustness** (99% unpaired Spearman correlation) suggests fever (42°C) won't drastically alter accessibility predictions. Small molecules targeting structured loops should remain effective across physiological temperatures.
 
 **For RNA structure annotation:**

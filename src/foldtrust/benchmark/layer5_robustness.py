@@ -220,13 +220,12 @@ def compute_per_nucleotide_tiers(
     temperature: float = 37.0,
 ) -> List[str]:
     """
-    Compute per-nucleotide tier classification.
+    Compute per-nucleotide tier classification using MEA structure.
     
-    Each nucleotide is classified based on its highest-probability pairing:
-    - FIRM: max pair prob >= 0.85
-    - SOFT: max pair prob >= 0.5
-    - FLOPPY: max pair prob > 0
-    - UNPAIRED: max pair prob = 0
+    FoldTrust tier logic:
+    - Positions paired in the MEA structure get their pair's tier
+    - Tier of a pair (i,j) based on p(i,j): FIRM >= 0.85, SOFT >= 0.5, FLOPPY < 0.5
+    - Unpaired positions are UNPAIRED
     
     Returns:
         List of tier labels, one per nucleotide
@@ -234,20 +233,26 @@ def compute_per_nucleotide_tiers(
     prob_matrix = compute_pair_probs_with_params(sequence, param_set, temperature)
     n = len(sequence)
     
-    tiers = []
-    for i in range(n):
-        max_prob = np.max(prob_matrix[i, :])
+    # Compute MEA structure
+    mea_pairs = compute_mea_structure(prob_matrix)
+    
+    # Initialize all positions as UNPAIRED
+    tiers = ["UNPAIRED"] * n
+    
+    # Assign tiers based on MEA pairing
+    for i, j in mea_pairs:
+        pair_prob = prob_matrix[i, j]
         
-        if max_prob >= 0.85:
+        if pair_prob >= 0.85:
             tier = "FIRM"
-        elif max_prob >= 0.5:
+        elif pair_prob >= 0.5:
             tier = "SOFT"
-        elif max_prob > 0:
+        else:  # pair_prob < 0.5
             tier = "FLOPPY"
-        else:
-            tier = "UNPAIRED"
         
-        tiers.append(tier)
+        # Both positions in the pair get the same tier
+        tiers[i] = tier
+        tiers[j] = tier
     
     return tiers
 
