@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FoldTrust Report - CFTR 5' UTR (cystic fibrosis)</title>
+    <title>FoldTrust Report - cftr-5utr NM_000492.4:1-200(+) 5' UTR and start-codon region (5'UTR 1-70 + CDS 71-200)</title>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
@@ -175,43 +175,44 @@
 <body>
     <div class="container">
         <h1>FoldTrust Structure Reliability Report</h1>
-        
+
         <div class="metadata">
-            <div class="metadata-item"><span class="metadata-label">Sequence:</span> CFTR 5' UTR (cystic fibrosis)</div>
-            <div class="metadata-item"><span class="metadata-label">Length:</span> 268 nt</div>
-            <div class="metadata-item"><span class="metadata-label">GC Content:</span> 31.7%</div>
-            <div class="metadata-item"><span class="metadata-label">MFE:</span> -55.10 kcal/mol</div>
+            <div class="metadata-item"><span class="metadata-label">Sequence:</span> cftr-5utr NM_000492.4:1-200(+) 5' UTR and start-codon region (5'UTR 1-70 + CDS 71-200)</div>
+            <div class="metadata-item"><span class="metadata-label">Length:</span> 200 nt</div>
+            <div class="metadata-item"><span class="metadata-label">GC Content:</span> 52.5%</div>
+            <div class="metadata-item"><span class="metadata-label">MFE:</span> -60.60 kcal/mol</div>
             <div class="metadata-item"><span class="metadata-label">Disease:</span> Cystic Fibrosis</div>
             <div class="metadata-item"><span class="metadata-label">Gene:</span> CFTR (Cystic Fibrosis Transmembrane Conductance Regulator)</div>
         </div>
-        
+
         <div class="verdict redesign">
             <strong>Verdict:</strong> REDESIGN - Contains floppy stems with low ensemble support
         </div>
-        
-        <div class="metadata"><strong>Teaching Point:</strong> Lung disease relevance. UTR structure predictions can bias translation/splicing hypotheses
-and inform mRNA optimization strategies for therapeutic delivery.
+
+        <div class="metadata"><strong>Teaching Point:</strong> Translation initiation depends on start codon accessibility. Firm structures that occlude the
+AUG in the ensemble (not just the MFE) can reduce protein expression, contributing to disease
+severity in patients with mild CFTR mutations.
 </div>
-        
+
         <h2>Stem Reliability Summary</h2>
-        
+
         <div class="stem-counts">
             <div class="stem-count firm">
                 <div class="stem-count-value">3</div>
                 <div class="stem-count-label">Firm Stems</div>
             </div>
             <div class="stem-count soft">
-                <div class="stem-count-value">9</div>
+                <div class="stem-count-value">4</div>
                 <div class="stem-count-label">Soft Stems</div>
             </div>
             <div class="stem-count floppy">
-                <div class="stem-count-value">5</div>
+                <div class="stem-count-value">7</div>
                 <div class="stem-count-label">Floppy Stems</div>
             </div>
         </div>
-        
+
         <h2>Stem Analysis</h2>
-        
+
         <table>
             <thead>
                 <tr>
@@ -224,145 +225,121 @@ and inform mRNA optimization strategies for therapeutic delivery.
             </thead>
             <tbody>
                 
-        <tr class="floppy">
+        <tr class="soft">
             <td>1</td>
-            <td>9-47 ... 11-45</td>
+            <td>7-70 ... 13-64</td>
+            <td>7</td>
+            <td>0.603</td>
+            <td><span class="flag-soft">SOFT</span></td>
+        </tr>
+        
+        <tr class="soft">
+            <td>2</td>
+            <td>14-61 ... 16-59</td>
             <td>3</td>
-            <td>0.422</td>
+            <td>0.587</td>
+            <td><span class="flag-soft">SOFT</span></td>
+        </tr>
+        
+        <tr class="floppy">
+            <td>3</td>
+            <td>21-33 ... 22-32</td>
+            <td>2</td>
+            <td>0.374</td>
             <td><span class="flag-floppy">FLOPPY</span></td>
         </tr>
         
-        <tr class="soft">
-            <td>2</td>
-            <td>13-44 ... 14-43</td>
-            <td>2</td>
-            <td>0.631</td>
-            <td><span class="flag-soft">SOFT</span></td>
-        </tr>
-        
-        <tr class="soft">
-            <td>3</td>
-            <td>17-40 ... 24-33</td>
-            <td>8</td>
-            <td>0.791</td>
-            <td><span class="flag-soft">SOFT</span></td>
-        </tr>
-        
-        <tr class="soft">
+        <tr class="floppy">
             <td>4</td>
-            <td>50-75 ... 57-68</td>
-            <td>8</td>
-            <td>0.617</td>
-            <td><span class="flag-soft">SOFT</span></td>
+            <td>24-31 ... 25-30</td>
+            <td>2</td>
+            <td>0.400</td>
+            <td><span class="flag-floppy">FLOPPY</span></td>
         </tr>
         
-        <tr class="firm">
+        <tr class="floppy">
             <td>5</td>
-            <td>76-264 ... 78-262</td>
-            <td>3</td>
-            <td>0.885</td>
-            <td><span class="flag-firm">FIRM</span></td>
+            <td>38-53 ... 39-52</td>
+            <td>2</td>
+            <td>0.424</td>
+            <td><span class="flag-floppy">FLOPPY</span></td>
         </tr>
         
-        <tr class="firm">
+        <tr class="floppy">
             <td>6</td>
-            <td>83-257 ... 91-249</td>
-            <td>9</td>
-            <td>0.927</td>
-            <td><span class="flag-firm">FIRM</span></td>
+            <td>40-50 ... 43-47</td>
+            <td>4</td>
+            <td>0.433</td>
+            <td><span class="flag-floppy">FLOPPY</span></td>
         </tr>
         
-        <tr class="soft">
+        <tr class="floppy">
             <td>7</td>
-            <td>93-248 ... 99-242</td>
-            <td>7</td>
-            <td>0.793</td>
-            <td><span class="flag-soft">SOFT</span></td>
+            <td>73-198 ... 77-194</td>
+            <td>5</td>
+            <td>0.342</td>
+            <td><span class="flag-floppy">FLOPPY</span></td>
         </tr>
         
         <tr class="floppy">
             <td>8</td>
-            <td>100-110 ... 102-108</td>
+            <td>78-185 ... 80-183</td>
             <td>3</td>
-            <td>0.345</td>
+            <td>0.193</td>
             <td><span class="flag-floppy">FLOPPY</span></td>
         </tr>
         
         <tr class="floppy">
             <td>9</td>
-            <td>112-158 ... 114-156</td>
-            <td>3</td>
-            <td>0.412</td>
+            <td>85-177 ... 89-173</td>
+            <td>5</td>
+            <td>0.491</td>
             <td><span class="flag-floppy">FLOPPY</span></td>
+        </tr>
+        
+        <tr class="soft">
+            <td>10</td>
+            <td>92-171 ... 93-170</td>
+            <td>2</td>
+            <td>0.692</td>
+            <td><span class="flag-soft">SOFT</span></td>
+        </tr>
+        
+        <tr class="soft">
+            <td>11</td>
+            <td>96-167 ... 99-164</td>
+            <td>4</td>
+            <td>0.802</td>
+            <td><span class="flag-soft">SOFT</span></td>
         </tr>
         
         <tr class="firm">
-            <td>10</td>
-            <td>117-154 ... 128-143</td>
             <td>12</td>
-            <td>0.951</td>
+            <td>100-162 ... 107-155</td>
+            <td>8</td>
+            <td>0.991</td>
             <td><span class="flag-firm">FIRM</span></td>
         </tr>
         
-        <tr class="floppy">
-            <td>11</td>
-            <td>161-170 ... 163-168</td>
-            <td>3</td>
-            <td>0.432</td>
-            <td><span class="flag-floppy">FLOPPY</span></td>
-        </tr>
-        
-        <tr class="floppy">
-            <td>12</td>
-            <td>173-232 ... 174-231</td>
-            <td>2</td>
-            <td>0.245</td>
-            <td><span class="flag-floppy">FLOPPY</span></td>
-        </tr>
-        
-        <tr class="soft">
+        <tr class="firm">
             <td>13</td>
-            <td>176-229 ... 177-228</td>
-            <td>2</td>
-            <td>0.502</td>
-            <td><span class="flag-soft">SOFT</span></td>
+            <td>113-150 ... 123-140</td>
+            <td>11</td>
+            <td>0.946</td>
+            <td><span class="flag-firm">FIRM</span></td>
         </tr>
         
-        <tr class="soft">
+        <tr class="firm">
             <td>14</td>
-            <td>179-226 ... 183-222</td>
-            <td>5</td>
-            <td>0.580</td>
-            <td><span class="flag-soft">SOFT</span></td>
-        </tr>
-        
-        <tr class="soft">
-            <td>15</td>
-            <td>187-218 ... 188-217</td>
-            <td>2</td>
-            <td>0.761</td>
-            <td><span class="flag-soft">SOFT</span></td>
-        </tr>
-        
-        <tr class="soft">
-            <td>16</td>
-            <td>191-214 ... 195-210</td>
-            <td>5</td>
-            <td>0.754</td>
-            <td><span class="flag-soft">SOFT</span></td>
-        </tr>
-        
-        <tr class="soft">
-            <td>17</td>
-            <td>197-208 ... 200-205</td>
-            <td>4</td>
-            <td>0.739</td>
-            <td><span class="flag-soft">SOFT</span></td>
+            <td>125-136 ... 127-134</td>
+            <td>3</td>
+            <td>0.982</td>
+            <td><span class="flag-firm">FIRM</span></td>
         </tr>
         
             </tbody>
         </table>
-        
+
         <div class="methods">
             <strong>Legend:</strong>
             <ul style="margin: 10px 0;">
@@ -371,48 +348,45 @@ and inform mRNA optimization strategies for therapeutic delivery.
                 <li><strong>FLOPPY</strong> (mean P < 0.5): Low confidence — MFE stem not reliable in ensemble</li>
             </ul>
         </div>
-        
+
         <h2>Base-Pair Probability Matrix</h2>
-        
+
         <div class="heatmap">
             <img src="pair_probabilities.png" alt="Base-pair probability heatmap">
             <p><em>Upper triangle shows probability of base-pairing between positions i and j</em></p>
         </div>
-        
+
         <h2>MFE Structure</h2>
-        
-        <div class="structure">     1 GAAGGAAATACTCAAAGAATATTTATTTTTAAAAATGTTTAATGGTGATAGAAATGGAATGAGATTGCTG
-       ........(((.((..((((((((........))))))))..)))))..((((((((..........)))
 
-    71 TTTCTTGTGATATTTTCTGTAAGGGGATCTACTTTGTGTGAACCAGGGAAATGGAAGCTTTGTGATTCTG
-       )))))(((....(((((((((.((((((((((.....))).(((..((((((((((((............
+        <div class="structure">     1 GTAGTAGGTCTTTGGCATTAGGAGCTTGAGCCCAGACGGCCCTAGCAGGGACCCCAGCGCCCGAGAGACC
+       ......((((((((((....((.((....))))....((((((...)))).)).....)))..)))))))
 
-   141 TTGCTTCTGTTTCTGGGTAGTGTAAAAGCAGCCTATCATTCTTGAGGTAATGATTCCAGAAAATTTTGTA
-       ..)))))))))))).)))..(((....)))..((.((.(((((...((..(((((.((((....)))).)
+    71 ATGCAGAGGTCGCCTCTGGAAAAGGCCAGCGTTGTCTCCAAACTTTTTTTCAGCTGGACCAGACCAATTT
+       ..((((((((....(((((..((..((((((((((((.....(((((((((((.(((......)))...)
 
-   211 ATTAAGACAAAAGGAGAGAGAGAATATTTTTGATTTTCTACAGAAAAGAAAACAGATT
-       ))))..))...))))).)).)).........))))))))))))))))....)))....
+   141 TGAGGAAAGGATACAGACAGCGCCTGGAATTGTCAGACATATACCAAATCCCTTCTGTTG
+       ))))))))))....)))))))).))))..)).))))).....)))........)))))..
 </div>
-        
+
         <h2>Methods</h2>
-        
+
         <div class="methods">
-            <p><strong>Key principle:</strong> Ask for base-pair probabilities (or the full ensemble), 
+            <p><strong>Key principle:</strong> Ask for base-pair probabilities (or the full ensemble),
             not only the minimum free energy structure.</p>
-            
-            <p>FoldTrust uses ViennaRNA's partition function to compute the Boltzmann ensemble 
-            of all possible secondary structures and their base-pairing probabilities. The MFE 
-            structure is parsed into stems, and each stem's reliability is assessed by averaging 
+
+            <p>FoldTrust uses ViennaRNA's partition function to compute the Boltzmann ensemble
+            of all possible secondary structures and their base-pairing probabilities. The MFE
+            structure is parsed into stems, and each stem's reliability is assessed by averaging
             the pair probabilities of its constituent base pairs.</p>
-            
-            <p><strong>Limitations:</strong> Thermodynamic models operate under simplified assumptions 
-            (37°C in 1M NaCl). In-cell conditions, co-transcriptional folding, RNA-binding proteins, 
-            and post-transcriptional modifications can alter structure. Experimental probing (SHAPE, DMS) 
+
+            <p><strong>Limitations:</strong> Thermodynamic models operate under simplified assumptions
+            (37°C in 1M NaCl). In-cell conditions, co-transcriptional folding, RNA-binding proteins,
+            and post-transcriptional modifications can alter structure. Experimental probing (SHAPE, DMS)
             and functional assays remain essential for validation.</p>
         </div>
-        
-        <h3>References</h3><ul><li><a href="https://doi.org/10.1152/physrev.00025.2017" target="_blank">The Cystic Fibrosis Transmembrane Conductance Regulator</a></li><li><a href="https://doi.org/10.1056/NEJM199209033271007" target="_blank">Molecular basis of cystic fibrosis</a></li></ul>
-        
+
+        <h3>References</h3><ul><li><a href="https://doi.org/10.1126/science.2475911" target="_blank">10.1126/science.2475911</a></li><li><a href="https://doi.org/10.1016/0888-7543(91)90503-7" target="_blank">10.1016/0888-7543(91)90503-7</a></li></ul>
+
         <div class="footer">
             <p>Generated by <strong>FoldTrust v0.1.0</strong></p>
             <p>By Kishore Anekalla</p>

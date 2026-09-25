@@ -2,52 +2,39 @@
 
 ## Sequence Information
 
-- **Sequence:** HCV IRES Domain II (hepatitis C virus internal ribosome entry site)
-- **Length:** 268 nt
-- **GC Content:** 57.5%
-- **MFE:** -91.20 kcal/mol
+- **Sequence:** hcv-ires-dii AF009606.1:44-118(+) HCV IRES domain II
+- **Length:** 75 nt
+- **GC Content:** 54.7%
+- **MFE:** -23.80 kcal/mol
 - **Disease:** Hepatitis C
-- **Gene:** HCV (Hepatitis C Virus) 5' UTR IRES
+- **Gene:** HCV (Hepatitis C Virus genotype 1a strain H77)
 
 ## Verdict
 
-**REDESIGN - Contains floppy stems with low ensemble support**
+**TRUST - Strong ensemble support for most stems**
 
 ### Teaching Point
 
-Structured viral RNA. Ensemble softness near functional loops can indicate flexibility
-required for ribosome binding, informing structure-based antiviral design.
-
+Viral IRES elements rely on conserved RNA structure for function. Ensemble analysis reveals
+whether predicted base pairs are consistently formed or fluctuate, guiding antiviral design.
 
 
 ## Stem Reliability Summary
 
-- **Firm stems:** 12 (mean P ≥ 0.85)
-- **Soft stems:** 4 (0.5 ≤ mean P < 0.85)
-- **Floppy stems:** 2 (mean P < 0.5)
+- **Firm stems:** 3 (mean P ≥ 0.85)
+- **Soft stems:** 3 (0.5 ≤ mean P < 0.85)
+- **Floppy stems:** 0 (mean P < 0.5)
 
 ## Stem Analysis
 
 | Stem ID | Positions | Length (bp) | Mean P(pair) | Flag |
 |---------|-----------|-------------|--------------|------|
-| 1 | 5-267 ... 9-263 | 5 | 0.982 | **FIRM** |
-| 2 | 10-94 ... 12-92 | 3 | 0.881 | **FIRM** |
-| 3 | 16-89 ... 19-86 | 4 | 0.980 | **FIRM** |
-| 4 | 21-84 ... 22-83 | 2 | 0.981 | **FIRM** |
-| 5 | 24-81 ... 28-77 | 5 | 0.936 | **FIRM** |
-| 6 | 30-75 ... 34-71 | 5 | 0.998 | **FIRM** |
-| 7 | 37-66 ... 38-65 | 2 | 0.925 | **FIRM** |
-| 8 | 40-63 ... 43-60 | 4 | 0.992 | **FIRM** |
-| 9 | 44-55 ... 46-53 | 3 | 0.837 | **SOFT** |
-| 10 | 95-119 ... 97-117 | 3 | 0.871 | **FIRM** |
-| 11 | 99-115 ... 104-110 | 6 | 0.987 | **FIRM** |
-| 12 | 120-187 ... 123-184 | 4 | 0.622 | **SOFT** |
-| 13 | 124-182 ... 127-179 | 4 | 0.541 | **SOFT** |
-| 14 | 130-178 ... 135-173 | 6 | 0.616 | **SOFT** |
-| 15 | 138-168 ... 143-163 | 6 | 0.480 | **FLOPPY** |
-| 16 | 144-155 ... 147-152 | 4 | 0.309 | **FLOPPY** |
-| 17 | 188-202 ... 191-199 | 4 | 0.969 | **FIRM** |
-| 18 | 243-258 ... 246-255 | 4 | 0.918 | **FIRM** |
+| 1 | 1-75 ... 4-72 | 4 | 0.985 | **FIRM** |
+| 2 | 6-71 ... 9-68 | 4 | 0.997 | **FIRM** |
+| 3 | 15-67 ... 18-64 | 4 | 0.696 | **SOFT** |
+| 4 | 22-59 ... 24-57 | 3 | 0.704 | **SOFT** |
+| 5 | 26-55 ... 27-54 | 2 | 0.679 | **SOFT** |
+| 6 | 31-49 ... 36-44 | 6 | 0.917 | **FIRM** |
 
 
 **Legend:**
@@ -64,17 +51,11 @@ required for ribosome binding, informing structure-based antiviral design.
 ## MFE Structure
 
 ```
-     1 CTGCGGAACCGGTGAGTACACCGGAATTGCCAGGACGACCGGGTCCTTTCTTGGATAAACCCGCTCAATG
-       ....((((((((.(.((((.((.(((((.(((((..((.(((((((......)))....)))).))....
+     1 CCTGTGAGGAACTACTGTCTTCACGCAGAAAGCGTCTAGCCATGGCGTTAGTATGAGTGTCGTGCAGCCT
+       ((((.((((.....(((((..(((.((...((((((.......))))))....)).)))..).)))))))
 
-    71 CCTGGAGATTTGGGCGTGCCCCCGCAAGACTGCTAGCCGAGTAGTGTTGGGTCGCGAAAGGCCTTGTGGT
-       ))))).))))).)).)))).))))(((.((((((.....)))))).)))((((((((..((((((.((((
-
-   141 ACTGCCTGATAGGGTGCTTGCGAGTGCCCCGGGAGGTCTCGTAGACCGTGCACCATGAGCACGAATCCTA
-       (((((((....)))).......))))))..).)))))))))).))))((((.......))))........
-
-   211 AACCTCAAAGAAAAACCAAACGTAACACCAACCGTCGCCCACAGGACGTCAAGTTCCC
-       ................................((((........))))....))))).
+    71 CCAGG
+       )))))
 
 ```
 
@@ -89,8 +70,8 @@ FoldTrust uses ViennaRNA's partition function to compute the Boltzmann ensemble 
 
 ## References
 
-- [Structure of the hepatitis C virus IRES](https://doi.org/10.1006/jmbi.1999.2918)
-- [The hepatitis C virus internal ribosome entry site](https://doi.org/10.1016/S0168-1702(98)00058-7)
+- [10.1128/JVI.73.2.1165-1174.1999](https://doi.org/10.1128/JVI.73.2.1165-1174.1999)
+- [10.1038/nsb1004](https://doi.org/10.1038/nsb1004)
 
 
 ---

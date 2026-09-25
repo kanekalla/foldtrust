@@ -2,11 +2,11 @@
 
 ## Sequence Information
 
-- **Sequence:** MAPT exon 10 splice regulatory region (tau, neurodegeneration)
-- **Length:** 268 nt
-- **GC Content:** 58.6%
-- **MFE:** -86.00 kcal/mol
-- **Disease:** Frontotemporal dementia, Progressive supranuclear palsy, Alzheimer's disease
+- **Sequence:** mapt-e10 NG_007398.2:120818-121000(+) MAPT exon 10 and 5' splice site stem-loop
+- **Length:** 183 nt
+- **GC Content:** 48.1%
+- **MFE:** -52.30 kcal/mol
+- **Disease:** Frontotemporal Dementia with Parkinsonism linked to chromosome 17 (FTDP-17)
 - **Gene:** MAPT (Microtubule-Associated Protein Tau)
 
 ## Verdict
@@ -15,40 +15,32 @@
 
 ### Teaching Point
 
-Disease splicing regulation via structure. Ensemble softness near the splice site affects
-structure-aware oligonucleotide design for splice switching therapies.
-
+cis-regulatory RNA structures control alternative splicing. Ensemble analysis distinguishes
+mutations that stabilize stems (increasing exon inclusion) from those that destabilize them.
 
 
 ## Stem Reliability Summary
 
 - **Firm stems:** 7 (mean P ≥ 0.85)
-- **Soft stems:** 10 (0.5 ≤ mean P < 0.85)
-- **Floppy stems:** 2 (mean P < 0.5)
+- **Soft stems:** 1 (0.5 ≤ mean P < 0.85)
+- **Floppy stems:** 4 (mean P < 0.5)
 
 ## Stem Analysis
 
 | Stem ID | Positions | Length (bp) | Mean P(pair) | Flag |
 |---------|-----------|-------------|--------------|------|
-| 1 | 1-266 ... 3-264 | 3 | 0.456 | **FLOPPY** |
-| 2 | 5-243 ... 9-239 | 5 | 0.835 | **SOFT** |
-| 3 | 13-183 ... 19-177 | 7 | 0.933 | **FIRM** |
-| 4 | 23-40 ... 26-37 | 4 | 0.305 | **FLOPPY** |
-| 5 | 42-50 ... 44-48 | 3 | 0.811 | **SOFT** |
-| 6 | 56-67 ... 58-65 | 3 | 0.765 | **SOFT** |
-| 7 | 82-176 ... 86-172 | 5 | 0.927 | **FIRM** |
-| 8 | 88-170 ... 89-169 | 2 | 0.614 | **SOFT** |
-| 9 | 97-113 ... 101-109 | 5 | 0.628 | **SOFT** |
-| 10 | 115-168 ... 117-166 | 3 | 0.896 | **FIRM** |
-| 11 | 119-164 ... 122-161 | 4 | 0.912 | **FIRM** |
-| 12 | 124-157 ... 126-155 | 3 | 0.936 | **FIRM** |
-| 13 | 129-151 ... 131-149 | 3 | 0.894 | **FIRM** |
-| 14 | 133-146 ... 136-143 | 4 | 0.838 | **SOFT** |
-| 15 | 189-206 ... 191-204 | 3 | 0.785 | **SOFT** |
-| 16 | 193-202 ... 194-201 | 2 | 0.836 | **SOFT** |
-| 17 | 209-238 ... 212-235 | 4 | 0.716 | **SOFT** |
-| 18 | 215-232 ... 220-227 | 6 | 0.973 | **FIRM** |
-| 19 | 244-262 ... 249-257 | 6 | 0.838 | **SOFT** |
+| 1 | 2-180 ... 6-176 | 5 | 0.658 | **SOFT** |
+| 2 | 9-175 ... 12-172 | 4 | 0.969 | **FIRM** |
+| 3 | 16-166 ... 18-164 | 3 | 0.957 | **FIRM** |
+| 4 | 20-162 ... 25-157 | 6 | 0.978 | **FIRM** |
+| 5 | 30-151 ... 35-146 | 6 | 0.976 | **FIRM** |
+| 6 | 51-73 ... 57-67 | 7 | 0.949 | **FIRM** |
+| 7 | 74-83 ... 76-81 | 3 | 0.209 | **FLOPPY** |
+| 8 | 84-113 ... 86-111 | 3 | 0.112 | **FLOPPY** |
+| 9 | 90-109 ... 93-106 | 4 | 0.893 | **FIRM** |
+| 10 | 115-144 ... 116-143 | 2 | 0.189 | **FLOPPY** |
+| 11 | 118-142 ... 120-140 | 3 | 0.360 | **FLOPPY** |
+| 12 | 122-139 ... 128-133 | 7 | 0.912 | **FIRM** |
 
 
 **Legend:**
@@ -65,17 +57,14 @@ structure-aware oligonucleotide design for splice switching therapies.
 ## MFE Structure
 
 ```
-     1 GGCACTGAGAACCTGCAGGATATTCTGATTTAATGAAGGAAGGGGAACCCAAGAAGCAGCAGATTGCCAA
-       (((.(((((...(((((((...((((..........)))).(((...))).....(((......)))...
+     1 GTCACTCATCCTTTTTTCTGGCTACCAAAGGTGCAGATAATTAATAAGAAGCTGGATCTTAGCAACGTCC
+       .(((((..((((...(((.((((((....((((((...............(((((((.........))))
 
-    71 TGACGAAACCAGCCTGGGCCAACCTGGTCACGTCCACAGTGACGGCTCCACCAAGCACGGCAGCGGCTCT
-       ...........(((((.((.......(((((.......))))).(((.((((.(((.((((.((((....
+    71 AGTCCAAGTGTGGCTCAAAGGATAATATCAAACACGTCCCGGGAGGCGGCAGTGTGAGTACCTTCACACG
+       )))(((....)))(((...((((............)))).))).((.(((.(((((((....))))))))
 
-   141 AACCGTCCGCCTGAGCTACAGGTGCAGCGTGCAGGCCCTGCAGAACCGTGGACTGCAACAAGACCAGCGT
-       ..))))..))).).)))...)))).))))).)))))))))))).....(((.((......)).)))..((
-
-   211 GGAGAAGGCCAAGACAGGCTTTGCCCGCCTCAGCACATCAGCGCTGGATGTGAGTCTC
-       ((..((((((......))))))..)))))))))((((((.......)))))).)))..
+   141 TCCCATGCGCCGTGCTGTGGCTTGAATTATTAGGAAGTGGTGT
+       )))).)))))).....)))))).))).....)))))))))...
 
 ```
 
@@ -90,8 +79,9 @@ FoldTrust uses ViennaRNA's partition function to compute the Boltzmann ensemble 
 
 ## References
 
-- [An extended stem-loop structure in the MAPT gene controls exon 10 splicing](https://doi.org/10.1093/hmg/10.10.1029)
-- [Tau alternative splicing and frontotemporal dementia](https://doi.org/10.1016/j.nbd.2005.07.017)
+- [10.1074/jbc.274.21.15134](https://doi.org/10.1074/jbc.274.21.15134)
+- [10.1073/pnas.96.14.8229](https://doi.org/10.1073/pnas.96.14.8229)
+- [10.1038/31508](https://doi.org/10.1038/31508)
 
 
 ---

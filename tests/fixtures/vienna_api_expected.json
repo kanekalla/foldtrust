@@ -1,26 +1,26 @@
 {
   "cftr-5utr": {
-    "mfe_energy": -55.1,
-    "structure_length": 268,
+    "mfe_energy": -60.6,
+    "structure_length": 200,
     "firm_count": 3,
-    "soft_count": 9,
-    "floppy_count": 5,
+    "soft_count": 4,
+    "floppy_count": 7,
     "verdict": "REDESIGN - Contains floppy stems with low ensemble support"
   },
   "hcv-ires-dii": {
-    "mfe_energy": -91.2,
-    "structure_length": 268,
-    "firm_count": 12,
-    "soft_count": 4,
-    "floppy_count": 2,
-    "verdict": "REDESIGN - Contains floppy stems with low ensemble support"
+    "mfe_energy": -23.8,
+    "structure_length": 75,
+    "firm_count": 3,
+    "soft_count": 3,
+    "floppy_count": 0,
+    "verdict": "TRUST - Strong ensemble support for most stems"
   },
   "mapt-e10": {
-    "mfe_energy": -86.0,
-    "structure_length": 268,
+    "mfe_energy": -52.3,
+    "structure_length": 183,
     "firm_count": 7,
-    "soft_count": 10,
-    "floppy_count": 2,
+    "soft_count": 1,
+    "floppy_count": 4,
     "verdict": "REDESIGN - Contains floppy stems with low ensemble support"
   },
   "sars2-fse": {
@@ -32,11 +32,11 @@
     "verdict": "NEED PROBING - Multiple stems have moderate ensemble support"
   },
   "smn2-iss-n1": {
-    "mfe_energy": -29.4,
-    "structure_length": 201,
-    "firm_count": 3,
-    "soft_count": 5,
-    "floppy_count": 5,
-    "verdict": "REDESIGN - Contains floppy stems with low ensemble support"
+    "mfe_energy": -31.3,
+    "structure_length": 154,
+    "firm_count": 5,
+    "soft_count": 4,
+    "floppy_count": 0,
+    "verdict": "TRUST - Strong ensemble support for most stems"
   }
 }

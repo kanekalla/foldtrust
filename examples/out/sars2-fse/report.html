@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FoldTrust Report - SARS-CoV-2 frameshift stimulatory element (nsp12 region)</title>
+    <title>FoldTrust Report - sars2-fse NC_045512.2:13462-13542(+) SARS-CoV-2 frameshifting element</title>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
@@ -175,43 +175,44 @@
 <body>
     <div class="container">
         <h1>FoldTrust Structure Reliability Report</h1>
-        
+
         <div class="metadata">
-            <div class="metadata-item"><span class="metadata-label">Sequence:</span> SARS-CoV-2 frameshift stimulatory element (nsp12 region)</div>
-            <div class="metadata-item"><span class="metadata-label">Length:</span> 181 nt</div>
-            <div class="metadata-item"><span class="metadata-label">GC Content:</span> 32.0%</div>
-            <div class="metadata-item"><span class="metadata-label">MFE:</span> -39.50 kcal/mol</div>
+            <div class="metadata-item"><span class="metadata-label">Sequence:</span> sars2-fse NC_045512.2:13462-13542(+) SARS-CoV-2 frameshifting element</div>
+            <div class="metadata-item"><span class="metadata-label">Length:</span> 81 nt</div>
+            <div class="metadata-item"><span class="metadata-label">GC Content:</span> 53.1%</div>
+            <div class="metadata-item"><span class="metadata-label">MFE:</span> -26.00 kcal/mol</div>
             <div class="metadata-item"><span class="metadata-label">Disease:</span> COVID-19</div>
-            <div class="metadata-item"><span class="metadata-label">Gene:</span> SARS-CoV-2 ORF1ab (nsp12 frameshift site)</div>
+            <div class="metadata-item"><span class="metadata-label">Gene:</span> SARS-CoV-2 (Severe Acute Respiratory Syndrome Coronavirus 2)</div>
         </div>
-        
-        <div class="verdict redesign">
-            <strong>Verdict:</strong> REDESIGN - Contains floppy stems with low ensemble support
+
+        <div class="verdict probing">
+            <strong>Verdict:</strong> NEED PROBING - Multiple stems have moderate ensemble support
         </div>
-        
-        <div class="metadata"><strong>Teaching Point:</strong> Competing structures and pseudoknot formation mean the MFE alone is insufficient.
-This region demonstrates ensemble complexity relevant to antiviral RNA targeting.
+
+        <div class="metadata"><strong>Teaching Point:</strong> Programmed frameshifts rely on RNA structure downstream of the slippery site. Ensemble
+pairing probabilities distinguish firm stems (required for frameshifting) from floppy
+regions that may tolerate mutation, guiding small-molecule or antisense inhibitor design.
 </div>
-        
+
         <h2>Stem Reliability Summary</h2>
-        
+
         <div class="stem-counts">
             <div class="stem-count firm">
-                <div class="stem-count-value">1</div>
+                <div class="stem-count-value">2</div>
                 <div class="stem-count-label">Firm Stems</div>
             </div>
             <div class="stem-count soft">
-                <div class="stem-count-value">0</div>
+                <div class="stem-count-value">3</div>
                 <div class="stem-count-label">Soft Stems</div>
             </div>
             <div class="stem-count floppy">
-                <div class="stem-count-value">7</div>
+                <div class="stem-count-value">0</div>
                 <div class="stem-count-label">Floppy Stems</div>
             </div>
         </div>
-        
+
         <h2>Stem Analysis</h2>
-        
+
         <table>
             <thead>
                 <tr>
@@ -224,73 +225,49 @@ This region demonstrates ensemble complexity relevant to antiviral RNA targeting
             </thead>
             <tbody>
                 
-        <tr class="floppy">
+        <tr class="soft">
             <td>1</td>
-            <td>15-176 ... 22-169</td>
-            <td>8</td>
-            <td>0.101</td>
-            <td><span class="flag-floppy">FLOPPY</span></td>
+            <td>6-33 ... 12-27</td>
+            <td>7</td>
+            <td>0.730</td>
+            <td><span class="flag-soft">SOFT</span></td>
         </tr>
         
-        <tr class="floppy">
+        <tr class="soft">
             <td>2</td>
-            <td>24-167 ... 28-163</td>
-            <td>5</td>
-            <td>0.101</td>
-            <td><span class="flag-floppy">FLOPPY</span></td>
-        </tr>
-        
-        <tr class="floppy">
+            <td>14-26 ... 16-24</td>
             <td>3</td>
-            <td>38-64 ... 43-59</td>
-            <td>6</td>
-            <td>0.108</td>
-            <td><span class="flag-floppy">FLOPPY</span></td>
+            <td>0.847</td>
+            <td><span class="flag-soft">SOFT</span></td>
         </tr>
         
-        <tr class="floppy">
-            <td>4</td>
-            <td>46-56 ... 48-54</td>
+        <tr class="soft">
             <td>3</td>
-            <td>0.138</td>
-            <td><span class="flag-floppy">FLOPPY</span></td>
-        </tr>
-        
-        <tr class="floppy">
-            <td>5</td>
-            <td>65-93 ... 72-86</td>
-            <td>8</td>
-            <td>0.174</td>
-            <td><span class="flag-floppy">FLOPPY</span></td>
+            <td>40-78 ... 41-77</td>
+            <td>2</td>
+            <td>0.564</td>
+            <td><span class="flag-soft">SOFT</span></td>
         </tr>
         
         <tr class="firm">
-            <td>6</td>
-            <td>94-110 ... 100-104</td>
-            <td>7</td>
-            <td>0.921</td>
+            <td>4</td>
+            <td>42-73 ... 49-66</td>
+            <td>8</td>
+            <td>0.946</td>
             <td><span class="flag-firm">FIRM</span></td>
         </tr>
         
-        <tr class="floppy">
-            <td>7</td>
-            <td>111-156 ... 121-146</td>
-            <td>11</td>
-            <td>0.177</td>
-            <td><span class="flag-floppy">FLOPPY</span></td>
-        </tr>
-        
-        <tr class="floppy">
-            <td>8</td>
-            <td>128-139 ... 131-136</td>
-            <td>4</td>
-            <td>0.164</td>
-            <td><span class="flag-floppy">FLOPPY</span></td>
+        <tr class="firm">
+            <td>5</td>
+            <td>50-64 ... 52-62</td>
+            <td>3</td>
+            <td>0.981</td>
+            <td><span class="flag-firm">FIRM</span></td>
         </tr>
         
             </tbody>
         </table>
-        
+
         <div class="methods">
             <strong>Legend:</strong>
             <ul style="margin: 10px 0;">
@@ -299,45 +276,42 @@ This region demonstrates ensemble complexity relevant to antiviral RNA targeting
                 <li><strong>FLOPPY</strong> (mean P < 0.5): Low confidence — MFE stem not reliable in ensemble</li>
             </ul>
         </div>
-        
+
         <h2>Base-Pair Probability Matrix</h2>
-        
+
         <div class="heatmap">
             <img src="pair_probabilities.png" alt="Base-pair probability heatmap">
             <p><em>Upper triangle shows probability of base-pairing between positions i and j</em></p>
         </div>
-        
+
         <h2>MFE Structure</h2>
-        
-        <div class="structure">     1 TTTAAATGGTTATATAGGTTTTTTGTTACATTGTTAAGTCTGTGATGCCATGCGCAGGATAGATCCATTA
-       ..............((((((((.(((((.........((((((..(((.....)))..))))))((((((
 
-    71 GTGCAAAGAATAAAAGCTGGTGGGCTTCTATTTTAGAGGCTTATTAAAACTTGGTAATACTTTTGGGTAC
-       ((.............))))))))(((((((...)))))))(((((((((((......((((....)))).
+        <div class="structure">     1 TTTAAACGGGTTTGCGGTGTAAGTGCAGCCCGTCTTACACCGTGCGGCACAGGCACTAGTACTGATGTCG
+       .....(((((((.(((.......))))))))))......(((((((((((((.........))).)))))
 
-   141 TTTTTGGTTTTGGTAACTTTATTAATACAAGGCTTAACTTT
-       .....)))))))))))......))))).)))))))).....
+    71 TATACAGGGCT
+       )))...))...
 </div>
-        
+
         <h2>Methods</h2>
-        
+
         <div class="methods">
-            <p><strong>Key principle:</strong> Ask for base-pair probabilities (or the full ensemble), 
+            <p><strong>Key principle:</strong> Ask for base-pair probabilities (or the full ensemble),
             not only the minimum free energy structure.</p>
-            
-            <p>FoldTrust uses ViennaRNA's partition function to compute the Boltzmann ensemble 
-            of all possible secondary structures and their base-pairing probabilities. The MFE 
-            structure is parsed into stems, and each stem's reliability is assessed by averaging 
+
+            <p>FoldTrust uses ViennaRNA's partition function to compute the Boltzmann ensemble
+            of all possible secondary structures and their base-pairing probabilities. The MFE
+            structure is parsed into stems, and each stem's reliability is assessed by averaging
             the pair probabilities of its constituent base pairs.</p>
-            
-            <p><strong>Limitations:</strong> Thermodynamic models operate under simplified assumptions 
-            (37°C in 1M NaCl). In-cell conditions, co-transcriptional folding, RNA-binding proteins, 
-            and post-transcriptional modifications can alter structure. Experimental probing (SHAPE, DMS) 
+
+            <p><strong>Limitations:</strong> Thermodynamic models operate under simplified assumptions
+            (37°C in 1M NaCl). In-cell conditions, co-transcriptional folding, RNA-binding proteins,
+            and post-transcriptional modifications can alter structure. Experimental probing (SHAPE, DMS)
             and functional assays remain essential for validation.</p>
         </div>
-        
-        <h3>References</h3><ul><li><a href="https://doi.org/10.1126/science.abc3546" target="_blank">Programmed -1 Ribosomal Frameshift in SARS-CoV-2</a></li><li><a href="https://doi.org/10.1093/nar/gkaa1369" target="_blank">Structure of the SARS-CoV-2 frameshifting pseudoknot</a></li></ul>
-        
+
+        <h3>References</h3><ul><li><a href="https://doi.org/10.1074/jbc.AC120.013449" target="_blank">10.1074/jbc.AC120.013449</a></li><li><a href="https://doi.org/10.1126/science.abf3546" target="_blank">10.1126/science.abf3546</a></li></ul>
+
         <div class="footer">
             <p>Generated by <strong>FoldTrust v0.1.0</strong></p>
             <p>By Kishore Anekalla</p>

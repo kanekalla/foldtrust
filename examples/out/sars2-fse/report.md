@@ -2,42 +2,39 @@
 
 ## Sequence Information
 
-- **Sequence:** SARS-CoV-2 frameshift stimulatory element (nsp12 region)
-- **Length:** 181 nt
-- **GC Content:** 32.0%
-- **MFE:** -39.50 kcal/mol
+- **Sequence:** sars2-fse NC_045512.2:13462-13542(+) SARS-CoV-2 frameshifting element
+- **Length:** 81 nt
+- **GC Content:** 53.1%
+- **MFE:** -26.00 kcal/mol
 - **Disease:** COVID-19
-- **Gene:** SARS-CoV-2 ORF1ab (nsp12 frameshift site)
+- **Gene:** SARS-CoV-2 (Severe Acute Respiratory Syndrome Coronavirus 2)
 
 ## Verdict
 
-**REDESIGN - Contains floppy stems with low ensemble support**
+**NEED PROBING - Multiple stems have moderate ensemble support**
 
 ### Teaching Point
 
-Competing structures and pseudoknot formation mean the MFE alone is insufficient.
-This region demonstrates ensemble complexity relevant to antiviral RNA targeting.
-
+Programmed frameshifts rely on RNA structure downstream of the slippery site. Ensemble
+pairing probabilities distinguish firm stems (required for frameshifting) from floppy
+regions that may tolerate mutation, guiding small-molecule or antisense inhibitor design.
 
 
 ## Stem Reliability Summary
 
-- **Firm stems:** 1 (mean P ≥ 0.85)
-- **Soft stems:** 0 (0.5 ≤ mean P < 0.85)
-- **Floppy stems:** 7 (mean P < 0.5)
+- **Firm stems:** 2 (mean P ≥ 0.85)
+- **Soft stems:** 3 (0.5 ≤ mean P < 0.85)
+- **Floppy stems:** 0 (mean P < 0.5)
 
 ## Stem Analysis
 
 | Stem ID | Positions | Length (bp) | Mean P(pair) | Flag |
 |---------|-----------|-------------|--------------|------|
-| 1 | 15-176 ... 22-169 | 8 | 0.101 | **FLOPPY** |
-| 2 | 24-167 ... 28-163 | 5 | 0.101 | **FLOPPY** |
-| 3 | 38-64 ... 43-59 | 6 | 0.108 | **FLOPPY** |
-| 4 | 46-56 ... 48-54 | 3 | 0.138 | **FLOPPY** |
-| 5 | 65-93 ... 72-86 | 8 | 0.174 | **FLOPPY** |
-| 6 | 94-110 ... 100-104 | 7 | 0.921 | **FIRM** |
-| 7 | 111-156 ... 121-146 | 11 | 0.177 | **FLOPPY** |
-| 8 | 128-139 ... 131-136 | 4 | 0.164 | **FLOPPY** |
+| 1 | 6-33 ... 12-27 | 7 | 0.730 | **SOFT** |
+| 2 | 14-26 ... 16-24 | 3 | 0.847 | **SOFT** |
+| 3 | 40-78 ... 41-77 | 2 | 0.564 | **SOFT** |
+| 4 | 42-73 ... 49-66 | 8 | 0.946 | **FIRM** |
+| 5 | 50-64 ... 52-62 | 3 | 0.981 | **FIRM** |
 
 
 **Legend:**
@@ -54,14 +51,11 @@ This region demonstrates ensemble complexity relevant to antiviral RNA targeting
 ## MFE Structure
 
 ```
-     1 TTTAAATGGTTATATAGGTTTTTTGTTACATTGTTAAGTCTGTGATGCCATGCGCAGGATAGATCCATTA
-       ..............((((((((.(((((.........((((((..(((.....)))..))))))((((((
+     1 TTTAAACGGGTTTGCGGTGTAAGTGCAGCCCGTCTTACACCGTGCGGCACAGGCACTAGTACTGATGTCG
+       .....(((((((.(((.......))))))))))......(((((((((((((.........))).)))))
 
-    71 GTGCAAAGAATAAAAGCTGGTGGGCTTCTATTTTAGAGGCTTATTAAAACTTGGTAATACTTTTGGGTAC
-       ((.............))))))))(((((((...)))))))(((((((((((......((((....)))).
-
-   141 TTTTTGGTTTTGGTAACTTTATTAATACAAGGCTTAACTTT
-       .....)))))))))))......))))).)))))))).....
+    71 TATACAGGGCT
+       )))...))...
 
 ```
 
@@ -76,8 +70,8 @@ FoldTrust uses ViennaRNA's partition function to compute the Boltzmann ensemble 
 
 ## References
 
-- [Programmed -1 Ribosomal Frameshift in SARS-CoV-2](https://doi.org/10.1126/science.abc3546)
-- [Structure of the SARS-CoV-2 frameshifting pseudoknot](https://doi.org/10.1093/nar/gkaa1369)
+- [10.1074/jbc.AC120.013449](https://doi.org/10.1074/jbc.AC120.013449)
+- [10.1126/science.abf3546](https://doi.org/10.1126/science.abf3546)
 
 
 ---

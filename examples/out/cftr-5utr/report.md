@@ -2,10 +2,10 @@
 
 ## Sequence Information
 
-- **Sequence:** CFTR 5' UTR (cystic fibrosis)
-- **Length:** 268 nt
-- **GC Content:** 31.7%
-- **MFE:** -55.10 kcal/mol
+- **Sequence:** cftr-5utr NM_000492.4:1-200(+) 5' UTR and start-codon region (5'UTR 1-70 + CDS 71-200)
+- **Length:** 200 nt
+- **GC Content:** 52.5%
+- **MFE:** -60.60 kcal/mol
 - **Disease:** Cystic Fibrosis
 - **Gene:** CFTR (Cystic Fibrosis Transmembrane Conductance Regulator)
 
@@ -15,38 +15,35 @@
 
 ### Teaching Point
 
-Lung disease relevance. UTR structure predictions can bias translation/splicing hypotheses
-and inform mRNA optimization strategies for therapeutic delivery.
-
+Translation initiation depends on start codon accessibility. Firm structures that occlude the
+AUG in the ensemble (not just the MFE) can reduce protein expression, contributing to disease
+severity in patients with mild CFTR mutations.
 
 
 ## Stem Reliability Summary
 
 - **Firm stems:** 3 (mean P ≥ 0.85)
-- **Soft stems:** 9 (0.5 ≤ mean P < 0.85)
-- **Floppy stems:** 5 (mean P < 0.5)
+- **Soft stems:** 4 (0.5 ≤ mean P < 0.85)
+- **Floppy stems:** 7 (mean P < 0.5)
 
 ## Stem Analysis
 
 | Stem ID | Positions | Length (bp) | Mean P(pair) | Flag |
 |---------|-----------|-------------|--------------|------|
-| 1 | 9-47 ... 11-45 | 3 | 0.422 | **FLOPPY** |
-| 2 | 13-44 ... 14-43 | 2 | 0.631 | **SOFT** |
-| 3 | 17-40 ... 24-33 | 8 | 0.791 | **SOFT** |
-| 4 | 50-75 ... 57-68 | 8 | 0.617 | **SOFT** |
-| 5 | 76-264 ... 78-262 | 3 | 0.885 | **FIRM** |
-| 6 | 83-257 ... 91-249 | 9 | 0.927 | **FIRM** |
-| 7 | 93-248 ... 99-242 | 7 | 0.793 | **SOFT** |
-| 8 | 100-110 ... 102-108 | 3 | 0.345 | **FLOPPY** |
-| 9 | 112-158 ... 114-156 | 3 | 0.412 | **FLOPPY** |
-| 10 | 117-154 ... 128-143 | 12 | 0.951 | **FIRM** |
-| 11 | 161-170 ... 163-168 | 3 | 0.432 | **FLOPPY** |
-| 12 | 173-232 ... 174-231 | 2 | 0.245 | **FLOPPY** |
-| 13 | 176-229 ... 177-228 | 2 | 0.502 | **SOFT** |
-| 14 | 179-226 ... 183-222 | 5 | 0.580 | **SOFT** |
-| 15 | 187-218 ... 188-217 | 2 | 0.761 | **SOFT** |
-| 16 | 191-214 ... 195-210 | 5 | 0.754 | **SOFT** |
-| 17 | 197-208 ... 200-205 | 4 | 0.739 | **SOFT** |
+| 1 | 7-70 ... 13-64 | 7 | 0.603 | **SOFT** |
+| 2 | 14-61 ... 16-59 | 3 | 0.587 | **SOFT** |
+| 3 | 21-33 ... 22-32 | 2 | 0.374 | **FLOPPY** |
+| 4 | 24-31 ... 25-30 | 2 | 0.400 | **FLOPPY** |
+| 5 | 38-53 ... 39-52 | 2 | 0.424 | **FLOPPY** |
+| 6 | 40-50 ... 43-47 | 4 | 0.433 | **FLOPPY** |
+| 7 | 73-198 ... 77-194 | 5 | 0.342 | **FLOPPY** |
+| 8 | 78-185 ... 80-183 | 3 | 0.193 | **FLOPPY** |
+| 9 | 85-177 ... 89-173 | 5 | 0.491 | **FLOPPY** |
+| 10 | 92-171 ... 93-170 | 2 | 0.692 | **SOFT** |
+| 11 | 96-167 ... 99-164 | 4 | 0.802 | **SOFT** |
+| 12 | 100-162 ... 107-155 | 8 | 0.991 | **FIRM** |
+| 13 | 113-150 ... 123-140 | 11 | 0.946 | **FIRM** |
+| 14 | 125-136 ... 127-134 | 3 | 0.982 | **FIRM** |
 
 
 **Legend:**
@@ -63,17 +60,14 @@ and inform mRNA optimization strategies for therapeutic delivery.
 ## MFE Structure
 
 ```
-     1 GAAGGAAATACTCAAAGAATATTTATTTTTAAAAATGTTTAATGGTGATAGAAATGGAATGAGATTGCTG
-       ........(((.((..((((((((........))))))))..)))))..((((((((..........)))
+     1 GTAGTAGGTCTTTGGCATTAGGAGCTTGAGCCCAGACGGCCCTAGCAGGGACCCCAGCGCCCGAGAGACC
+       ......((((((((((....((.((....))))....((((((...)))).)).....)))..)))))))
 
-    71 TTTCTTGTGATATTTTCTGTAAGGGGATCTACTTTGTGTGAACCAGGGAAATGGAAGCTTTGTGATTCTG
-       )))))(((....(((((((((.((((((((((.....))).(((..((((((((((((............
+    71 ATGCAGAGGTCGCCTCTGGAAAAGGCCAGCGTTGTCTCCAAACTTTTTTTCAGCTGGACCAGACCAATTT
+       ..((((((((....(((((..((..((((((((((((.....(((((((((((.(((......)))...)
 
-   141 TTGCTTCTGTTTCTGGGTAGTGTAAAAGCAGCCTATCATTCTTGAGGTAATGATTCCAGAAAATTTTGTA
-       ..)))))))))))).)))..(((....)))..((.((.(((((...((..(((((.((((....)))).)
-
-   211 ATTAAGACAAAAGGAGAGAGAGAATATTTTTGATTTTCTACAGAAAAGAAAACAGATT
-       ))))..))...))))).)).)).........))))))))))))))))....)))....
+   141 TGAGGAAAGGATACAGACAGCGCCTGGAATTGTCAGACATATACCAAATCCCTTCTGTTG
+       ))))))))))....)))))))).))))..)).))))).....)))........)))))..
 
 ```
 
@@ -88,8 +82,8 @@ FoldTrust uses ViennaRNA's partition function to compute the Boltzmann ensemble 
 
 ## References
 
-- [The Cystic Fibrosis Transmembrane Conductance Regulator](https://doi.org/10.1152/physrev.00025.2017)
-- [Molecular basis of cystic fibrosis](https://doi.org/10.1056/NEJM199209033271007)
+- [10.1126/science.2475911](https://doi.org/10.1126/science.2475911)
+- [10.1016/0888-7543(91)90503-7](https://doi.org/10.1016/0888-7543(91)90503-7)
 
 
 ---

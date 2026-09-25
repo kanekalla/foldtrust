@@ -2,16 +2,16 @@
 
 ## Sequence Information
 
-- **Sequence:** SMN2 intron 7 ISS-N1 region (Spinraza target neighborhood)
-- **Length:** 201 nt
-- **GC Content:** 22.9%
-- **MFE:** -29.40 kcal/mol
+- **Sequence:** smn2-iss-n1 NG_008728.1:31999-32152(+) SMN2 exon 7 and ISS-N1 (intron 7 +1..+100)
+- **Length:** 154 nt
+- **GC Content:** 30.5%
+- **MFE:** -31.30 kcal/mol
 - **Disease:** Spinal Muscular Atrophy (SMA)
 - **Gene:** SMN2 (Survival Motor Neuron 2)
 
 ## Verdict
 
-**REDESIGN - Contains floppy stems with low ensemble support**
+**TRUST - Strong ensemble support for most stems**
 
 ### Teaching Point
 
@@ -19,30 +19,25 @@ ASO site selection requires assessing local pairing probability, not just MFE ca
 Stems that look firm in the MFE but are floppy in the ensemble may be better ASO targets.
 
 
-
 ## Stem Reliability Summary
 
-- **Firm stems:** 3 (mean P ≥ 0.85)
-- **Soft stems:** 5 (0.5 ≤ mean P < 0.85)
-- **Floppy stems:** 5 (mean P < 0.5)
+- **Firm stems:** 5 (mean P ≥ 0.85)
+- **Soft stems:** 4 (0.5 ≤ mean P < 0.85)
+- **Floppy stems:** 0 (mean P < 0.5)
 
 ## Stem Analysis
 
 | Stem ID | Positions | Length (bp) | Mean P(pair) | Flag |
 |---------|-----------|-------------|--------------|------|
-| 1 | 12-40 ... 18-34 | 7 | 0.962 | **FIRM** |
-| 2 | 21-32 ... 22-31 | 2 | 0.874 | **FIRM** |
-| 3 | 41-201 ... 44-198 | 4 | 0.189 | **FLOPPY** |
-| 4 | 49-115 ... 50-114 | 2 | 0.458 | **FLOPPY** |
-| 5 | 52-112 ... 56-108 | 5 | 0.544 | **SOFT** |
-| 6 | 60-103 ... 64-99 | 5 | 0.530 | **SOFT** |
-| 7 | 69-95 ... 73-91 | 5 | 0.441 | **FLOPPY** |
-| 8 | 78-89 ... 81-86 | 4 | 0.171 | **FLOPPY** |
-| 9 | 121-154 ... 126-149 | 6 | 0.217 | **FLOPPY** |
-| 10 | 127-140 ... 129-138 | 3 | 0.647 | **SOFT** |
-| 11 | 155-197 ... 157-195 | 3 | 0.603 | **SOFT** |
-| 12 | 159-193 ... 162-190 | 4 | 0.809 | **SOFT** |
-| 13 | 164-188 ... 170-182 | 7 | 0.966 | **FIRM** |
+| 1 | 2-118 ... 6-114 | 5 | 0.930 | **FIRM** |
+| 2 | 9-111 ... 13-107 | 5 | 0.656 | **SOFT** |
+| 3 | 15-106 ... 17-104 | 3 | 0.954 | **FIRM** |
+| 4 | 19-102 ... 22-99 | 4 | 0.891 | **FIRM** |
+| 5 | 29-65 ... 31-63 | 3 | 0.721 | **SOFT** |
+| 6 | 32-60 ... 34-58 | 3 | 0.607 | **SOFT** |
+| 7 | 38-56 ... 45-49 | 8 | 0.912 | **FIRM** |
+| 8 | 70-96 ... 81-85 | 12 | 0.940 | **FIRM** |
+| 9 | 126-148 ... 132-142 | 7 | 0.845 | **SOFT** |
 
 
 **Legend:**
@@ -59,14 +54,14 @@ Stems that look firm in the MFE but are floppy in the ensemble may be better ASO
 ## MFE Structure
 
 ```
-     1 CTTACATAAAAGCCATAATTTCTTTTATTTGATTTATGGTGTCATTTTGTTAACTGTATTTATACCTGAA
-       ...........(((((((..((........)).)))))))((((....((.(((((...(((((....((
+     1 GGTTTTAGACAAAATCAAAAAGAAGGAAGGTGCTCACATTCCTTAAATTAAGGAGTAAGTCTGCCAGCAT
+       .(((((..(((((.(((.((((......((((((...((((((((...)))))))).)))..)))....(
 
-    71 GGAATATGATCTTCAGATTCTCCTTAATTATGATGATCAGTTTACTCTTAATATATTCCTCATTTTTGGA
-       (((....((((....)))).)))))...)))))....))))).)).....(((((((((........)))
+    71 TATGAAAGTGAATCTTACTTTTGTAAAACTTTATGGTTTGTGGAAAACAAATGTTTTTGAACATTTAAAA
+       (((((((((((...))))))))))))..)))).))))))))..))))).......(((((((........
 
-   141 CTTTTTAAATATATATATAATATATAAGGATTTTTTTTTTCTCCTTGTCTATTTTATTGAT
-       ........))))))(((.((((.(((((((...........))))))).)))).)))))))
+   141 AGTTCAGATGTTAG
+       .)))))))......
 
 ```
 
@@ -81,8 +76,8 @@ FoldTrust uses ViennaRNA's partition function to compute the Boltzmann ensemble 
 
 ## References
 
-- [Nusinersen versus Sham Control in Infantile-Onset Spinal Muscular Atrophy](https://doi.org/10.1056/NEJMoa1702752)
-- [An intronic splicing silencer causes skipping of the IVS7 donor site in SMN2](https://doi.org/10.1093/hmg/11.15.1833)
+- [10.1128/MCB.26.4.1333-1346.2006](https://doi.org/10.1128/MCB.26.4.1333-1346.2006)
+- [10.1056/NEJMoa1702752](https://doi.org/10.1056/NEJMoa1702752)
 
 
 ---
