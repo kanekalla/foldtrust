@@ -321,9 +321,9 @@ def evaluate_dataset(
                         "f1": metrics_exact["f1"],
                         "mcc": metrics_exact["mcc"],
                         # Slip-tolerant metrics
-                        "sensitivity_slip": metrics_slip["sensitivity"],
-                        "ppv_slip": metrics_slip["ppv"],
-                        "f1_slip": metrics_slip["f1"],
+                        "sensitivity_slip": metrics_slip["sensitivity_slip"],
+                        "ppv_slip": metrics_slip["ppv_slip"],
+                        "f1_slip": metrics_slip["f1_slip"],
                         "mcc_slip": metrics_slip["mcc"],
                     }
                 )
