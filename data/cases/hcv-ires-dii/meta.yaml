@@ -1,19 +1,40 @@
 disease: Hepatitis C
-gene: HCV (Hepatitis C Virus) 5' UTR IRES
-region: Internal Ribosome Entry Site Domain II
+gene: HCV (Hepatitis C Virus genotype 1a strain H77)
+region: IRES domain II
 why_structure_matters: |
-  The HCV IRES is a highly structured RNA element essential for cap-independent translation
-  initiation. Domain II contains conserved stem-loops that bind ribosomal subunits and
-  initiation factors. Small-molecule and oligonucleotide-based inhibitors targeting IRES
-  structure are antiviral candidates.
+  The HCV internal ribosome entry site (IRES) directs cap-independent translation initiation.
+  Domain II is a structured element within the 5' NTR that contributes to IRES architecture.
+  Accurate ensemble folding is essential for understanding how the IRES recruits ribosomes
+  and for designing small-molecule inhibitors targeting structured domains.
 teaching_point: |
-  Structured viral RNA. Ensemble softness near functional loops can indicate flexibility
-  required for ribosome binding, informing structure-based antiviral design.
-coordinates: "HCV genotype 1a H77 strain (AF009606.1) 5' UTR domain II region, positions ~40-310"
+  Viral IRES elements rely on conserved RNA structure for function. Ensemble analysis reveals
+  whether predicted base pairs are consistently formed or fluctuate, guiding antiviral design.
+provenance:
+  accession: AF009606.1
+  start: 44
+  end: 118
+  strand: +
+  length: 75
+  region: HCV 5' NTR domain II (standard HCV numbering nt 44-118)
+  landmarks:
+    - name: Domain II basal helix 5' strand
+      record_coords: 44..47
+      window_coords: 1..4
+      sequence: CCUG
+    - name: Domain II basal helix 3' strand
+      record_coords: 115..118
+      window_coords: 72..75
+      sequence: CAGG
+      note: "Pairs with nt 44-47"
+    - name: Domain II (full)
+      record_coords: 44..118
+      window_coords: 1..75
+      note: "Entirely within the 5' NTR (nt 1-341); CDS starts at 342"
+  feature_source: AF009606.1 annotation and Honda et al. 1999 domain II = nt 44-118
 references:
-  - title: "Structure of the hepatitis C virus IRES"
-    doi: "10.1006/jmbi.1999.2918"
-    pmid: "10433278"
-  - title: "The hepatitis C virus internal ribosome entry site"
-    doi: "10.1016/S0168-1702(98)00058-7"
-    pmid: "9833891"
+  - citation: "Honda M et al. 1999 J Virol 73:1165"
+    doi: "10.1128/JVI.73.2.1165-1174.1999"
+    note: "HCV IRES domain II spans nt 44-118"
+  - citation: "Lukavsky PJ et al. 2003 Nat Struct Biol 10:1033"
+    doi: "10.1038/nsb1004"
+    note: "NMR structure of HCV IRES domain II"

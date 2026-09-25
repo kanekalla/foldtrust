@@ -1,18 +1,43 @@
 disease: COVID-19
-gene: SARS-CoV-2 ORF1ab (nsp12 frameshift site)
-region: Frameshift stimulatory element (FSE) with slippery site
+gene: SARS-CoV-2 (Severe Acute Respiratory Syndrome Coronavirus 2)
+region: Frameshifting element (ORF1a/ORF1ab −1 ribosomal frameshift)
 why_structure_matters: |
-  Programmed -1 ribosomal frameshift is essential for SARS-CoV-2 viral replication.
-  The 3' pseudoknot structure downstream of the slippery sequence UUUAAAC modulates
-  frameshift efficiency. Antiviral strategies targeting this structure have been proposed.
+  A −1 programmed ribosomal frameshift at this site controls the ratio of ORF1a to ORF1ab
+  polyproteins. The slippery sequence UUUAAAC and downstream 3-stem pseudoknot induce
+  frameshifting. Ensemble analysis reveals which pseudoknot base pairs are stable and which
+  are dynamic, informing antiviral strategies that target the frameshift element.
 teaching_point: |
-  Competing structures and pseudoknot formation mean the MFE alone is insufficient.
-  This region demonstrates ensemble complexity relevant to antiviral RNA targeting.
-coordinates: "NC_045512.2:13462-13542 (slippery site 13462-13468 + stem-loops 13476-13542)"
+  Programmed frameshifts rely on RNA structure downstream of the slippery site. Ensemble
+  pairing probabilities distinguish firm stems (required for frameshifting) from floppy
+  regions that may tolerate mutation, guiding small-molecule or antisense inhibitor design.
+provenance:
+  accession: NC_045512.2
+  start: 13462
+  end: 13542
+  strand: +
+  length: 81
+  region: ORF1a/ORF1ab frameshifting element (slippery site + 3-stem pseudoknot)
+  landmarks:
+    - name: Slippery sequence
+      record_coords: 13462..13468
+      window_coords: 1..7
+      sequence: UUUAAAC
+      note: "−1 frameshift site"
+    - name: Pseudoknot stem 1
+      record_coords: ~13476..13487
+      window_coords: ~15..26
+      note: "Approximate coordinates; exact base pairs determined by structure"
+    - name: Pseudoknot stem 2
+      record_coords: ~13488..13498
+      window_coords: ~27..37
+    - name: Pseudoknot stem 3
+      record_coords: ~13519..13542
+      window_coords: ~58..81
+  feature_source: NC_045512.2 annotation and Kelly et al. 2020, Bhatt et al. 2021
 references:
-  - title: "Programmed -1 Ribosomal Frameshift in SARS-CoV-2"
-    doi: "10.1126/science.abc3546"
-    pmid: "32754468"
-  - title: "Structure of the SARS-CoV-2 frameshifting pseudoknot"
-    doi: "10.1093/nar/gkaa1369"
-    pmid: "33517476"
+  - citation: "Kelly JA et al. 2020 J Biol Chem 295:10741"
+    doi: "10.1074/jbc.AC120.013449"
+    note: "SARS-CoV-2 frameshifting element structure and mechanism"
+  - citation: "Bhatt PR et al. 2021 Science 372:eabf3546"
+    doi: "10.1126/science.abf3546"
+    note: "High-resolution structure of frameshifting element"

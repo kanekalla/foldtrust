@@ -1,19 +1,56 @@
-disease: Frontotemporal dementia, Progressive supranuclear palsy, Alzheimer's disease
+disease: Frontotemporal Dementia with Parkinsonism linked to chromosome 17 (FTDP-17)
 gene: MAPT (Microtubule-Associated Protein Tau)
-region: Exon 10 splice regulatory region
+region: Exon 10 (NCBI exon 11, classic exon 10) and 5' splice site stem-loop
 why_structure_matters: |
-  Alternative splicing of MAPT exon 10 produces tau isoforms with 3 or 4 microtubule-binding
-  repeats (3R/4R tau). An extended stem-loop structure at the exon 10 5' splice site regulates
-  splicing. Mutations that stabilize or destabilize this stem cause familial tauopathies.
-  ASO-based splice modulation is under investigation.
+  A stem-loop at the exon 10 / intron 10 5' splice site regulates exon 10 inclusion.
+  Mutations that strengthen the stem (e.g. intron +3 G>A, +13 A>G, +14 C>T, +16 C>T)
+  increase exon 10 inclusion, shifting the tau 4R/3R ratio and causing FTDP-17. Structure
+  predictions must capture the stability and pairing probabilities of this regulatory element.
 teaching_point: |
-  Disease splicing regulation via structure. Ensemble softness near the splice site affects
-  structure-aware oligonucleotide design for splice switching therapies.
-coordinates: "NM_001123066.4 exon 9-10 boundary region (positions ~980-1260)"
+  cis-regulatory RNA structures control alternative splicing. Ensemble analysis distinguishes
+  mutations that stabilize stems (increasing exon inclusion) from those that destabilize them.
+provenance:
+  accession: NG_007398.2
+  start: 120818
+  end: 121000
+  strand: +
+  length: 183
+  region: Intron 9 last 30 nt + MAPT exon 10 (classic, NCBI exon 11) + intron 10 +1..+60
+  landmarks:
+    - name: Exon 10 (classic, NCBI exon 11)
+      record_coords: 120848..120940
+      window_coords: 31..123
+      length: 93
+      note: "Encodes second microtubule-binding repeat (R2), begins VQIINKK"
+    - name: Exon 10 / Intron 10 5' splice site
+      record_coords: 120940|120941
+      window_coords: 123|124
+    - name: 5' splice site stem-loop core
+      record_coords: 120935..120959
+      window_coords: 118..142
+      sequence: GGCAGUGGCCGGUGGGGGCAAGGUG
+      note: "Exon -5..-1 | intron +1..+19"
+    - name: S305 codon (AGU)
+      record_coords: 120938..120940
+      window_coords: 121..123
+      note: "S305N mutation (exon -2 A>G, pos 120939) weakens stem"
+    - name: Intron +3 (FTDP-17 G>A)
+      record_coords: 120943
+      window_coords: 126
+    - name: Intron +14 (FTDP-17 C>T)
+      record_coords: 120954
+      window_coords: 137
+    - name: Intron +16 (FTDP-17 C>T)
+      record_coords: 120956
+      window_coords: 139
+  feature_source: NG_007398.2 GenBank feature table exon 120848..120940 (alternate designation 10)
 references:
-  - title: "An extended stem-loop structure in the MAPT gene controls exon 10 splicing"
-    doi: "10.1093/hmg/10.10.1029"
-    pmid: "11331614"
-  - title: "Tau alternative splicing and frontotemporal dementia"
-    doi: "10.1016/j.nbd.2005.07.017"
-    pmid: "16337799"
+  - citation: "Grover A et al. 1999 J Biol Chem 274:15134"
+    doi: "10.1074/jbc.274.21.15134"
+    note: "5' splice site stem-loop regulates exon 10 splicing"
+  - citation: "Varani L et al. 1999 Proc Natl Acad Sci USA 96:8229"
+    doi: "10.1073/pnas.96.14.8229"
+    note: "NMR structure of stem-loop"
+  - citation: "Hutton M et al. 1998 Nature 393:702"
+    doi: "10.1038/31508"
+    note: "FTDP-17 mutations in MAPT"

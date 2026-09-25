@@ -1,18 +1,43 @@
 disease: Spinal Muscular Atrophy (SMA)
 gene: SMN2 (Survival Motor Neuron 2)
-region: Intron 7 intronic splicing silencer N1 (ISS-N1)
+region: Exon 7 (NCBI exon 8, classic exon 7) and intron 7 ISS-N1
 why_structure_matters: |
   Nusinersen (Spinraza) is an FDA-approved antisense oligonucleotide (ASO) that targets
-  ISS-N1 to restore SMN2 exon 7 inclusion. The local RNA structure affects ASO accessibility
-  and binding kinetics. Understanding ensemble pairing probabilities informs ASO design.
+  ISS-N1 (intron 7 +10..+27) to restore SMN2 exon 7 inclusion. The local RNA structure
+  affects ASO accessibility and binding kinetics. Understanding ensemble pairing probabilities
+  informs ASO design and distinguishes accessible from structured target sites.
 teaching_point: |
   ASO site selection requires assessing local pairing probability, not just MFE cartoons.
   Stems that look firm in the MFE but are floppy in the ensemble may be better ASO targets.
-coordinates: "NM_017411.4 intron 7 ISS-N1 neighborhood (approx positions 840-1040)"
+provenance:
+  accession: NG_008728.1
+  start: 31999
+  end: 32152
+  strand: +
+  length: 154
+  region: SMN2 exon 7 (classic numbering, NCBI exon 8) and intron 7 +1..+100
+  landmarks:
+    - name: Exon 7 (classic, NCBI exon 8)
+      record_coords: 31999..32052
+      window_coords: 1..54
+      note: "C6T SNP at position 6 (U in RNA) defines SMN2 vs SMN1"
+    - name: Exon 7 / Intron 7 5' splice site
+      record_coords: 32052|32053
+      window_coords: 54|55
+    - name: ISS-N1 (intron 7 +10..+24)
+      record_coords: 32062..32076
+      window_coords: 64..78
+      sequence: CCAGCAUUAUGAAAG
+      note: "Core silencer element"
+    - name: Nusinersen target (intron 7 +10..+27)
+      record_coords: 32062..32079
+      window_coords: 64..81
+      note: "ASO 5'-UCACUUUCAUAAUGCUGG-3' binds reverse complement"
+  feature_source: NG_008728.1 GenBank feature table exon 31999..32052 (alternate designation 7)
 references:
-  - title: "Nusinersen versus Sham Control in Infantile-Onset Spinal Muscular Atrophy"
+  - citation: "Singh NK et al. 2006 Mol Cell Biol 26:1333"
+    doi: "10.1128/MCB.26.4.1333-1346.2006"
+    note: "ISS-N1 identification and characterization"
+  - citation: "Finkel RS et al. 2017 N Engl J Med 377:1723"
     doi: "10.1056/NEJMoa1702752"
-    pmid: "29091570"
-  - title: "An intronic splicing silencer causes skipping of the IVS7 donor site in SMN2"
-    doi: "10.1093/hmg/11.15.1833"
-    pmid: "12095918"
+    note: "Nusinersen (Spinraza) clinical trial"
