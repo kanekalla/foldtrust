@@ -7,7 +7,7 @@ RNA secondary structure prediction benchmarking.
 import hashlib
 import json
 from pathlib import Path
-from typing import Dict, List, Optional, Set, Tuple
+from typing import Dict, Set, Tuple
 
 import numpy as np
 
@@ -199,7 +199,7 @@ def compute_exact_metrics(
     sensitivity = tp / (tp + fn) if (tp + fn) > 0 else 0.0
     ppv = tp / (tp + fp) if (tp + fp) > 0 else 0.0
     f1 = 2 * tp / (2 * tp + fp + fn) if (2 * tp + fp + fn) > 0 else 0.0
-    
+
     # MCC without TN (simplified form)
     mcc_denom = ((tp + fp) * (tp + fn) * (tn + fp) * (tn + fn)) ** 0.5
     mcc = ((tp * tn) - (fp * fn)) / mcc_denom if mcc_denom > 0 else 0.0
@@ -259,7 +259,7 @@ def compute_slip_metrics(
     ppv_slip = tp_pred / len(predicted_pairs)
     sen_slip = tp_ref / len(reference_pairs)
     f1_slip = 2 * ppv_slip * sen_slip / (ppv_slip + sen_slip) if (ppv_slip + sen_slip) > 0 else 0.0
-    
+
     # MCC for slip-tolerant (simplified without TN)
     fp = len(predicted_pairs) - tp_pred
     fn = len(reference_pairs) - tp_ref
@@ -367,7 +367,9 @@ def run_layer1_tests(output_dir: Path) -> Dict:
     results.append({"test": "slip_gte_exact", "status": "pass"})
 
     if HAS_RNA:
-        fse_seq = "UUUAAACGGGUUUGCGGUGUAAGUGCAGCCCGUCUUACACCGUGCGGCACAGGCACUAGUACUGAUGUCGUAUACAGGGCU"
+        fse_seq = (
+            "UUUAAACGGGUUUGCGGUGUAAGUGCAGCCCGUCUUACACCGUGCGGCACAGGCACUAGUACUGAUGUCGUAUACAGGGCU"
+        )
 
         expected = {"Turner2004": -26.00, "Andronescu2007": -22.26, "Langdon2018": -24.70}
         for params, exp_energy in expected.items():
