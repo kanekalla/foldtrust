@@ -227,17 +227,16 @@ def benchmark(
         layer5_output.mkdir(parents=True, exist_ok=True)
 
         results = run_layer5_analysis(cases_dir, layer5_output, cache_dir)
-        console.print(
-            f"\n[green]✓ Layer 5 complete: {len(results)} cases analyzed[/green]"
-        )
+        console.print(f"\n[green]✓ Layer 5 complete: {len(results)} cases analyzed[/green]")
         console.print(f"Results in {layer5_output}")
-        
+
         # Generate figures
         console.print("\nGenerating figures...")
-        from scripts.generate_layer5_figures import generate_all_layer5_figures
+        from foldtrust.benchmark.layer5_figures import generate_all_layer5_figures
+
         figures_dir = output / "figures"
         generate_all_layer5_figures(layer5_output, figures_dir)
-        
+
         return
 
     # Layer 4: SHAPE analysis (standalone)
