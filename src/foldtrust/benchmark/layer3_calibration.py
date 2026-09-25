@@ -39,13 +39,12 @@ def load_sample_ids(layer2_output_dir: Path) -> Dict[str, Set[str]]:
             "Run Layer 2 first to generate the sample."
         )
     
-    # Build a dict mapping dataset to set of sha1s
     dataset_ids = defaultdict(set)
     
     with open(sample_ids_path, 'r') as f:
         reader = csv.DictReader(f)
         for row in reader:
-            dataset_ids[row['dataset']].add(row['seq_sha1'])
+            dataset_ids[row['dataset']].add(row['name'])
     
     return dict(dataset_ids)
 
@@ -55,12 +54,11 @@ def filter_by_sample_ids(structures: List[Dict], dataset_name: str, sample_ids: 
     if dataset_name not in sample_ids:
         return structures
     
-    allowed_sha1s = sample_ids[dataset_name]
+    allowed_names = sample_ids[dataset_name]
     filtered = []
     
     for struct in structures:
-        sha1 = sequence_sha1(struct['sequence'])
-        if sha1 in allowed_sha1s:
+        if struct['name'] in allowed_names:
             filtered.append(struct)
     
     return filtered
@@ -246,7 +244,7 @@ def analyze_tiers(
             mfe_pairs = parse_dotbracket(mfe_structure)
             
             fc.pf()
-            mea_structure, _ = fc.MEA(gamma=1.0)
+            mea_structure, _ = fc.MEA(1.0)
             mea_pairs = parse_dotbracket(mea_structure)
             
             # === MFE pair tiers ===

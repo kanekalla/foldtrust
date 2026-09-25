@@ -1,45 +1,117 @@
 {
   "n_structures": 600,
-  "n_candidate_pairs": 181390,
-  "n_positive_pairs": 20437,
-  "ece": 0.06915250418038191,
-  "auroc": 0.8869932614060777,
-  "auprc": 0.6028052419163001,
+  "n_candidate_pairs": 185653,
+  "n_positive_pairs": 21191,
+  "bootstrap_seed": 0,
+  "bootstrap_iterations": 1000,
+  "ece": 0.06642917931801344,
+  "auroc": 0.8889211434349301,
+  "auprc": 0.6153345304048305,
   "n_bins": 10,
   "prob_floor": 0.001,
-  "tier_summary": [
+  "mfe_tier_summary": [
     {
       "tier": "FIRM",
-      "ppv_mean": 0.6642472665850683,
-      "ppv_ci_lower": 0.6375980071272497,
-      "ppv_ci_upper": 0.6882635714170324,
-      "coverage_mean": 0.4973013176586436,
-      "coverage_ci_lower": 0.4761722970238513,
-      "coverage_ci_upper": 0.5203280732867549,
-      "n_structures": 600,
-      "total_pairs": 16202.0
+      "pooled_ppv": 0.6738137296704635,
+      "macro_ppv_mean": 0.6793874576132947,
+      "macro_ppv_ci_lower": 0.6543831324094262,
+      "macro_ppv_ci_upper": 0.7035904925943589,
+      "n_structures": 582,
+      "total_pairs": 16417
     },
     {
       "tier": "SOFT",
-      "ppv_mean": 0.3349737659226707,
-      "ppv_ci_lower": 0.3090428214678173,
-      "ppv_ci_upper": 0.3611046634289065,
-      "coverage_mean": 0.10526457861311393,
-      "coverage_ci_lower": 0.09431011504995207,
-      "coverage_ci_upper": 0.11589721962249966,
-      "n_structures": 600,
-      "total_pairs": 8191.0
+      "pooled_ppv": 0.29936604836816155,
+      "macro_ppv_mean": 0.34391584461824865,
+      "macro_ppv_ci_lower": 0.318324008897001,
+      "macro_ppv_ci_upper": 0.3693117792082354,
+      "n_structures": 585,
+      "total_pairs": 8518
     },
     {
       "tier": "FLOPPY",
-      "ppv_mean": 0.17731058329886587,
-      "ppv_ci_lower": 0.1506474150428927,
-      "ppv_ci_upper": 0.2052269288017559,
-      "coverage_mean": 0.03496184227834184,
-      "coverage_ci_lower": 0.028315553995657113,
-      "coverage_ci_upper": 0.04232365681142323,
-      "n_structures": 600,
-      "total_pairs": 5450.0
+      "pooled_ppv": 0.1457122093023256,
+      "macro_ppv_mean": 0.1896655542628835,
+      "macro_ppv_ci_lower": 0.16164711075069207,
+      "macro_ppv_ci_upper": 0.2170655525550598,
+      "n_structures": 466,
+      "total_pairs": 5504
+    }
+  ],
+  "mea_tier_summary": [
+    {
+      "tier": "FIRM",
+      "pooled_ppv": 0.6736874051593323,
+      "macro_ppv_mean": 0.6791649087422557,
+      "macro_ppv_ci_lower": 0.6553504119037588,
+      "macro_ppv_ci_upper": 0.703870595279203,
+      "n_structures": 583,
+      "total_pairs": 16475
+    },
+    {
+      "tier": "SOFT",
+      "pooled_ppv": 0.31665307786384017,
+      "macro_ppv_mean": 0.346527070953575,
+      "macro_ppv_ci_lower": 0.32044229565508414,
+      "macro_ppv_ci_upper": 0.373720474237093,
+      "n_structures": 590,
+      "total_pairs": 9812
+    },
+    {
+      "tier": "FLOPPY",
+      "pooled_ppv": 0.16890459363957597,
+      "macro_ppv_mean": 0.1793492284049759,
+      "macro_ppv_ci_lower": 0.15092227909361847,
+      "macro_ppv_ci_upper": 0.21021214098492227,
+      "n_structures": 401,
+      "total_pairs": 2830
+    }
+  ],
+  "candidate_tier_summary": [
+    {
+      "tier": "FIRM",
+      "pooled_ppv": 0.6736874051593323,
+      "n_pairs": 16475
+    },
+    {
+      "tier": "SOFT",
+      "pooled_ppv": 0.3177162559578136,
+      "n_pairs": 9861
+    },
+    {
+      "tier": "FLOPPY",
+      "pooled_ppv": 0.04368020989599352,
+      "n_pairs": 159317
+    }
+  ],
+  "stem_tier_summary": [
+    {
+      "tier": "FIRM",
+      "pooled_pair_ppv": 0.6669856459330143,
+      "total_pairs": 16720,
+      "total_stems": 2983,
+      "stems_fraction_correct": 0.6771706335903452
+    },
+    {
+      "tier": "SOFT",
+      "pooled_pair_ppv": 0.2990969295605057,
+      "total_pairs": 8305,
+      "total_stems": 2006,
+      "stems_fraction_correct": 0.3000997008973081
+    },
+    {
+      "tier": "FLOPPY",
+      "pooled_pair_ppv": 0.14701830348356623,
+      "total_pairs": 5081,
+      "total_stems": 1372,
+      "stems_fraction_correct": 0.141399416909621
+    },
+    {
+      "tier": "LONELY",
+      "pooled_pair_ppv": 0.09309309309309309,
+      "total_pairs": 333,
+      "total_stems": 0,
+      "stems_fraction_correct": 0.0
     }
   ]
 }
