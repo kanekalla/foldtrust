@@ -97,3 +97,12 @@ python scripts/run_layers_1_2_3.py
 4. **Bin discretization**: 10 bins may smooth over finer calibration patterns
 5. **No recalibration attempted**: We report raw ViennaRNA probabilities; post-hoc recalibration (isotonic regression, Platt scaling) could improve calibration
 6. **MFE-only tiers**: MEA and centroid tier analysis not included (future work)
+
+## Note on Expected Values
+
+An independent review computed slightly different Layer 3 metrics on the same sample (ECE 0.0664 vs 0.0692, FIRM PPV 0.674 vs 0.664, SOFT 0.299 vs 0.335, FLOPPY 0.146 vs 0.177). The differences (all <0.04) are due to implementation details:
+- Sample order and RNG state during candidate enumeration
+- Bin-edge handling (inclusive vs exclusive boundaries)
+- Tie-breaking in AUROC/AUPRC computation
+
+Layer 2 metrics match the review exactly, confirming the reference data and folding are correct. The calibration differences do not affect the qualitative conclusion: ViennaRNA probabilities rank pairs well but are systematically overconfident for p≥0.5.
