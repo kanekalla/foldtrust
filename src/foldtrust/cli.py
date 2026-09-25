@@ -158,11 +158,13 @@ def benchmark(
         console.print("[yellow]Note: Probing analysis requires SHAPE data (not included in MVP)[/yellow]")
 
     if analysis in ["robustness", "all"]:
-        console.print("[bold cyan]Running robustness analysis...[/bold cyan]")
+        console.print("[bold cyan]Running Layer 5: Robustness analysis...[/bold cyan]")
         cases_dir = Path("data/cases")
         if cases_dir.exists():
             case_dirs = find_case_directories(cases_dir)
-            run_robustness_analysis(output, case_dirs)
+            from foldtrust.benchmark.layer5_robustness import run_robustness_analysis as run_layer5
+            layer5_output = output / "layer5_robustness"
+            run_layer5(case_dirs, layer5_output)
         else:
             console.print("[yellow]data/cases not found; skipping robustness analysis[/yellow]")
 
