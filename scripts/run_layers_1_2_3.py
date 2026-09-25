@@ -40,17 +40,17 @@ def main():
     print("Layer 2: Accuracy benchmark (ArchiveII, bpRNA TS0, Rfam)")
     print("-" * 70)
     layer2_output = output_dir / "layer2"
-    layer2_df = run_layer2_benchmark(
+    layer2_results = run_layer2_benchmark(
         cache_dir=cache_dir, output_dir=layer2_output, max_length=500, sample_size=200
     )
-    print(f"  ✓ Layer 2 complete. {len(layer2_df)} structures. Results in {layer2_output}")
+    print(f"  ✓ Layer 2 complete. {layer2_results['n_structures']} structures. Results in {layer2_output}")
     print()
 
     print("Layer 3: Calibration analysis")
     print("-" * 70)
     layer3_output = output_dir / "layer3"
     layer3_summary = run_layer3_calibration(
-        cache_dir=cache_dir, layer2_output_dir=layer2_output, output_dir=layer3_output
+        cache_dir=cache_dir, output_dir=layer3_output, max_length=500, sample_size=200
     )
     print(f"  ✓ Layer 3 complete. ECE={layer3_summary['ece']:.4f}. Results in {layer3_output}")
     print()

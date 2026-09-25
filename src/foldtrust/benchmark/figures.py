@@ -8,9 +8,22 @@ from pathlib import Path
 from typing import Optional
 
 
-# Set style
+# Okabe-Ito colourblind-safe palette
+OKABE_ITO = {
+    "orange": "#E69F00",
+    "sky_blue": "#56B4E9",
+    "bluish_green": "#009E73",
+    "yellow": "#F0E442",
+    "blue": "#0072B2",
+    "vermillion": "#D55E00",
+    "reddish_purple": "#CC79A7",
+    "black": "#000000",
+}
+
+# Set style and colourblind-safe palette
 plt.style.use('seaborn-v0_8-darkgrid')
-sns.set_palette("colorblind")
+sns.set_palette([OKABE_ITO["blue"], OKABE_ITO["orange"], OKABE_ITO["bluish_green"], 
+                 OKABE_ITO["vermillion"], OKABE_ITO["sky_blue"], OKABE_ITO["reddish_purple"]])
 
 
 def plot_reliability_diagram(
@@ -186,7 +199,8 @@ def plot_tier_ppv(
     
     errors = np.array([means - ci_lower, ci_upper - means])
     
-    bars = ax.bar(x, means, color=['#2ecc71', '#f39c12', '#e74c3c'], alpha=0.7)
+    # Use Okabe-Ito colourblind-safe colors: blue for FIRM, orange for SOFT, vermillion for FLOPPY
+    bars = ax.bar(x, means, color=[OKABE_ITO["blue"], OKABE_ITO["orange"], OKABE_ITO["vermillion"]], alpha=0.7)
     ax.errorbar(x, means, yerr=errors, fmt='none', ecolor='black', capsize=10, linewidth=2)
     
     ax.set_xlabel('Reliability Tier', fontsize=12)
