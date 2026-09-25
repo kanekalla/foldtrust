@@ -165,3 +165,38 @@ def test_case_coords_complete():
     
     expected_cases = {"sars2-fse", "smn2-iss-n1", "cftr-5utr", "mapt-e10", "hcv-ires-dii"}
     assert set(CASE_COORDS.keys()) == expected_cases
+
+
+@pytest.mark.skipif(not HAS_RNA, reason="ViennaRNA not available")
+def test_flank_extraction_is_exact_substring():
+    """Flanking sequences should be exact substrings of cached records."""
+    from foldtrust.benchmark.layer5_robustness import (
+        get_flanking_sequences,
+        fetch_fasta_from_ncbi,
+        extract_sequence_from_fasta,
+        CASE_COORDS,
+    )
+    
+    cache_dir = Path("data/_cache")
+    cache_dir.mkdir(parents=True, exist_ok=True)
+    
+    case_name = "sars2-fse"
+    coords = CASE_COORDS[case_name]
+    
+    # Fetch full record
+    fasta_content = fetch_fasta_from_ncbi(coords["accession"], cache_dir)
+    if not fasta_content:
+        pytest.skip(f"Could not fetch {coords['accession']}")
+    
+    full_seq = extract_sequence_from_fasta(fasta_content).upper().replace('T', 'U')
+    
+    # Get flanks
+    left_flank, right_flank = get_flanking_sequences(case_name, 50, cache_dir)
+    
+    # Verify left flank is substring
+    if left_flank:
+        assert left_flank in full_seq, "Left flank should be substring of record"
+    
+    # Verify right flank is substring
+    if right_flank:
+        assert right_flank in full_seq, "Right flank should be substring of record"

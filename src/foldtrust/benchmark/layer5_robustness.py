@@ -12,6 +12,8 @@ Retention metrics are computed only over stems/pairs that exist in the reference
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 import json
+import urllib.request
+import urllib.error
 
 import numpy as np
 import pandas as pd
@@ -64,6 +66,112 @@ CASE_COORDS = {
         "length": 75,
     },
 }
+
+
+def fetch_fasta_from_ncbi(accession: str, cache_dir: Path) -> Optional[str]:
+    """
+    Fetch complete FASTA record from NCBI, with caching.
+    
+    Args:
+        accession: GenBank/RefSeq accession
+        cache_dir: Directory for cached files
+        
+    Returns:
+        FASTA content string, or None if fetch fails
+    """
+    cache_file = cache_dir / f"{accession}.fa"
+    
+    if cache_file.exists():
+        return cache_file.read_text()
+    
+    url = f"https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nuccore&id={accession}&rettype=fasta&retmode=text"
+    
+    try:
+        with urllib.request.urlopen(url, timeout=30) as response:
+            content = response.read().decode('utf-8')
+        
+        cache_dir.mkdir(parents=True, exist_ok=True)
+        cache_file.write_text(content)
+        
+        return content
+    except urllib.error.URLError as e:
+        print(f"  Warning: Failed to fetch {accession}: {e}")
+        return None
+
+
+def extract_sequence_from_fasta(fasta_content: str) -> str:
+    """Extract sequence from FASTA content (strip header)."""
+    lines = fasta_content.strip().split('\n')
+    return ''.join(line.strip() for line in lines if not line.startswith('>'))
+
+
+def get_flanking_sequences(
+    case_name: str,
+    flank_size: int,
+    cache_dir: Path,
+) -> Tuple[str, str]:
+    """
+    Fetch real flanking sequences from NCBI.
+    
+    Args:
+        case_name: Case identifier
+        flank_size: Number of nucleotides to fetch on each side
+        cache_dir: Cache directory
+        
+    Returns:
+        (left_flank, right_flank) tuple of sequences
+    """
+    coords = CASE_COORDS[case_name]
+    accession = coords["accession"]
+    start = coords["start"]
+    end = coords["end"]
+    
+    # Fetch full record
+    fasta_content = fetch_fasta_from_ncbi(accession, cache_dir)
+    if not fasta_content:
+        return "", ""
+    
+    full_seq = extract_sequence_from_fasta(fasta_content).upper().replace('T', 'U')
+    
+    # Extract left flank (clip at record start)
+    left_start = max(0, start - 1 - flank_size)
+    left_end = start - 1
+    left_flank = full_seq[left_start:left_end]
+    
+    # Extract right flank (clip at record end)
+    right_start = end
+    right_end = min(len(full_seq), end + flank_size)
+    right_flank = full_seq[right_start:right_end]
+    
+    return left_flank, right_flank
+
+
+def verify_core_sequence(
+    case_name: str,
+    core_sequence: str,
+    cache_dir: Path,
+) -> bool:
+    """
+    Verify that core sequence is an exact substring of the cached record.
+    
+    Returns:
+        True if verified
+    """
+    coords = CASE_COORDS[case_name]
+    accession = coords["accession"]
+    start = coords["start"]
+    end = coords["end"]
+    
+    fasta_content = fetch_fasta_from_ncbi(accession, cache_dir)
+    if not fasta_content:
+        return False
+    
+    full_seq = extract_sequence_from_fasta(fasta_content).upper().replace('T', 'U')
+    expected_seq = full_seq[start - 1:end]
+    
+    core_norm = core_sequence.upper().replace('T', 'U')
+    
+    return core_norm == expected_seq
 
 
 def compute_mea_structure(
@@ -387,9 +495,103 @@ def analyze_params_condition(
     }
 
 
+def analyze_window_context(
+    core_sequence: str,
+    left_flank: str,
+    right_flank: str,
+    flank_size: int,
+    ref_structure: str,
+    ref_mea_pairs: List[Tuple[int, int]],
+    ref_stems: List[Dict],
+) -> Dict:
+    """
+    Analyze window with flanking context.
+    
+    Tests retention of core window stems when flanking sequence is added.
+    Only the core window stems (from ref_stems) are counted for retention.
+    
+    Args:
+        core_sequence: Core window sequence
+        left_flank: Left flanking sequence
+        right_flank: Right flanking sequence
+        flank_size: Requested flank size (for metadata)
+        ref_structure: Reference structure (for core window)
+        ref_mea_pairs: Reference MEA pairs (0-based, core window coords)
+        ref_stems: Reference stems (from parse_stems on core window)
+        
+    Returns:
+        Dict with metrics
+    """
+    # Construct extended sequence
+    extended_seq = left_flank + core_sequence + right_flank
+    core_offset = len(left_flank)
+    
+    # Fold extended sequence
+    param_set = "Turner2004"
+    temp = 37.0
+    
+    structure, mfe_energy = fold_with_params(extended_seq, param_set, temp)
+    prob_matrix = compute_pair_probs_with_params(extended_seq, param_set, temp)
+    mea_pairs, mea_energy = compute_mea_structure(extended_seq, param_set, temp)
+    
+    # Map core window reference pairs to extended coordinates
+    ref_pairs_extended = [(i + core_offset, j + core_offset) for i, j in ref_mea_pairs]
+    
+    # Base-pair distance (core window pairs only)
+    bp_dist_mea = compute_basepair_distance(ref_pairs_extended, mea_pairs)
+    
+    # Stem retention: check if core stems are retained in extended MEA
+    # Need to translate stem pairs to extended coordinates
+    extended_stems = []
+    for stem in ref_stems:
+        extended_pairs = [(i + core_offset, j + core_offset) for i, j in stem["pairs"]]
+        extended_stem = {
+            "id": stem["id"],
+            "pairs": extended_pairs,
+            "length": stem["length"],
+            "mean_prob": stem["mean_prob"],
+            "flag": stem["flag"],
+        }
+        extended_stems.append(extended_stem)
+    
+    # Compute retention using extended stems
+    mea_pairs_set = set(mea_pairs)
+    tier_retention = {"firm": [], "soft": [], "floppy": []}
+    
+    for stem in extended_stems:
+        tier = stem["flag"]
+        all_paired = all(pair in mea_pairs_set for pair in stem["pairs"])
+        tier_retention[tier].append(1 if all_paired else 0)
+    
+    # Average retention per tier
+    retention_results = {}
+    for tier in ["firm", "soft", "floppy"]:
+        if tier_retention[tier]:
+            retention_results[tier] = {
+                "count": len(tier_retention[tier]),
+                "retention": sum(tier_retention[tier]) / len(tier_retention[tier]),
+            }
+        else:
+            retention_results[tier] = {
+                "count": 0,
+                "retention": None,
+            }
+    
+    return {
+        "flank_size": flank_size,
+        "left_flank_len": len(left_flank),
+        "right_flank_len": len(right_flank),
+        "extended_len": len(extended_seq),
+        "mfe_energy": mfe_energy,
+        "bp_distance_mea": bp_dist_mea,
+        "stem_retention": retention_results,
+    }
+
+
 def run_layer5_analysis(
     cases_dir: Path,
     output_dir: Path,
+    cache_dir: Optional[Path] = None,
 ) -> Dict:
     """
     Run Layer 5 robustness analysis for all cases.
@@ -398,10 +600,12 @@ def run_layer5_analysis(
     1. Compute 37°C Turner2004 baseline
     2. Test temperatures: 25, 30, 42°C
     3. Test parameter sets: Andronescu2007, Langdon2018
+    4. Test window context: extend by 0, 25, 50, 100 nt flanks
     
     Args:
         cases_dir: Path to data/cases
         output_dir: Path to benchmarks/outputs/layer5
+        cache_dir: Cache directory for NCBI fetches (default: data/_cache)
         
     Returns:
         Summary dict
@@ -409,7 +613,11 @@ def run_layer5_analysis(
     if not HAS_RNA:
         raise RuntimeError("ViennaRNA not available. Install: pip install ViennaRNA")
     
+    if cache_dir is None:
+        cache_dir = Path("data/_cache")
+    
     output_dir.mkdir(parents=True, exist_ok=True)
+    cache_dir.mkdir(parents=True, exist_ok=True)
     
     results = {}
     
@@ -426,6 +634,14 @@ def run_layer5_analysis(
         _, sequence = read_fasta(seq_file)
         print(f"  Length: {len(sequence)} nt")
         
+        # Verify sequence against NCBI
+        print("  Verifying sequence...")
+        verified = verify_core_sequence(case_name, sequence, cache_dir)
+        if verified:
+            print("    ✓ Verified as exact substring of cached record")
+        else:
+            print("    ⚠ Could not verify (continuing anyway)")
+        
         # Baseline: 37°C Turner2004
         print("  Computing baseline (37°C Turner2004)...")
         ref_structure, ref_mfe_energy = fold_with_params(sequence, "Turner2004", 37.0)
@@ -437,6 +653,8 @@ def run_layer5_analysis(
         case_results = {
             "case": case_name,
             "length": len(sequence),
+            "accession": CASE_COORDS[case_name]["accession"],
+            "coords": f"{CASE_COORDS[case_name]['start']}-{CASE_COORDS[case_name]['end']}",
             "baseline": {
                 "mfe_energy": ref_mfe_energy,
                 "ensemble_defect": ref_ensemble_defect,
@@ -449,6 +667,7 @@ def run_layer5_analysis(
             },
             "temperature": {},
             "parameters": {},
+            "window_context": {},
         }
         
         # Temperature sweep
@@ -465,10 +684,41 @@ def run_layer5_analysis(
                 sequence, param_set, ref_structure, ref_mea_pairs, ref_stems
             )
         
+        # Window context sweep
+        print("  Window context...")
+        for flank_size in [0, 25, 50, 100]:
+            print(f"    Flank size {flank_size} nt...")
+            
+            if flank_size == 0:
+                # No flanks: same as baseline
+                case_results["window_context"][f"flank_{flank_size}"] = {
+                    "flank_size": 0,
+                    "left_flank_len": 0,
+                    "right_flank_len": 0,
+                    "extended_len": len(sequence),
+                    "mfe_energy": ref_mfe_energy,
+                    "bp_distance_mea": 0,
+                    "stem_retention": {
+                        "firm": {"count": case_results["baseline"]["stem_counts"]["firm"], "retention": 1.0},
+                        "soft": {"count": case_results["baseline"]["stem_counts"]["soft"], "retention": 1.0},
+                        "floppy": {"count": case_results["baseline"]["stem_counts"]["floppy"], "retention": 1.0},
+                    },
+                }
+            else:
+                left_flank, right_flank = get_flanking_sequences(case_name, flank_size, cache_dir)
+                if left_flank or right_flank:
+                    print(f"      Fetched left={len(left_flank)} nt, right={len(right_flank)} nt")
+                    case_results["window_context"][f"flank_{flank_size}"] = analyze_window_context(
+                        sequence, left_flank, right_flank, flank_size,
+                        ref_structure, ref_mea_pairs, ref_stems
+                    )
+                else:
+                    print(f"      Could not fetch flanks")
+        
         results[case_name] = case_results
     
     # Save detailed JSON
-    json_path = output_dir / "layer5_temp_params.json"
+    json_path = output_dir / "layer5_complete.json"
     with open(json_path, "w") as f:
         json.dump(results, f, indent=2)
     print(f"\n✓ Saved detailed results to {json_path}")
@@ -476,6 +726,7 @@ def run_layer5_analysis(
     # Create CSV tables
     create_temperature_tables(results, output_dir)
     create_parameters_tables(results, output_dir)
+    create_window_context_tables(results, output_dir)
     
     return results
 
@@ -590,5 +841,53 @@ def create_parameters_tables(results: Dict, output_dir: Path):
     
     df = pd.DataFrame(rows)
     csv_path = output_dir / "parameters_stem_retention.csv"
+    df.to_csv(csv_path, index=False, float_format="%.4f")
+    print(f"✓ {csv_path.name}")
+
+
+def create_window_context_tables(results: Dict, output_dir: Path):
+    """Create CSV tables for window context sweep."""
+    
+    # Basic metrics table
+    rows = []
+    for case_name, case_data in results.items():
+        if "window_context" not in case_data:
+            continue
+        
+        for flank_key, flank_data in case_data["window_context"].items():
+            rows.append({
+                "case": case_name,
+                "flank_size": flank_data["flank_size"],
+                "left_flank_len": flank_data["left_flank_len"],
+                "right_flank_len": flank_data["right_flank_len"],
+                "extended_len": flank_data["extended_len"],
+                "mfe_energy": flank_data["mfe_energy"],
+                "bp_distance_mea": flank_data["bp_distance_mea"],
+            })
+    
+    df = pd.DataFrame(rows)
+    csv_path = output_dir / "window_context_metrics.csv"
+    df.to_csv(csv_path, index=False, float_format="%.2f")
+    print(f"✓ {csv_path.name}")
+    
+    # Stem retention table
+    rows = []
+    for case_name, case_data in results.items():
+        if "window_context" not in case_data:
+            continue
+        
+        for flank_key, flank_data in case_data["window_context"].items():
+            for tier, tier_data in flank_data["stem_retention"].items():
+                if tier_data["count"] > 0 and tier_data["retention"] is not None:
+                    rows.append({
+                        "case": case_name,
+                        "flank_size": flank_data["flank_size"],
+                        "tier": tier.upper(),
+                        "n_stems": tier_data["count"],
+                        "retention": tier_data["retention"],
+                    })
+    
+    df = pd.DataFrame(rows)
+    csv_path = output_dir / "window_context_stem_retention.csv"
     df.to_csv(csv_path, index=False, float_format="%.4f")
     print(f"✓ {csv_path.name}")
