@@ -1,237 +1,99 @@
-# Layer 3: Calibration — The Core FoldTrust Claim
+# Layer 3: Calibration
 
 ## Question
 
-**Are predicted pair probabilities well-calibrated?** When ViennaRNA says a pair has probability p, is it correct approximately 100p% of the time?
-
-More specifically:
-1. **Reliability**: Does p(i,j) correlate with the fraction of reference structures where (i,j) is truly paired?
-2. **Discrimination**: Can we use probabilities to rank pairs (AUROC, AUPRC)?
-3. **Tier separation**: Are FIRM pairs (p ≥ 0.85) more often correct than SOFT (0.5 ≤ p < 0.85) and FLOPPY (p < 0.5) pairs?
-
-This is the **core claim** of FoldTrust: that ensemble probabilities provide actionable reliability information for ASO design, antiviral targeting, and structure-guided experiments.
+Are ViennaRNA base-pair probabilities well-calibrated? That is, do pairs with predicted probability *p* occur with frequency *p* in known structures?
 
 ## Data
 
-We use the pooled Layer 2 reference sets:
-- ArchiveII (≤500 nt)
-- bpRNA TS0 (≤500 nt)
-- Rfam seed (≤500 nt)
+Same 600-structure sample from Layer 2 (ArchiveII 200, bpRNA TS0 200, Rfam seed 200; all ≤500 nt, seed 42).
 
-For each structure, we compute the ViennaRNA partition function and extract all candidate pairs with p > 1e-3 (a small floor to exclude noise). Each candidate pair is labeled:
-- **y_true = 1** if the pair is present in the reference structure (after pseudoknot removal)
-- **y_true = 0** otherwise
+For each structure:
+- **Reference**: Known pairs (after pseudoknot removal)
+- **Candidates**: All pairs with base-pair probability > 0.001
+- **MFE structure**: Used for tier analysis
 
-This yields a large pool of (p, y_true) observations for calibration analysis.
+Total: 181,390 candidate pairs, 20,437 correct (11.27%).
 
 ## Method
 
-### 1. Reliability Diagram (Calibration Curve)
+1. Fold each sequence with ViennaRNA (Turner2004, 37°C)
+2. Compute partition function and base-pair probability matrix
+3. For each candidate pair (i,j) with p > 0.001:
+   - Record predicted probability *p*
+   - Record ground truth: 1 if (i,j) is in reference, 0 otherwise
+4. Compute calibration metrics:
+   - **ECE** (Expected Calibration Error): mean |predicted - actual| over 10 equally-spaced bins
+   - **AUROC**: Area under ROC curve (discriminative power)
+   - **AUPRC**: Area under precision-recall curve
+5. Tier analysis:
+   - Bin MFE pairs by their probability: FIRM (p≥0.85), SOFT (0.5≤p<0.85), FLOPPY (p<0.5)
+   - Report pooled PPV per tier (sum correct / sum pairs across all structures)
 
-We bin candidate pairs by predicted probability (default: 10 bins, uniformly spaced 0–1) and compute:
-- **Bin mean probability**: Average p in the bin
-- **Bin accuracy**: Fraction of pairs in the bin that are true pairs
-
-A perfectly calibrated model would have `bin_accuracy = bin_mean` (points on the diagonal).
-
-### 2. Expected Calibration Error (ECE)
-
-ECE = sum over bins of (bin_count / total) × |bin_mean - bin_accuracy|
-
-Lower ECE indicates better calibration.
-
-### 3. AUROC and AUPRC
-
-- **AUROC** (Area Under ROC Curve): Ability to rank true pairs above false pairs
-- **AUPRC** (Area Under Precision-Recall Curve): Performance in the positive class (useful when positive pairs are rare)
-
-### 4. Tier Analysis
-
-For each structure:
-1. Predict MFE structure
-2. Compute pair probabilities
-3. Classify each MFE pair into tiers:
-   - **FIRM**: p ≥ 0.85
-   - **SOFT**: 0.5 ≤ p < 0.85
-   - **FLOPPY**: p < 0.5
-
-For each tier, compute:
-- **PPV**: Fraction of tier's pairs that are in the reference
-- **Coverage**: Fraction of reference pairs recovered by this tier
-
-We report **per-structure** tier PPVs and then aggregate with bootstrap 95% CIs.
-
-### 5. Stem-Level Tier Analysis (Optional)
-
-If FoldTrust tiers stems (not just pairs), we compute the fraction of a stem's pairs present in the reference. This measures whether ensemble support for entire structural motifs (not just individual pairs) is meaningful.
-
-**Status**: Stem-level analysis planned for future work (requires stem parsing from MFE).
-
-## Thresholds
-
-FoldTrust tiers are defined by these thresholds (confirm in code):
-- **FIRM**: p ≥ 0.85
-- **SOFT**: 0.5 ≤ p < 0.85
-- **FLOPPY**: p < 0.5
-
-These thresholds are **not** tuned on the benchmark data; they are chosen a priori based on the concept that p ≥ 0.85 represents "strong ensemble support."
-
-## Command
-
+**Command**:
 ```bash
-cd /workspace
-python3 scripts/run_layers_1_2_3.py
+python scripts/run_layers_1_2_3.py
 ```
-
-Layer 3 runs after Layer 2 completes.
 
 ## Results
 
-**Run completed**: 2026-09-25  
-**Sample size**: 600 structures (200 per dataset)
+### Overall Calibration
 
-### Candidate Pair Pool
+| Metric | Value |
+|--------|------:|
+| ECE | 0.0692 |
+| ECE (p≥0.5) | 0.3302 |
+| AUROC | 0.8870 |
+| AUPRC | 0.6028 |
+| Candidates (p>0.001) | 181,390 |
+| Positive pairs | 20,437 (11.27%) |
 
-- **Total candidate pairs** (p > 1e-3): 181,390
-- **Positive pairs** (in reference): 20,437 (11.27%)
+### Reliability Per Bin
 
-This represents all pairs with predicted probability > 0.001 across all 600 structures.
+| Bin | Mean Prob | Fraction Correct | Count |
+|-----|-----------|------------------|-------|
+| [0.0, 0.1) | 0.014 | 0.027 | 134,654 |
+| [0.1, 0.2) | 0.143 | 0.109 | 8,937 |
+| [0.2, 0.3) | 0.248 | 0.147 | 4,940 |
+| [0.3, 0.4) | 0.349 | 0.188 | 3,669 |
+| [0.4, 0.5) | 0.452 | 0.216 | 3,409 |
+| [0.5, 0.6) | 0.548 | 0.298 | 2,732 |
+| [0.6, 0.7) | 0.651 | 0.285 | 2,579 |
+| [0.7, 0.8) | 0.750 | 0.344 | 2,602 |
+| [0.8, 0.9) | 0.854 | 0.410 | 3,671 |
+| [0.9, 1.0] | 0.976 | 0.681 | 14,197 |
 
-### Calibration Metrics
+### MFE-Pair Tier PPV
 
-| Metric | Value  | Interpretation                               |
-|--------|--------|---------------------------------------------|
-| ECE    | 0.0692 | Small overall error                          |
-| AUROC  | 0.8870 | Strong discrimination (> 0.8)               |
-| AUPRC  | 0.6028 | Good precision-recall trade-off             |
+| Tier | Pooled PPV | N Structures | N Pairs |
+|------|------------|--------------|---------|
+| FIRM | 0.664 | 600 | 16,202 |
+| SOFT | 0.335 | 600 | 8,191 |
+| FLOPPY | 0.177 | 600 | 5,450 |
 
-**Interpretation**: ViennaRNA pair probabilities **rank pairs well** (AUROC = 0.887), effectively discriminating true pairs from false pairs. However, **probabilities are overconfident** at high values.
-
-### Calibration Detail: Overconfidence at High Probabilities
-
-The small overall ECE (0.069) is driven by the large fraction (~74%) of candidate pairs in the lowest bin [0, 0.1), where calibration is good. When restricted to **p ≥ 0.5**, the model is systematically **overconfident by 25–44 percentage points**:
-
-- FIRM pairs have **mean predicted probability ~0.95** but are correct only **~65%** of the time (overconfident by ~30 points)
-- SOFT pairs (mean p ~0.65–0.75) are correct only **~30–35%** of the time
-
-Full per-bin calibration table:
-
-| Bin          | Mean Predicted p | Observed Accuracy | Count    | Calibration Gap |
-|--------------|------------------|-------------------|----------|-----------------|
-| [0.0, 0.1)   | 0.014            | 0.027             | 138,095  | +0.013          |
-| [0.1, 0.2)   | 0.143            | 0.108             | 9,138    | -0.035          |
-| [0.2, 0.3)   | 0.248            | 0.156             | 5,027    | -0.092          |
-| [0.3, 0.4)   | 0.350            | 0.187             | 3,698    | -0.163          |
-| [0.4, 0.5)   | 0.452            | 0.224             | 3,359    | -0.228          |
-| [0.5, 0.6)   | 0.548            | 0.279             | 2,695    | -0.269          |
-| [0.6, 0.7)   | 0.650            | 0.278             | 2,611    | -0.372          |
-| [0.7, 0.8)   | 0.750            | 0.358             | 2,839    | -0.392          |
-| [0.8, 0.9)   | 0.853            | 0.441             | 3,833    | -0.412          |
-| [0.9, 1.0]   | 0.976            | 0.700             | 14,358   | -0.276          |
-
-**ECE restricted to p ≥ 0.5**: 0.317 (large miscalibration)
-
-**Practical implication**: Do not interpret p = 0.95 as "95% confidence this pair is correct." Use probabilities for **ranking** (which pairs are more vs less reliable), not as direct confidence estimates.
-
-### Tier PPV and Coverage (95% CI)
-
-| Tier    | PPV Mean | 95% CI              | Coverage Mean | N Structures | Total Pairs |
-|---------|----------|---------------------|---------------|--------------|-------------|
-| FIRM    | 0.664    | [0.638, 0.688]      | 0.497         | 600          | 16,202      |
-| SOFT    | 0.335    | [0.309, 0.361]      | 0.105         | 600          | 8,191       |
-| FLOPPY  | 0.177    | [0.151, 0.205]      | 0.035         | 600          | 5,450       |
-
-**Key Finding**: Clear tier separation!
-- **FIRM pairs** (p ≥ 0.85): 66.4% are correct
-- **SOFT pairs** (0.5 ≤ p < 0.85): 33.5% are correct
-- **FLOPPY pairs** (p < 0.5): 17.7% are correct
-
-**FIRM vs FLOPPY gap**: 66.4% - 17.7% = **48.7 percentage points** (nearly 4× more reliable)
-
-### Figures
-
-Generated in `benchmarks/outputs/figures/`:
-- `layer3_reliability_diagram.png`: Calibration curve with bin counts (predicted prob vs observed fraction)
-- `layer3_tier_ppv.png`: Tier PPV bar chart with 95% bootstrap CIs (green/orange/red bars)
+**Tier definitions**: FIRM = p≥0.85, SOFT = 0.5≤p<0.85, FLOPPY = p<0.5. MFE pairs are binned by their own base-pair probability. Pooled PPV = (sum correct pairs) / (sum all pairs) across all structures. N Structures = number of structures with ≥1 pair in that tier (same structure can contribute to multiple tiers).
 
 ## Interpretation
 
-### Answers to Key Questions
+**Discrimination (ranking)**: ViennaRNA probabilities rank pairs well (AUROC 0.887), distinguishing correct from incorrect pairs significantly better than random (0.5).
 
-1. **Do probabilities rank pairs well?** ✓ Yes — AUROC 0.887, strong discrimination
-2. **Are probabilities well-calibrated?** ✗ **No at high p** — overconfident by 25–44 points for p ≥ 0.5
-3. **Are FIRM pairs more accurate than SOFT and FLOPPY?** ✓ **Strongly yes**
-   - FIRM: 66.4%
-   - SOFT: 33.5%
-   - FLOPPY: 17.7%
-4. **How big is the PPV gap?** **48.7 percentage points** (FIRM vs FLOPPY)
+**Calibration (accuracy)**: Probabilities are **systematically overconfident** for p ≥ 0.5:
+- Pairs predicted at mean p ~ 0.95 (bin [0.9,1.0]) are correct only 68% of the time (gap: 27 points)
+- Pairs predicted at p ~ 0.85 (bin [0.8,0.9)) are correct 41% of the time (gap: 44 points)
+- **ECE restricted to p≥0.5 = 0.330** (overall ECE 0.069 is misleading because 74% of candidates sit in [0,0.1) where calibration is near-perfect)
 
-### Core Finding
+**Practical impact (MFE tiers)**:
+- **FIRM pairs** (mean p ~ 0.95) are correct ~66% of the time. This is **useful but far from certain**: roughly 1 in 3 high-confidence pairs is wrong.
+- **SOFT pairs** (p ~ 0.5–0.85) are correct ~34% of the time
+- **FLOPPY pairs** (p < 0.5) are correct ~18% of the time (slightly better than the 11% base rate, but not by much)
 
-Probabilities **rank pairs well** (AUROC ~0.887) but are **overconfident** for p ≥ 0.5. FIRM pairs (p ≥ 0.85, mean predicted p ~0.95) are correct ~65% of the time, not 95%.
-
-**Evidence**:
-- FIRM pairs are correct 66% of the time
-- FLOPPY pairs are correct only 18% of the time
-- The gap is statistically significant (non-overlapping 95% CIs)
-- FIRM pairs recover ~50% of reference pairs (high coverage)
-- But: Predicted probabilities systematically overestimate correctness at high p
-
-### Practical Implications
-
-#### ASO Design (Antisense Oligonucleotide Targeting)
-- **Target FLOPPY regions**: Low pair probabilities suggest accessibility
-- Avoid FIRM-paired regions unless disruption is the goal
-
-#### Antiviral Design (e.g., SARS-CoV-2 FSE)
-- Validate FIRM structures experimentally before assuming they are targets
-- ~34% of FIRM pairs are wrong — not a substitute for SHAPE/DMS probing
-
-#### Structure-Guided Mutagenesis
-- Prioritize experiments on FIRM vs FLOPPY pairs
-- Use tiers to stratify hypotheses by confidence
-
-### Comparison to Published Work
-
-- **RNAprobR** (Lange et al., *Bioinformatics* 2012): Showed pair probabilities correlate with structure probing reactivity
-- **Biers** (Cordero et al., *RNA* 2012): Used ensemble information for structure refinement
-- **LinearPartition** (Huang et al., *Bioinformatics* 2019): Fast partition function for probabilistic analysis
-
-FoldTrust extends this tradition by making tiers **explicit and actionable** for therapeutic design.
+**Conclusion**: Base-pair probabilities successfully rank pairs, but **should not be interpreted as literal confidence**. A "95% confident" pair is actually ~66% likely to be correct. Users relying on these probabilities for decision-making (e.g., primer design, therapeutic targeting) should apply empirical recalibration.
 
 ## Limitations
 
-1. **Probability floor**: We use p > 1e-3 to exclude noise; very low-probability pairs are not evaluated
-2. **Reference structure errors**: Some "reference" structures may have annotation errors (especially Rfam consensus projections)
-3. **Pseudoknot removal**: We remove pseudoknotted pairs from references, which may bias results toward nested structures
-4. **Turner2004 only**: Calibration may differ for other parameter sets
-5. **No stem-level analysis yet**: We analyze pairs, not structural motifs
-6. **Bootstrap resampling**: CIs are computed by resampling structures, not pairs within structures (structures are the sampling unit)
-
-## Files Generated
-
-```
-benchmarks/outputs/layer3/
-├── layer3_calibration_curve.csv      # Bin means, accuracies, counts
-├── layer3_tier_analysis.csv          # Per-structure tier PPVs
-├── layer3_tier_summary.csv           # Aggregated tier PPVs with CIs
-└── layer3_summary.json               # Overall metrics
-
-benchmarks/outputs/figures/
-├── layer3_reliability_diagram.png
-└── layer3_tier_ppv.png
-```
-
-## Plain Statement
-
-**FIRM pairs are more often correct than SOFT and FLOPPY.**
-
-- FIRM pairs (p ≥ 0.85): **66.4%** correct [95% CI: 63.8–68.8%]
-- SOFT pairs (0.5 ≤ p < 0.85): **33.5%** correct [95% CI: 30.9–36.1%]
-- FLOPPY pairs (p < 0.5): **17.7%** correct [95% CI: 15.1–20.5%]
-
-**The PPV gap is 48.7 percentage points** (FIRM vs FLOPPY), with non-overlapping confidence intervals. This is **large enough to guide experimental decisions**.
-
-**However**: Even FIRM pairs are wrong ~34% of the time. Thermodynamic predictions are approximations. **Experimental validation (SHAPE, DMS, functional assays) remains essential** for therapeutic design, especially when patient safety or drug efficacy depends on structure accuracy.
-
-FoldTrust tiers provide **hypothesis prioritization**, not ground truth.
+1. **Reference bias**: Same as Layer 2 (comparative structures may already reflect thermodynamic assumptions)
+2. **Turner2004 only**: Other parameter sets may have different calibration
+3. **Sample size**: 600 structures is adequate for overall trends but not for rare-event analysis
+4. **Bin discretization**: 10 bins may smooth over finer calibration patterns
+5. **No recalibration attempted**: We report raw ViennaRNA probabilities; post-hoc recalibration (isotonic regression, Platt scaling) could improve calibration
+6. **MFE-only tiers**: MEA and centroid tier analysis not included (future work)

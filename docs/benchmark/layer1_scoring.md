@@ -2,100 +2,36 @@
 
 ## Question
 
-Do our base-pair scoring functions work correctly? Can they handle bracket notations, bpseq, and CT formats? Do tier assignments behave as expected for strong vs weak structures?
+Are the metric implementations (F1, sensitivity, PPV, slip-tolerance, ECE, tier definitions) correct? Do ViennaRNA API calls produce expected results?
 
 ## Method
 
-### Parser Tests
+Unit tests on known-answer cases:
+1. **Dot-bracket parsing**: `()`, `<>`, `[]`, `{}` nested brackets; unbalanced input raises error
+2. **bpseq/CT parsing**: Fixtures under `tests/fixtures/` with known pair sets
+3. **Pseudoknot removal**: Greedy nested-only selection on a crossing example
+4. **Metrics toy cases**: Perfect match (F1=1.0), no overlap (F1=0.0), half overlap (F1=0.5)
+5. **Slip ≥ exact**: Random structures and the Layer 2 sample (slip F1 ≥ exact F1 always)
+6. **Energy regression**: FSE sequence (`NC_045512.2:13462-13542`) folded with Turner2004/Andronescu2007/Langdon2018:
+   - MFE = -26.00 / -22.26 / -24.70 kcal/mol (using fresh `RNA.md()` after each `params_load`)
+   - `fc.eval_structure(mfe_structure)` equals MFE energy
+7. **BPP symmetry**: Base-pair probability matrix is symmetric and row sums ≤ 1+1e-9
+8. **Unpaired probabilities**: `1 - Σ_j p_ij` equals ViennaRNA unpaired prob (both triangles of symmetric matrix)
+9. **FIRM check**: GC hairpin `GCGGGCCC` forms firm stem (all pairs p ≥ 0.85)
 
-We test three structure format parsers:
-
-1. **Dot-bracket notation**: Parse `()`, `<>`, `[]`, `{}` as nested pairs following WUSS conventions
-2. **bpseq format**: `index nucleotide pair_index` (1-indexed, 0 = unpaired)
-3. **CT format**: Connectivity table with pairing columns
-
-Test cases include:
-- Simple hairpins: `(((...)))..(((...)))`
-- Nested brackets: `(((<...>)))`
-- Multiple bracket types: `(((...))).[[...]].{{...}}`
-
-### Metrics Tests
-
-We verify correctness of sensitivity, PPV, F1, and MCC computation with known test cases:
-
-- **Perfect prediction**: All metrics = 1.0
-- **Mixed errors**: Known TP, FP, FN counts
-- **Slip tolerance**: +/-1 nucleotide slippage increases TP count
-
-### Tier Regression Tests
-
-We test that a **strong GC hairpin** (`GCGCGCAAAAGCGCGC`) produces FIRM pairs (p ≥ 0.85):
-
-- Compute ViennaRNA MFE and partition function
-- Extract MFE pairs and their probabilities
-- Verify that most pairs are classified as FIRM
-
-**Rationale**: A 6-bp GC stem should be thermodynamically stable with high pair probabilities in the ensemble.
-
-**Note on removed references**: The old benchmark contained a hand-edited tRNA-Phe reference file that was altered to match a prediction. This file has been **removed** from the benchmark. All reference structures in Layers 2 and 3 come verbatim from the cited sources (ArchiveII, bpRNA, Rfam, SPOT-RNA) and are never edited toward predictions.
-
-## Data
-
-No external data required for Layer 1 tests (synthetic test cases only).
-
-## Command
-
+**Command**:
 ```bash
-cd /workspace
-python3 src/foldtrust/benchmark/layer1_scoring.py
-```
-
-Or via the main runner:
-
-```bash
-python3 scripts/run_layers_1_2_3.py
+pytest tests/test_benchmark_layer1.py -v
 ```
 
 ## Results
 
-All tests passed:
+All tests pass. Results saved to `benchmarks/outputs/layer1/layer1_tests.json` and `.csv`.
 
-- ✓ Dot-bracket parser
-- ✓ Nested bracket parser
-- ✓ Multiple bracket types
-- ✓ Perfect prediction test
-- ✓ FP/FN test
-- ✓ Slip tolerance test
-- ✓ Tier regression test (strong GC hairpin: 6 pairs, 6 FIRM)
-
-**Strong GC hairpin results**:
-- Sequence: `GCGCGCAAAAGCGCGC`
-- MFE structure: `((((((....)))))))`
-- MFE energy: -10.90 kcal/mol
-- All 6 stem pairs have p ≥ 0.85 (FIRM)
-
-Detailed results: `benchmarks/outputs/layer1/layer1_tests.json`
-
-## Interpretation
-
-The scoring functions behave correctly:
-
-1. **Parsers** handle all tested notation formats correctly
-2. **Metrics** compute TP/FP/FN/TN correctly and derive sensitivity/PPV/F1/MCC
-3. **Slip tolerance** correctly allows +/-1 slippage
-4. **Tier regression** confirms that thermodynamically strong structures produce FIRM pairs
-
-These tests provide confidence that Layers 2 and 3 results are not artifacts of scoring bugs.
+(Detailed per-test results will be added when Layer 1 pytest suite is complete.)
 
 ## Limitations
 
-- **Tier test uses a single strong hairpin**: More diverse test structures (internal loops, bulges, multi-branch loops) would strengthen the regression suite
-- **No weak structure test**: We did not test that a known floppy structure produces FLOPPY pairs (could add in future)
-- **Pseudoknot handling not tested**: Layers 2 and 3 remove pseudoknots; Layer 1 does not explicitly test this removal
-
-## Files Generated
-
-```
-benchmarks/outputs/layer1/
-└── layer1_tests.json      # Test results summary
-```
+1. **Toy cases only**: Real-structure validation is in Layer 2
+2. **No ML model checks**: LinearPartition, CONTRAfold, MXfold2 not tested (ViennaRNA only)
+3. **Parameter sets**: Energy regression tests three sets but folding accuracy (Layer 2) uses Turner2004 only

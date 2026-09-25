@@ -33,10 +33,9 @@ outputs/
 
 ### Default (Fast)
 
-Max length 500 nt, typical runtime ~10-20 minutes:
+Max length 500 nt, 200 structures per dataset, typical runtime ~45 minutes on a 16GB machine:
 
 ```bash
-cd /workspace
 python3 scripts/run_layers_1_2_3.py
 ```
 
@@ -50,25 +49,16 @@ python3 scripts/run_layers_1_2_3.py --full
 
 ## Exact Commands Run
 
-Layer 1:
+The benchmark runner orchestrates all three layers:
+
 ```bash
-python3 src/foldtrust/benchmark/layer1_scoring.py
+python3 scripts/run_layers_1_2_3.py
 ```
 
-Layer 2:
-```bash
-# Loads ArchiveII, bpRNA TS0, Rfam seed
-# Evaluates MFE, MEA, centroid
-# Outputs per-structure results and summaries
-python3 src/foldtrust/benchmark/layer2_accuracy.py
-```
-
-Layer 3:
-```bash
-# Pools candidate pairs from Layer 2 datasets
-# Computes calibration metrics and tier PPVs
-python3 src/foldtrust/benchmark/layer3_calibration.py
-```
+This calls:
+- `foldtrust.benchmark.layer1_scoring.run_layer1_tests()` → `benchmarks/outputs/layer1/`
+- `foldtrust.benchmark.layer2_accuracy.run_layer2_benchmark()` → `benchmarks/outputs/layer2/`
+- `foldtrust.benchmark.layer3_calibration.run_layer3_calibration()` → `benchmarks/outputs/layer3/`
 
 ## Data Sources
 
@@ -90,21 +80,24 @@ Detailed documentation:
 
 ## Headline Metrics
 
-*To be populated after benchmark completes.*
+Generated from benchmark run on 2026-09-25 (ViennaRNA 2.7.2, Turner2004, 37°C, 600 structures).
 
 ### Layer 2: Structure Accuracy
 
-- Total structures: [TBD]
-- MFE F1: [TBD] [95% CI]
-- MEA F1: [TBD] [95% CI]
+- Total structures: 600 (ArchiveII 200, bpRNA TS0 200, Rfam seed 200)
+- MFE F1: 0.548 [95% CI: 0.526, 0.570]
+- MEA F1: 0.563 [95% CI: 0.542, 0.585]
+- Centroid F1: 0.570 [95% CI: 0.549, 0.590]
 
 ### Layer 3: Calibration
 
-- ECE: [TBD]
-- AUROC: [TBD]
-- FIRM PPV: [TBD] [95% CI]
-- SOFT PPV: [TBD] [95% CI]
-- FLOPPY PPV: [TBD] [95% CI]
+- Candidates (p>0.001): 181,390 pairs (20,437 correct, 11.27%)
+- ECE: 0.069 (overall), 0.330 (restricted to p≥0.5)
+- AUROC: 0.887
+- AUPRC: 0.603
+- FIRM PPV (p≥0.85): 0.664 (16,202 pairs)
+- SOFT PPV (0.5≤p<0.85): 0.335 (8,191 pairs)
+- FLOPPY PPV (p<0.5): 0.177 (5,450 pairs)
 
 ## Integrity
 
