@@ -190,19 +190,19 @@ def remove_pseudoknots(pairs: Set[Tuple[int, int]]) -> Set[Tuple[int, int]]:
 def compute_exact_metrics(
     predicted_pairs: Set[Tuple[int, int]], reference_pairs: Set[Tuple[int, int]]
 ) -> Dict[str, float]:
-    """Compute exact pair-matching metrics."""
+    """Compute exact pair-matching metrics.
+
+    MCC is computed using the RNA-structure approximation MCC = sqrt(sensitivity * PPV)
+    (Gorodkin, Stricklin & Stormo 2001, Nucleic Acids Res 29:2135-2144).
+    """
     tp = len(predicted_pairs & reference_pairs)
     fp = len(predicted_pairs - reference_pairs)
     fn = len(reference_pairs - predicted_pairs)
-    tn = 0  # TN not well-defined for pair sets without sequence length
 
     sensitivity = tp / (tp + fn) if (tp + fn) > 0 else 0.0
     ppv = tp / (tp + fp) if (tp + fp) > 0 else 0.0
     f1 = 2 * tp / (2 * tp + fp + fn) if (2 * tp + fp + fn) > 0 else 0.0
-
-    # MCC without TN (simplified form)
-    mcc_denom = ((tp + fp) * (tp + fn) * (tn + fp) * (tn + fn)) ** 0.5
-    mcc = ((tp * tn) - (fp * fn)) / mcc_denom if mcc_denom > 0 else 0.0
+    mcc = np.sqrt(sensitivity * ppv) if (sensitivity > 0 and ppv > 0) else 0.0
 
     return {
         "sensitivity": sensitivity,
@@ -226,13 +226,16 @@ def compute_slip_metrics(
 
     PPV_slip = #pred pairs with a match / #pred pairs
     SEN_slip = #ref pairs recovered / #ref pairs
+
+    MCC is computed using the RNA-structure approximation MCC = sqrt(sensitivity * PPV)
+    (Gorodkin, Stricklin & Stormo 2001, Nucleic Acids Res 29:2135-2144).
     """
     if not predicted_pairs and not reference_pairs:
-        return {"sensitivity": 1.0, "ppv": 1.0, "f1": 1.0, "mcc": 0.0}
+        return {"sensitivity_slip": 1.0, "ppv_slip": 1.0, "f1_slip": 1.0, "mcc": 1.0}
     if not predicted_pairs:
-        return {"sensitivity": 0.0, "ppv": 0.0, "f1": 0.0, "mcc": 0.0}
+        return {"sensitivity_slip": 0.0, "ppv_slip": 0.0, "f1_slip": 0.0, "mcc": 0.0}
     if not reference_pairs:
-        return {"sensitivity": 0.0, "ppv": 0.0, "f1": 0.0, "mcc": 0.0}
+        return {"sensitivity_slip": 0.0, "ppv_slip": 0.0, "f1_slip": 0.0, "mcc": 0.0}
 
     tp_pred = 0
     for i, j in predicted_pairs:
@@ -258,19 +261,15 @@ def compute_slip_metrics(
 
     ppv_slip = tp_pred / len(predicted_pairs)
     sen_slip = tp_ref / len(reference_pairs)
-    f1_slip = 2 * ppv_slip * sen_slip / (ppv_slip + sen_slip) if (ppv_slip + sen_slip) > 0 else 0.0
-
-    # MCC for slip-tolerant (simplified without TN)
-    fp = len(predicted_pairs) - tp_pred
-    fn = len(reference_pairs) - tp_ref
-    tn = 0
-    mcc_denom = ((tp_pred + fp) * (tp_ref + fn) * (tn + fp) * (tn + fn)) ** 0.5
-    mcc = ((tp_pred * tn) - (fp * fn)) / mcc_denom if mcc_denom > 0 else 0.0
+    f1_slip = (
+        2 * ppv_slip * sen_slip / (ppv_slip + sen_slip) if (ppv_slip + sen_slip) > 0 else 0.0
+    )
+    mcc = np.sqrt(sen_slip * ppv_slip) if (sen_slip > 0 and ppv_slip > 0) else 0.0
 
     return {
-        "sensitivity": sen_slip,
-        "ppv": ppv_slip,
-        "f1": f1_slip,
+        "sensitivity_slip": sen_slip,
+        "ppv_slip": ppv_slip,
+        "f1_slip": f1_slip,
         "mcc": mcc,
     }
 
