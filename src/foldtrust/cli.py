@@ -126,7 +126,7 @@ def demo():
 @app.command()
 def benchmark(
     layer: str = typer.Argument(
-        ..., help="Layer to run: 'layer1', 'layer2', 'layer3', 'all', or 'layer4_shape'"
+        ..., help="Layer to run: 'layer1', 'layer2', 'layer3', 'layer5', 'all', or 'layer4_shape'"
     ),
     output: Path = typer.Option("benchmarks/outputs", "-o", "--output", help="Output directory"),
     full: bool = typer.Option(False, "--full", help="Run full benchmark (no subsampling)"),
@@ -212,6 +212,34 @@ def benchmark(
         console.print(f"Results in {layer3_output}")
         return
 
+    # Layer 5: Robustness analysis
+    if layer == "layer5":
+        console.print("[bold cyan]Running Layer 5: Robustness Analysis...[/bold cyan]")
+        from foldtrust.benchmark.layer5_robustness import run_layer5_analysis
+
+        cases_dir = Path("data/cases")
+        if not cases_dir.exists():
+            console.print("[red]Error: data/cases not found[/red]")
+            raise typer.Exit(1)
+
+        cache_dir = Path("data/_cache")
+        layer5_output = output / "layer5"
+        layer5_output.mkdir(parents=True, exist_ok=True)
+
+        results = run_layer5_analysis(cases_dir, layer5_output, cache_dir)
+        console.print(
+            f"\n[green]✓ Layer 5 complete: {len(results)} cases analyzed[/green]"
+        )
+        console.print(f"Results in {layer5_output}")
+        
+        # Generate figures
+        console.print("\nGenerating figures...")
+        from scripts.generate_layer5_figures import generate_all_layer5_figures
+        figures_dir = output / "figures"
+        generate_all_layer5_figures(layer5_output, figures_dir)
+        
+        return
+
     # Layer 4: SHAPE analysis (standalone)
     if layer == "layer4_shape":
         console.print("[bold cyan]Running Layer 4: SHAPE Agreement Analysis...[/bold cyan]")
@@ -254,12 +282,13 @@ def benchmark(
             raise typer.Exit(1)
     else:
         console.print(
-            "[yellow]Supported layers: 'layer1', 'layer2', 'layer3', 'all', or 'layer4_shape'[/yellow]"
+            "[yellow]Supported layers: 'layer1', 'layer2', 'layer3', 'layer5', 'all', or 'layer4_shape'[/yellow]"
         )
         console.print("[dim]Examples:[/dim]")
         console.print("[dim]  foldtrust benchmark layer1[/dim]")
         console.print("[dim]  foldtrust benchmark layer2 --full[/dim]")
         console.print("[dim]  foldtrust benchmark layer3[/dim]")
+        console.print("[dim]  foldtrust benchmark layer5[/dim]")
         raise typer.Exit(1)
 
 
