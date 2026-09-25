@@ -1,0 +1,6 @@
+case,length,baseline_firm_pairs,baseline_floppy_pairs,mean_tier_agreement,std_tier_agreement
+cftr-5utr,268,21,15119,0.7212,0.2177
+hcv-ires-dii,268,47,12571,0.6804,0.1761
+mapt-e10,268,34,11778,0.6696,0.1830
+sars2-fse,181,14,6921,0.6256,0.1830
+smn2-iss-n1,201,18,7878,0.7462,0.1786
