@@ -32,37 +32,44 @@ FoldTrust runs ViennaRNA's partition function to compute base-pair probabilities
 
 ## Disease Case Gallery
 
-FoldTrust ships with five curated disease-relevant RNA cases demonstrating real-world therapeutic and diagnostic relevance:
+FoldTrust ships with five curated disease-relevant RNA cases with verified NCBI provenance (see `docs/benchmark/layer0_cases.md`):
 
 ### 1. SARS-CoV-2 Frameshift Element (sars2-fse)
+**Coordinates:** NC_045512.2:13462-13542(+), 81 nt  
 **Disease:** COVID-19  
-**Gene:** SARS-CoV-2 ORF1ab frameshifting pseudoknot  
+**Biology:** Programmed −1 ribosomal frameshift element (slippery site + 3-stem pseudoknot) controls ORF1a/ORF1ab polyprotein ratio  
 **Teaching point:** Competing structures; MFE alone insufficient for antiviral design  
-**References:** [DOI:10.1126/science.abc3546](https://doi.org/10.1126/science.abc3546)
+**References:** [Kelly et al. 2020](https://doi.org/10.1074/jbc.AC120.013449), [Bhatt et al. 2021](https://doi.org/10.1126/science.abf3546)
 
 ### 2. SMN2 ISS-N1 (smn2-iss-n1)
+**Coordinates:** NG_008728.1:31999-32152(+), 154 nt  
 **Disease:** Spinal Muscular Atrophy (SMA)  
-**Gene:** SMN2 intron 7 (Spinraza/nusinersen target)  
-**Teaching point:** ASO site selection requires local pairing probability assessment  
-**References:** [DOI:10.1056/NEJMoa1702752](https://doi.org/10.1056/NEJMoa1702752)
+**Biology:** SMN2 exon 7 (classic numbering) + intron 7 ISS-N1 (nusinersen/Spinraza antisense target at intron 7 +10..+27)  
+**Teaching point:** ASO site selection requires local pairing probability assessment, not just MFE cartoons  
+**References:** [Singh et al. 2006](https://doi.org/10.1128/MCB.26.4.1333-1346.2006), [Finkel et al. 2017](https://doi.org/10.1056/NEJMoa1702752)
 
-### 3. CFTR 5' UTR (cftr-5utr)
+### 3. CFTR 5' UTR and Start Codon Region (cftr-5utr)
+**Coordinates:** NM_000492.4:1-200(+), 200 nt  
 **Disease:** Cystic Fibrosis  
-**Gene:** CFTR 5' untranslated region  
-**Teaching point:** Lung disease; UTR structure affects translation/splicing hypotheses  
-**References:** [DOI:10.1152/physrev.00025.2017](https://doi.org/10.1152/physrev.00025.2017)
+**Biology:** Complete 5' UTR (1-70) + first 130 nt of CDS; structure around start codon affects translation efficiency  
+**Teaching point:** UTR structure influences ribosome loading; start codon accessibility matters for expression  
+**References:** [Riordan et al. 1989](https://doi.org/10.1126/science.2475911), [Zielenski & Tsui 1991](https://doi.org/10.1016/0888-7543(91)90503-7)
 
-### 4. MAPT Exon 10 (mapt-e10)
-**Disease:** Frontotemporal dementia, tauopathies  
-**Gene:** MAPT (tau) exon 10 splice site  
-**Teaching point:** Disease splicing + structure-aware oligo design  
-**References:** [DOI:10.1093/hmg/10.10.1029](https://doi.org/10.1093/hmg/10.10.1029)
+### 4. MAPT Exon 10 5'ss Stem-Loop (mapt-e10)
+**Coordinates:** NG_007398.2:120818-121000(+), 183 nt  
+**Disease:** Frontotemporal dementia with parkinsonism (FTDP-17), tauopathies  
+**Biology:** Exon 10 (classic numbering, encodes tau R2 repeat) + 5' splice site stem-loop; mutations that stabilize the stem increase exon 10 inclusion (pathogenic 4R/3R ratio shift)  
+**Teaching point:** cis-regulatory RNA structures control alternative splicing; ensemble analysis reveals mutation effects  
+**References:** [Grover et al. 1999](https://doi.org/10.1074/jbc.274.21.15134), [Varani et al. 1999](https://doi.org/10.1073/pnas.96.14.8229), [Hutton et al. 1998](https://doi.org/10.1038/31508)
 
 ### 5. HCV IRES Domain II (hcv-ires-dii)
+**Coordinates:** AF009606.1:44-118(+), 75 nt  
 **Disease:** Hepatitis C  
-**Gene:** HCV IRES ribosome entry site  
-**Teaching point:** Structured viral RNA; ensemble flexibility near functional loops  
-**References:** [DOI:10.1006/jmbi.1999.2918](https://doi.org/10.1006/jmbi.1999.2918)
+**Biology:** HCV genotype 1a internal ribosome entry site domain II (5' NTR nt 44-118); structured element for cap-independent translation  
+**Teaching point:** Viral IRES with mostly firm stems; demonstrates FoldTrust can distinguish stable from floppy structures  
+**References:** [Honda et al. 1999](https://doi.org/10.1128/JVI.73.2.1165-1174.1999), [Lukavsky et al. 2003](https://doi.org/10.1038/nsb1004)
+
+**Provenance note:** Original SMN2, CFTR, and MAPT sequences were invented (no NCBI source). HCV was the wrong region (domain III at 148-415, not domain II at 44-118). All were rebuilt from verified NCBI coordinates. See `docs/benchmark/layer0_cases.md` for audit details.
 
 ## Installation
 

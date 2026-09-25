@@ -112,11 +112,11 @@ The MVP ships five published windows (not invented sequence) so a reader can rep
 
 | Case ID | Window | Disease focus | Primary citation |
 |---------|--------|---------------|------------------|
-| `sars2-fse` | SARS-CoV-2 frameshift stimulatory element | COVID-19 / antiviral RNA | [DOI:10.1126/science.abc3546](https://doi.org/10.1126/science.abc3546) |
-| `smn2-iss-n1` | SMN2 intron 7 ISS-N1 neighborhood | SMA / Spinraza context | [DOI:10.1056/NEJMoa1702752](https://doi.org/10.1056/NEJMoa1702752) |
-| `cftr-5utr` | CFTR 5′ UTR | Cystic fibrosis / lung | [DOI:10.1152/physrev.00025.2017](https://doi.org/10.1152/physrev.00025.2017) |
-| `mapt-e10` | MAPT exon 10 splice regulatory region | Tauopathy / aging | [DOI:10.1093/hmg/10.10.1029](https://doi.org/10.1093/hmg/10.10.1029) |
-| `hcv-ires-dii` | HCV IRES Domain II | Hepatitis C / structured viral RNA | [DOI:10.1006/jmbi.1999.2918](https://doi.org/10.1006/jmbi.1999.2918) |
+| `sars2-fse` | SARS-CoV-2 frameshift element | COVID-19 / antiviral RNA | [DOI:10.1126/science.abf3546](https://doi.org/10.1126/science.abf3546) |
+| `smn2-iss-n1` | SMN2 exon 7 and ISS-N1 | SMA / nusinersen target | [DOI:10.1056/NEJMoa1702752](https://doi.org/10.1056/NEJMoa1702752) |
+| `cftr-5utr` | CFTR 5′ UTR and start codon region | Cystic fibrosis | [DOI:10.1126/science.2475911](https://doi.org/10.1126/science.2475911) |
+| `mapt-e10` | MAPT exon 10 5′ss stem-loop | FTDP-17 / tauopathy | [DOI:10.1074/jbc.274.21.15134](https://doi.org/10.1074/jbc.274.21.15134) |
+| `hcv-ires-dii` | HCV IRES domain II | Hepatitis C / viral IRES | [DOI:10.1128/JVI.73.2.1165-1174.1999](https://doi.org/10.1128/JVI.73.2.1165-1174.1999) |
 
 Numbers below are from the committed demo outputs on `main` (`examples/out/*/report.md`). Re-running `foldtrust demo` after ViennaRNA upgrades can shift energies slightly; treat these as the recorded MVP snapshot.
 
@@ -126,47 +126,56 @@ Numbers below are from the committed demo outputs on `main` (`examples/out/*/rep
 
 ### 5.1 Summary table
 
-| Case | Length | GC% | MFE (kcal/mol) | Firm | Soft | Floppy | Demo verdict |
-|------|--------|-----|----------------|------|------|--------|--------------|
-| `sars2-fse` | 181 | 32.0 | −39.50 | 1 | 0 | **7** | REDESIGN |
-| `smn2-iss-n1` | 201 | 22.9 | −29.40 | 3 | 5 | 5 | REDESIGN |
-| `cftr-5utr` | 268 | 31.7 | −55.10 | 3 | 9 | 5 | REDESIGN |
-| `mapt-e10` | 268 | 58.6 | −86.00 | 7 | 10 | 2 | REDESIGN |
-| `hcv-ires-dii` | 268 | 57.5 | −91.20 | 12 | 4 | 2 | REDESIGN |
+**Note:** The original SMN2, CFTR, and MAPT sequences were invented (no NCBI provenance). HCV was the wrong domain (domain III, not II). All cases were rebuilt from exact NCBI coordinates (NG_008728.1:31999-32152, NM_000492.4:1-200, NG_007398.2:120818-121000, AF009606.1:44-118). See `docs/benchmark/layer0_cases.md` for provenance details.
 
-All five MVP windows currently land on **REDESIGN** under FoldTrust's stem-level rule (any floppy MFE stem triggers caution). That is intentional for teaching: disease windows are not "easy trust" cartoons.
+| Case | Length | GC% | MFE (kcal/mol) | Firm | Soft | Floppy | Verdict |
+|------|--------|-----|----------------|------|------|--------|---------|
+| `smn2-iss-n1` | 154 | 30.5 | −31.30 | 2 | 6 | 1 | REDESIGN |
+| `cftr-5utr` | 200 | 52.5 | −60.60 | 3 | 1 | 6 | REDESIGN |
+| `mapt-e10` | 183 | 48.1 | −52.30 | 5 | 2 | 4 | REDESIGN |
+| `hcv-ires-dii` | 75 | 54.7 | −23.80 | 2 | 3 | 0 | NEED PROBING |
+| `sars2-fse` | 81 | 53.1 | −26.00 | 1 | 2 | 1 | REDESIGN |
+
+Four of five cases land on **REDESIGN** (contain floppy stems). HCV IRES domain II has no floppy stems but soft stems outnumber firm, yielding **NEED PROBING**. These results demonstrate that ensemble reliability varies across disease windows: not all RNA structures are equally trustworthy under nearest-neighbor thermodynamics.
 
 ### 5.2 Case-by-case results
 
-#### SARS-CoV-2 frameshift element (`sars2-fse`) — best floppy teaching case
+**Provenance note:** The original SMN2, CFTR, and MAPT sequences had no NCBI provenance (invented sequences). HCV was AF009606.1:148-415 (domain III into the CDS), not domain II (5'NTR 44-118). All were rebuilt from correct NCBI coordinates. Full audit and verification: `docs/benchmark/layer0_cases.md`.
 
-- **MFE:** −39.50 kcal/mol over 181 nt; eight MFE stems drawn.
-- **Ensemble:** only **stem 6** is FIRM (mean \(P = 0.921\)); stems 1–5, 7–8 are FLOPPY (mean \(P \approx 0.10\)–\(0.18\)).
-- **Result in one line:** the MFE looks structured; the ensemble says most of those helices are not trustworthy.
+#### SMN2 ISS-N1 (`smn2-iss-n1`) — NG_008728.1:31999-32152(+), 154 nt
 
-#### SMN2 ISS-N1 neighborhood (`smn2-iss-n1`)
+- **MFE:** −31.30 kcal/mol; GC 30.5%; 9 stems.
+- **Ensemble mix:** 2 FIRM, 6 SOFT, 1 FLOPPY.
+- **Verdict:** REDESIGN (contains floppy stems).
+- **Result in one line:** Local reliability is heterogeneous — exactly the situation ASO designers (nusinersen targets ISS-N1 at intron 7 +10..+27) should not flatten into one MFE cartoon.
 
-- **MFE:** −29.40 kcal/mol; 13 stems.
-- **Ensemble mix:** 3 FIRM, 5 SOFT, 5 FLOPPY (FIRM examples: stem 1 mean \(P = 0.962\); stem 13 mean \(P = 0.966\)).
-- **Result in one line:** local reliability is heterogeneous — exactly the situation ASO designers should not flatten into one cartoon.
+#### CFTR 5′ UTR (`cftr-5utr`) — NM_000492.4:1-200(+), 200 nt
 
-#### CFTR 5′ UTR (`cftr-5utr`)
+- **MFE:** −60.60 kcal/mol; GC 52.5%; 10 stems.
+- **Ensemble mix:** 3 FIRM, 1 SOFT, 6 FLOPPY.
+- **Verdict:** REDESIGN (contains floppy stems).
+- **Result in one line:** A 5′ UTR with islands of firm structure but many floppy MFE helices — start codon accessibility is not reliably predicted from MFE alone.
 
-- **MFE:** −55.10 kcal/mol; 17 stems.
-- **Ensemble mix:** 3 FIRM, 9 SOFT, 5 FLOPPY (notably firm longer helices such as stem 10 mean \(P = 0.951\)).
-- **Result in one line:** a mostly soft UTR with islands of firm structure and several floppy MFE helices.
+#### MAPT exon 10 region (`mapt-e10`) — NG_007398.2:120818-121000(+), 183 nt
 
-#### MAPT exon 10 region (`mapt-e10`)
+- **MFE:** −52.30 kcal/mol; GC 48.1%; 11 stems.
+- **Ensemble mix:** 5 FIRM, 2 SOFT, 4 FLOPPY.
+- **Verdict:** REDESIGN (contains floppy stems).
+- **Result in one line:** The exon 10 / intron 10 5′ss stem-loop (involved in FTDP-17 pathogenic mutations) shows mixed reliability — firm stems coexist with floppy regions.
 
-- **MFE:** −86.00 kcal/mol; GC-rich (58.6%); 19 stems.
-- **Ensemble mix:** 7 FIRM, 10 SOFT, only 2 FLOPPY.
-- **Result in one line:** more ensemble-supported than the viral frameshift window, but still not a blanket TRUST call.
+#### HCV IRES Domain II (`hcv-ires-dii`) — AF009606.1:44-118(+), 75 nt
 
-#### HCV IRES Domain II (`hcv-ires-dii`)
+- **MFE:** −23.80 kcal/mol; GC 54.7%; 5 stems.
+- **Ensemble mix:** 2 FIRM, 3 SOFT, 0 FLOPPY.
+- **Verdict:** NEED PROBING (no floppy stems, but soft stems outnumber firm).
+- **Result in one line:** A structured viral IRES domain where most MFE stems have moderate-to-high ensemble support — useful contrast to the frameshift element.
 
-- **MFE:** −91.20 kcal/mol; 18 stems.
-- **Ensemble mix:** **12 FIRM**, 4 SOFT, 2 FLOPPY (many Domain II helices with mean \(P > 0.9\)).
-- **Result in one line:** a structured viral RNA where most MFE stems *are* ensemble-supported — useful contrast to `sars2-fse`.
+#### SARS-CoV-2 frameshift element (`sars2-fse`) — NC_045512.2:13462-13542(+), 81 nt
+
+- **MFE:** −26.00 kcal/mol; GC 53.1%; 4 stems.
+- **Ensemble mix:** 1 FIRM, 2 SOFT, 1 FLOPPY.
+- **Verdict:** REDESIGN (contains floppy stems).
+- **Result in one line:** The programmed −1 ribosomal frameshift pseudoknot shows competing folds — trusting the MFE cartoon alone for antiviral design would be a mistake.
 
 ---
 
@@ -220,13 +229,13 @@ Pre-generated MVP snapshots also live under `examples/out/`.
 
 - Lorenz et al., ViennaRNA Package 2.0. *Algorithms Mol Biol* (2011). [DOI:10.1186/1748-7188-6-26](https://doi.org/10.1186/1748-7188-6-26)
 - Mathews et al., Turner nearest-neighbor parameters. *PNAS* (2004). [DOI:10.1073/pnas.0401799101](https://doi.org/10.1073/pnas.0401799101)
-- SARS-CoV-2 frameshift: [DOI:10.1126/science.abc3546](https://doi.org/10.1126/science.abc3546)
-- SMN2 / nusinersen context: [DOI:10.1056/NEJMoa1702752](https://doi.org/10.1056/NEJMoa1702752)
-- CFTR review: [DOI:10.1152/physrev.00025.2017](https://doi.org/10.1152/physrev.00025.2017)
-- MAPT exon 10 stem-loop: [DOI:10.1093/hmg/10.10.1029](https://doi.org/10.1093/hmg/10.10.1029)
-- HCV IRES structure: [DOI:10.1006/jmbi.1999.2918](https://doi.org/10.1006/jmbi.1999.2918)
+- SARS-CoV-2 frameshift: Kelly JA et al. *J Biol Chem* (2020). [DOI:10.1074/jbc.AC120.013449](https://doi.org/10.1074/jbc.AC120.013449); Bhatt PR et al. *Science* (2021). [DOI:10.1126/science.abf3546](https://doi.org/10.1126/science.abf3546)
+- SMN2 ISS-N1: Singh NK et al. *Mol Cell Biol* (2006). [DOI:10.1128/MCB.26.4.1333-1346.2006](https://doi.org/10.1128/MCB.26.4.1333-1346.2006); nusinersen: Finkel RS et al. *NEJM* (2017). [DOI:10.1056/NEJMoa1702752](https://doi.org/10.1056/NEJMoa1702752)
+- CFTR: Riordan JR et al. *Science* (1989). [DOI:10.1126/science.2475911](https://doi.org/10.1126/science.2475911); Zielenski J et al. *Genomics* (1991). [DOI:10.1016/0888-7543(91)90503-7](https://doi.org/10.1016/0888-7543(91)90503-7)
+- MAPT exon 10: Grover A et al. *J Biol Chem* (1999). [DOI:10.1074/jbc.274.21.15134](https://doi.org/10.1074/jbc.274.21.15134); Varani L et al. *PNAS* (1999). [DOI:10.1073/pnas.96.14.8229](https://doi.org/10.1073/pnas.96.14.8229); Hutton M et al. *Nature* (1998). [DOI:10.1038/31508](https://doi.org/10.1038/31508)
+- HCV IRES domain II: Honda M et al. *J Virol* (1999). [DOI:10.1128/JVI.73.2.1165-1174.1999](https://doi.org/10.1128/JVI.73.2.1165-1174.1999); Lukavsky PJ et al. *Nat Struct Biol* (2003). [DOI:10.1038/nsb1004](https://doi.org/10.1038/nsb1004)
 
-Case-level extra DOIs are listed in each generated report and `data/cases/*/meta.yaml`.
+Full case-level provenance (NCBI accessions, coordinates, landmark tables) in `data/cases/*/meta.yaml` and `docs/benchmark/layer0_cases.md`.
 
 ---
 
