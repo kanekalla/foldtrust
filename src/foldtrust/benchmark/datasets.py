@@ -138,7 +138,7 @@ def create_minimal_reference_set(output_file: Path) -> None:
         {
             "name": "tRNA-Phe_yeast",
             "sequence": "GCGGAUUUAGCUCAGUUGGGAGAGCGCCAGACUGAAGAUCUGGAGGUCCUGUGUUCGAUCCACAGAAUUCGCACCA",
-            "structure": "(((((((..((((.........)))).(((((.......))))).....(((((.......))))))))))))..",
+            "structure": "(((((((..((((........)))).(((((.......))))).....(((((.......))))))))))))....",
             "length": 76,
             "source": "PDB_1EHZ"
         },
