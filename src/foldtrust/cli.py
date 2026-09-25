@@ -126,8 +126,7 @@ def demo():
 @app.command()
 def benchmark(
     layer: str = typer.Argument(
-        ...,
-        help="Layer to run: 'layer1', 'layer2', 'layer3', 'all', or 'layer4_shape'"
+        ..., help="Layer to run: 'layer1', 'layer2', 'layer3', 'all', or 'layer4_shape'"
     ),
     output: Path = typer.Option("benchmarks/outputs", "-o", "--output", help="Output directory"),
     full: bool = typer.Option(False, "--full", help="Run full benchmark (no subsampling)"),
@@ -141,12 +140,14 @@ def benchmark(
     if layer == "layer1":
         console.print("[bold cyan]Running Layer 1: Scoring Correctness Tests...[/bold cyan]")
         from foldtrust.benchmark.scoring import run_layer1_tests
-        
+
         layer1_output = output / "layer1"
         layer1_output.mkdir(parents=True, exist_ok=True)
-        
+
         results = run_layer1_tests(layer1_output)
-        console.print(f"\n[green]✓ Layer 1 complete: {results['tests_passed']}/{results['tests_total']} tests passed[/green]")
+        console.print(
+            f"\n[green]✓ Layer 1 complete: {results['tests_passed']}/{results['tests_total']} tests passed[/green]"
+        )
         console.print(f"Results in {layer1_output}")
         return
 
@@ -154,22 +155,26 @@ def benchmark(
     if layer == "layer2":
         console.print("[bold cyan]Running Layer 2: Structure Accuracy Benchmark...[/bold cyan]")
         from foldtrust.benchmark.layer2_accuracy import run_layer2_benchmark
-        
+
         cache_dir = Path("data/_cache")
         if not cache_dir.exists():
-            console.print("[red]Error: data/_cache not found. Extract benchmark data bundle first.[/red]")
+            console.print(
+                "[red]Error: data/_cache not found. Extract benchmark data bundle first.[/red]"
+            )
             raise typer.Exit(1)
-        
+
         layer2_output = output / "layer2"
         layer2_output.mkdir(parents=True, exist_ok=True)
-        
+
         results = run_layer2_benchmark(
             cache_dir=cache_dir,
             output_dir=layer2_output,
             use_full=full,
-            sample_size=None if full else 200
+            sample_size=None if full else 200,
         )
-        console.print(f"\n[green]✓ Layer 2 complete: {results['n_structures']} structures analyzed[/green]")
+        console.print(
+            f"\n[green]✓ Layer 2 complete: {results['n_structures']} structures analyzed[/green]"
+        )
         console.print(f"Results in {layer2_output}")
         return
 
@@ -177,27 +182,33 @@ def benchmark(
     if layer == "layer3":
         console.print("[bold cyan]Running Layer 3: Calibration Analysis...[/bold cyan]")
         from foldtrust.benchmark.layer3_calibration import run_layer3_calibration
-        
+
         cache_dir = Path("data/_cache")
         layer2_output = output / "layer2"
-        
+
         if not cache_dir.exists():
-            console.print("[red]Error: data/_cache not found. Extract benchmark data bundle first.[/red]")
+            console.print(
+                "[red]Error: data/_cache not found. Extract benchmark data bundle first.[/red]"
+            )
             raise typer.Exit(1)
-        
+
         if not (layer2_output / "sample_ids.csv").exists():
-            console.print("[yellow]Warning: sample_ids.csv not found. Run layer2 first for consistent sampling.[/yellow]")
-        
+            console.print(
+                "[yellow]Warning: sample_ids.csv not found. Run layer2 first for consistent sampling.[/yellow]"
+            )
+
         layer3_output = output / "layer3"
         layer3_output.mkdir(parents=True, exist_ok=True)
-        
+
         results = run_layer3_calibration(
             cache_dir=cache_dir,
             output_dir=layer3_output,
             use_full=full,
-            sample_size=None if full else 200
+            sample_size=None if full else 200,
         )
-        console.print(f"\n[green]✓ Layer 3 complete: ECE={results['ece']:.4f}, AUROC={results['auroc']:.4f}[/green]")
+        console.print(
+            f"\n[green]✓ Layer 3 complete: ECE={results['ece']:.4f}, AUROC={results['auroc']:.4f}[/green]"
+        )
         console.print(f"Results in {layer3_output}")
         return
 
@@ -205,22 +216,19 @@ def benchmark(
     if layer == "layer4_shape":
         console.print("[bold cyan]Running Layer 4: SHAPE Agreement Analysis...[/bold cyan]")
         from foldtrust.benchmark.shape import run_layer4_shape_analysis
-        
+
         cache_dir = Path("data/_cache")
         if not cache_dir.exists():
-            console.print("[red]Error: data/_cache not found. Extract benchmark data bundle first.[/red]")
+            console.print(
+                "[red]Error: data/_cache not found. Extract benchmark data bundle first.[/red]"
+            )
             raise typer.Exit(1)
-        
+
         layer4_output = output / "layer4_shape"
-        run_layer4_shape_analysis(
-            cache_dir,
-            layer4_output,
-            n_genome_windows=n_windows,
-            seed=seed
-        )
+        run_layer4_shape_analysis(cache_dir, layer4_output, n_genome_windows=n_windows, seed=seed)
         console.print(f"\n[green]✓ Layer 4 complete. Results in {layer4_output}[/green]")
         return
-    
+
     # Comprehensive benchmark runner (all layers)
     if layer == "all":
         try:
@@ -229,23 +237,25 @@ def benchmark(
             console.print("[red]Error: benchmark runner not found[/red]")
             console.print("[yellow]For now, use 'layer4_shape' for SHAPE analysis[/yellow]")
             raise typer.Exit(1)
-        
+
         console.print("[bold cyan]Running complete 6-layer benchmark analysis...[/bold cyan]")
         console.print("[dim]This will take several minutes...[/dim]\n")
-        
+
         try:
             results = run_all_benchmarks(output, verbose=True)
-            
+
             console.print("\n[bold green]✓ Benchmark complete![/bold green]")
             console.print(f"Results saved to: [bold]{output}[/bold]")
             console.print(f"Summary: {output / 'benchmark_summary.json'}")
             console.print(f"Figures: {output / 'figures'}")
-            
+
         except Exception as e:
             console.print(f"[red]Error running benchmark: {e}[/red]")
             raise typer.Exit(1)
     else:
-        console.print(f"[yellow]Supported layers: 'layer1', 'layer2', 'layer3', 'all', or 'layer4_shape'[/yellow]")
+        console.print(
+            "[yellow]Supported layers: 'layer1', 'layer2', 'layer3', 'all', or 'layer4_shape'[/yellow]"
+        )
         console.print("[dim]Examples:[/dim]")
         console.print("[dim]  foldtrust benchmark layer1[/dim]")
         console.print("[dim]  foldtrust benchmark layer2 --full[/dim]")

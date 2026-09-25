@@ -42,7 +42,5 @@
     }
   ],
   "tests_total": 5,
-  "tests_passed": 5,
-  "parser_tests": true,
-  "tier_regression": true
+  "tests_passed": 5
 }
