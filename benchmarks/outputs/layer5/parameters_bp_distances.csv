@@ -1,11 +1,16 @@
 case,parameters,bp_distance_mfe,bp_distance_mea,ensemble_defect
+sars2-fse,Turner2004_baseline,0,0,14.68
 sars2-fse,Andronescu2007,27,25,22.83
 sars2-fse,Langdon2018,25,25,11.61
+smn2-iss-n1,Turner2004_baseline,0,0,22.26
 smn2-iss-n1,Andronescu2007,61,19,79.22
 smn2-iss-n1,Langdon2018,70,61,38.30
+cftr-5utr,Turner2004_baseline,0,0,54.98
 cftr-5utr,Andronescu2007,49,4,79.02
 cftr-5utr,Langdon2018,66,64,41.50
+mapt-e10,Turner2004_baseline,0,0,32.99
 mapt-e10,Andronescu2007,7,4,45.94
 mapt-e10,Langdon2018,9,9,23.88
+hcv-ires-dii,Turner2004_baseline,0,0,10.92
 hcv-ires-dii,Andronescu2007,27,18,29.28
 hcv-ires-dii,Langdon2018,0,2,14.78

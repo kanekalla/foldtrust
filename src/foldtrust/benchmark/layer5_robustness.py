@@ -389,6 +389,53 @@ def compute_stem_retention(
     return results
 
 
+def compute_baseline_retention(
+    ref_stems: List[Dict],
+    ref_mea_pairs: List[Tuple[int, int]],
+) -> Dict:
+    """
+    Compute baseline retention: MFE stems retained in MEA.
+    
+    This measures the MFE-vs-MEA gap for the same condition (37°C Turner2004).
+    
+    Args:
+        ref_stems: Stems from MFE structure
+        ref_mea_pairs: MEA pairs from same condition
+        
+    Returns:
+        Retention dict by tier
+    """
+    mea_pairs_set = set(ref_mea_pairs)
+    
+    # Group stems by tier
+    tiers = {"firm": [], "soft": [], "floppy": []}
+    for stem in ref_stems:
+        tiers[stem["flag"]].append(stem)
+    
+    results = {}
+    for tier_name, stems in tiers.items():
+        if not stems:
+            results[tier_name] = {
+                "count": 0,
+                "retention": None,
+            }
+            continue
+        
+        # Count stems whose pairs are all in MEA
+        retained = 0
+        for stem in stems:
+            all_paired = all(pair in mea_pairs_set for pair in stem["pairs"])
+            if all_paired:
+                retained += 1
+        
+        results[tier_name] = {
+            "count": len(stems),
+            "retention": retained / len(stems),
+        }
+    
+    return results
+
+
 def analyze_temperature_condition(
     sequence: str,
     temp: float,
@@ -500,6 +547,7 @@ def analyze_window_context(
     left_flank: str,
     right_flank: str,
     flank_size: int,
+    case_name: str,
     ref_structure: str,
     ref_mea_pairs: List[Tuple[int, int]],
     ref_stems: List[Dict],
@@ -509,12 +557,14 @@ def analyze_window_context(
     
     Tests retention of core window stems when flanking sequence is added.
     Only the core window stems (from ref_stems) are counted for retention.
+    BP distance counts only pairs with both ends in the core window.
     
     Args:
         core_sequence: Core window sequence
         left_flank: Left flanking sequence
         right_flank: Right flanking sequence
         flank_size: Requested flank size (for metadata)
+        case_name: Case name for coordinate metadata
         ref_structure: Reference structure (for core window)
         ref_mea_pairs: Reference MEA pairs (0-based, core window coords)
         ref_stems: Reference stems (from parse_stems on core window)
@@ -525,20 +575,26 @@ def analyze_window_context(
     # Construct extended sequence
     extended_seq = left_flank + core_sequence + right_flank
     core_offset = len(left_flank)
+    core_end = core_offset + len(core_sequence)
     
     # Fold extended sequence
     param_set = "Turner2004"
     temp = 37.0
     
     structure, mfe_energy = fold_with_params(extended_seq, param_set, temp)
-    prob_matrix = compute_pair_probs_with_params(extended_seq, param_set, temp)
     mea_pairs, mea_energy = compute_mea_structure(extended_seq, param_set, temp)
     
     # Map core window reference pairs to extended coordinates
     ref_pairs_extended = [(i + core_offset, j + core_offset) for i, j in ref_mea_pairs]
     
+    # Filter MEA pairs to only those with BOTH ends in core window
+    mea_pairs_core_only = [
+        (i, j) for i, j in mea_pairs
+        if core_offset <= i < core_end and core_offset <= j < core_end
+    ]
+    
     # Base-pair distance (core window pairs only)
-    bp_dist_mea = compute_basepair_distance(ref_pairs_extended, mea_pairs)
+    bp_dist_mea = compute_basepair_distance(ref_pairs_extended, mea_pairs_core_only)
     
     # Stem retention: check if core stems are retained in extended MEA
     # Need to translate stem pairs to extended coordinates
@@ -577,6 +633,23 @@ def analyze_window_context(
                 "retention": None,
             }
     
+    # Compute flank coordinates and clipping status
+    coords = CASE_COORDS[case_name]
+    accession = coords["accession"]
+    core_start = coords["start"]
+    core_end = coords["end"]
+    
+    left_start = core_start - len(left_flank)
+    left_end = core_start - 1
+    left_clipped = (len(left_flank) < flank_size)
+    
+    right_start = core_end + 1
+    right_end = core_end + len(right_flank)
+    right_clipped = (len(right_flank) < flank_size)
+    
+    left_coords = f"{accession}:{left_start}-{left_end}" if len(left_flank) > 0 else None
+    right_coords = f"{accession}:{right_start}-{right_end}" if len(right_flank) > 0 else None
+    
     return {
         "flank_size": flank_size,
         "left_flank_len": len(left_flank),
@@ -585,6 +658,10 @@ def analyze_window_context(
         "mfe_energy": mfe_energy,
         "bp_distance_mea": bp_dist_mea,
         "stem_retention": retention_results,
+        "left_accession_coords": left_coords,
+        "right_accession_coords": right_coords,
+        "left_clipped": left_clipped,
+        "right_clipped": right_clipped,
     }
 
 
@@ -637,10 +714,13 @@ def run_layer5_analysis(
         # Verify sequence against NCBI
         print("  Verifying sequence...")
         verified = verify_core_sequence(case_name, sequence, cache_dir)
-        if verified:
-            print("    ✓ Verified as exact substring of cached record")
-        else:
-            print("    ⚠ Could not verify (continuing anyway)")
+        if not verified:
+            raise RuntimeError(
+                f"{case_name}: Core sequence verification failed. "
+                f"Sequence is not an exact substring of {CASE_COORDS[case_name]['accession']} "
+                f"at coordinates {CASE_COORDS[case_name]['start']}-{CASE_COORDS[case_name]['end']}"
+            )
+        print("    ✓ Verified as exact substring of cached record")
         
         # Baseline: 37°C Turner2004
         print("  Computing baseline (37°C Turner2004)...")
@@ -649,6 +729,9 @@ def run_layer5_analysis(
         ref_stems = parse_stems(ref_structure, ref_prob_matrix)
         ref_mea_pairs, ref_mea_energy = compute_mea_structure(sequence, "Turner2004", 37.0)
         ref_ensemble_defect = compute_ensemble_defect(sequence, ref_structure, "Turner2004", 37.0)
+        
+        # Compute baseline retention (MFE stems in MEA for same condition)
+        baseline_retention = compute_baseline_retention(ref_stems, ref_mea_pairs)
         
         case_results = {
             "case": case_name,
@@ -664,10 +747,20 @@ def run_layer5_analysis(
                     "soft": sum(1 for s in ref_stems if s["flag"] == "soft"),
                     "floppy": sum(1 for s in ref_stems if s["flag"] == "floppy"),
                 },
+                "retention": baseline_retention,  # MFE-in-MEA retention
             },
             "temperature": {},
             "parameters": {},
             "window_context": {},
+        }
+        
+        # Add baseline row to temperature sweep (37°C)
+        case_results["temperature"]["37C_baseline"] = {
+            "mfe_energy": ref_mfe_energy,
+            "ensemble_defect": ref_ensemble_defect,
+            "bp_distance_mfe": 0,
+            "bp_distance_mea": 0,
+            "stem_retention": baseline_retention,
         }
         
         # Temperature sweep
@@ -676,6 +769,15 @@ def run_layer5_analysis(
             case_results["temperature"][f"{temp}C"] = analyze_temperature_condition(
                 sequence, temp, ref_structure, ref_mea_pairs, ref_stems
             )
+        
+        # Add baseline row to parameter sweep (Turner2004)
+        case_results["parameters"]["Turner2004_baseline"] = {
+            "mfe_energy": ref_mfe_energy,
+            "ensemble_defect": ref_ensemble_defect,
+            "bp_distance_mfe": 0,
+            "bp_distance_mea": 0,
+            "stem_retention": baseline_retention,
+        }
         
         # Parameter set sweep
         for param_set in ["Andronescu2007", "Langdon2018"]:
@@ -690,7 +792,7 @@ def run_layer5_analysis(
             print(f"    Flank size {flank_size} nt...")
             
             if flank_size == 0:
-                # No flanks: same as baseline
+                # No flanks: compute actual MFE-in-MEA retention (same as baseline)
                 case_results["window_context"][f"flank_{flank_size}"] = {
                     "flank_size": 0,
                     "left_flank_len": 0,
@@ -698,18 +800,18 @@ def run_layer5_analysis(
                     "extended_len": len(sequence),
                     "mfe_energy": ref_mfe_energy,
                     "bp_distance_mea": 0,
-                    "stem_retention": {
-                        "firm": {"count": case_results["baseline"]["stem_counts"]["firm"], "retention": 1.0},
-                        "soft": {"count": case_results["baseline"]["stem_counts"]["soft"], "retention": 1.0},
-                        "floppy": {"count": case_results["baseline"]["stem_counts"]["floppy"], "retention": 1.0},
-                    },
+                    "stem_retention": baseline_retention,
+                    "left_accession_coords": None,
+                    "right_accession_coords": None,
+                    "left_clipped": False,
+                    "right_clipped": False,
                 }
             else:
                 left_flank, right_flank = get_flanking_sequences(case_name, flank_size, cache_dir)
                 if left_flank or right_flank:
                     print(f"      Fetched left={len(left_flank)} nt, right={len(right_flank)} nt")
                     case_results["window_context"][f"flank_{flank_size}"] = analyze_window_context(
-                        sequence, left_flank, right_flank, flank_size,
+                        sequence, left_flank, right_flank, flank_size, case_name,
                         ref_structure, ref_mea_pairs, ref_stems
                     )
                 else:
@@ -779,7 +881,6 @@ def create_temperature_tables(results: Dict, output_dir: Path):
                         "tier": tier.upper(),
                         "n_stems": tier_data["count"],
                         "retention": tier_data["retention"],
-                        "mean_prob_change": tier_data["mean_prob_change"],
                     })
     
     df = pd.DataFrame(rows)
@@ -796,10 +897,11 @@ def create_parameters_tables(results: Dict, output_dir: Path):
     for case_name, case_data in results.items():
         row = {
             "case": case_name,
-            "Turner2004": case_data["baseline"]["mfe_energy"],
+            "Turner2004_baseline": case_data["baseline"]["mfe_energy"],
         }
         for param_name, param_data in case_data["parameters"].items():
-            row[param_name] = param_data["mfe_energy"]
+            if param_name != "Turner2004_baseline":
+                row[param_name] = param_data["mfe_energy"]
         rows.append(row)
     
     df = pd.DataFrame(rows)
@@ -836,7 +938,6 @@ def create_parameters_tables(results: Dict, output_dir: Path):
                         "tier": tier.upper(),
                         "n_stems": tier_data["count"],
                         "retention": tier_data["retention"],
-                        "mean_prob_change": tier_data["mean_prob_change"],
                     })
     
     df = pd.DataFrame(rows)
@@ -863,6 +964,10 @@ def create_window_context_tables(results: Dict, output_dir: Path):
                 "extended_len": flank_data["extended_len"],
                 "mfe_energy": flank_data["mfe_energy"],
                 "bp_distance_mea": flank_data["bp_distance_mea"],
+                "left_coords": flank_data.get("left_accession_coords", ""),
+                "right_coords": flank_data.get("right_accession_coords", ""),
+                "left_clipped": flank_data.get("left_clipped", False),
+                "right_clipped": flank_data.get("right_clipped", False),
             })
     
     df = pd.DataFrame(rows)

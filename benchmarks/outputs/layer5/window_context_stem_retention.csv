@@ -1,6 +1,6 @@
 case,flank_size,tier,n_stems,retention
 sars2-fse,0,FIRM,2,1.0000
-sars2-fse,0,SOFT,3,1.0000
+sars2-fse,0,SOFT,3,0.6667
 sars2-fse,25,FIRM,2,1.0000
 sars2-fse,25,SOFT,3,0.0000
 sars2-fse,50,FIRM,2,1.0000
@@ -8,7 +8,7 @@ sars2-fse,50,SOFT,3,0.0000
 sars2-fse,100,FIRM,2,1.0000
 sars2-fse,100,SOFT,3,0.0000
 smn2-iss-n1,0,FIRM,5,1.0000
-smn2-iss-n1,0,SOFT,4,1.0000
+smn2-iss-n1,0,SOFT,4,0.7500
 smn2-iss-n1,25,FIRM,5,0.4000
 smn2-iss-n1,25,SOFT,4,0.2500
 smn2-iss-n1,50,FIRM,5,0.4000
@@ -16,8 +16,8 @@ smn2-iss-n1,50,SOFT,4,0.2500
 smn2-iss-n1,100,FIRM,5,0.4000
 smn2-iss-n1,100,SOFT,4,0.0000
 cftr-5utr,0,FIRM,3,1.0000
-cftr-5utr,0,SOFT,4,1.0000
-cftr-5utr,0,FLOPPY,7,1.0000
+cftr-5utr,0,SOFT,4,0.7500
+cftr-5utr,0,FLOPPY,7,0.5714
 cftr-5utr,25,FIRM,3,1.0000
 cftr-5utr,25,SOFT,4,0.5000
 cftr-5utr,25,FLOPPY,7,0.5714
@@ -28,8 +28,8 @@ cftr-5utr,100,FIRM,3,1.0000
 cftr-5utr,100,SOFT,4,0.5000
 cftr-5utr,100,FLOPPY,7,0.5714
 mapt-e10,0,FIRM,7,1.0000
-mapt-e10,0,SOFT,1,1.0000
-mapt-e10,0,FLOPPY,4,1.0000
+mapt-e10,0,SOFT,1,0.0000
+mapt-e10,0,FLOPPY,4,0.0000
 mapt-e10,25,FIRM,7,0.2857
 mapt-e10,25,SOFT,1,0.0000
 mapt-e10,25,FLOPPY,4,0.5000
