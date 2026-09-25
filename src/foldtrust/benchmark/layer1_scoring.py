@@ -194,15 +194,21 @@ def compute_exact_metrics(
     tp = len(predicted_pairs & reference_pairs)
     fp = len(predicted_pairs - reference_pairs)
     fn = len(reference_pairs - predicted_pairs)
+    tn = 0  # TN not well-defined for pair sets without sequence length
 
     sensitivity = tp / (tp + fn) if (tp + fn) > 0 else 0.0
     ppv = tp / (tp + fp) if (tp + fp) > 0 else 0.0
     f1 = 2 * tp / (2 * tp + fp + fn) if (2 * tp + fp + fn) > 0 else 0.0
+    
+    # MCC without TN (simplified form)
+    mcc_denom = ((tp + fp) * (tp + fn) * (tn + fp) * (tn + fn)) ** 0.5
+    mcc = ((tp * tn) - (fp * fn)) / mcc_denom if mcc_denom > 0 else 0.0
 
     return {
         "sensitivity": sensitivity,
         "ppv": ppv,
         "f1": f1,
+        "mcc": mcc,
         "tp": tp,
         "fp": fp,
         "fn": fn,
@@ -222,11 +228,11 @@ def compute_slip_metrics(
     SEN_slip = #ref pairs recovered / #ref pairs
     """
     if not predicted_pairs and not reference_pairs:
-        return {"sensitivity_slip": 1.0, "ppv_slip": 1.0, "f1_slip": 1.0}
+        return {"sensitivity": 1.0, "ppv": 1.0, "f1": 1.0, "mcc": 0.0}
     if not predicted_pairs:
-        return {"sensitivity_slip": 0.0, "ppv_slip": 0.0, "f1_slip": 0.0}
+        return {"sensitivity": 0.0, "ppv": 0.0, "f1": 0.0, "mcc": 0.0}
     if not reference_pairs:
-        return {"sensitivity_slip": 0.0, "ppv_slip": 0.0, "f1_slip": 0.0}
+        return {"sensitivity": 0.0, "ppv": 0.0, "f1": 0.0, "mcc": 0.0}
 
     tp_pred = 0
     for i, j in predicted_pairs:
@@ -253,11 +259,19 @@ def compute_slip_metrics(
     ppv_slip = tp_pred / len(predicted_pairs)
     sen_slip = tp_ref / len(reference_pairs)
     f1_slip = 2 * ppv_slip * sen_slip / (ppv_slip + sen_slip) if (ppv_slip + sen_slip) > 0 else 0.0
+    
+    # MCC for slip-tolerant (simplified without TN)
+    fp = len(predicted_pairs) - tp_pred
+    fn = len(reference_pairs) - tp_ref
+    tn = 0
+    mcc_denom = ((tp_pred + fp) * (tp_ref + fn) * (tn + fp) * (tn + fn)) ** 0.5
+    mcc = ((tp_pred * tn) - (fp * fn)) / mcc_denom if mcc_denom > 0 else 0.0
 
     return {
-        "sensitivity_slip": sen_slip,
-        "ppv_slip": ppv_slip,
-        "f1_slip": f1_slip,
+        "sensitivity": sen_slip,
+        "ppv": ppv_slip,
+        "f1": f1_slip,
+        "mcc": mcc,
     }
 
 

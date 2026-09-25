@@ -105,7 +105,8 @@ def load_bprna_ts0(cache_dir: Path, max_length: Optional[int] = 500) -> List[Dic
     structures = []
     
     for bpseq_file in sorted(ts0_dir.glob('*.bpseq')):
-        sequence, pairs = parse_bpseq(bpseq_file)
+        sequence, structure = parse_bpseq(bpseq_file)
+        pairs = parse_dotbracket(structure)
         
         # Filter by length
         if max_length and len(sequence) > max_length:
@@ -165,7 +166,12 @@ def remove_pseudoknots(pairs: Set[Tuple[int, int]]) -> Tuple[Set[Tuple[int, int]
     pairs_list = sorted(pairs)
     nested = []
     
-    for i, (a, b) in enumerate(pairs_list):
+    for pair_idx, pair_elem in enumerate(pairs_list):
+        # Ensure we have a proper 2-tuple
+        if not isinstance(pair_elem, tuple) or len(pair_elem) != 2:
+            raise ValueError(f"Expected (i, j) tuple at index {pair_idx}, got {pair_elem} (type={type(pair_elem)})")
+        a, b = pair_elem
+        
         is_nested = True
         for j, (c, d) in enumerate(nested):
             # Check if (a, b) pseudoknots with (c, d)
@@ -293,10 +299,10 @@ def evaluate_dataset(
                 )
                 
                 # Compute metrics (exact)
-                metrics_exact = compute_metrics(pred_pairs, ref_nested, length, allow_slip=False)
+                metrics_exact = compute_exact_metrics(pred_pairs, ref_nested)
                 
                 # Compute metrics (slip-tolerant)
-                metrics_slip = compute_metrics(pred_pairs, ref_nested, length, allow_slip=True)
+                metrics_slip = compute_slip_metrics(pred_pairs, ref_nested)
                 
                 results.append({
                     'name': name,
