@@ -91,6 +91,8 @@ def compute_pair_probabilities(sequence: str) -> np.ndarray:
         bpp = fc.bpp()
         
         # Convert to matrix (ViennaRNA uses 1-based indexing)
+        # bpp[i][j] is upper-triangular (only i < j has values)
+        # Make it symmetric by copying to both (i,j) and (j,i)
         for i in range(1, n + 1):
             for j in range(i + 1, n + 1):
                 prob = bpp[i][j]

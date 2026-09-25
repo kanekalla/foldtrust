@@ -1,110 +1,57 @@
 {
   "fse_start": 13462,
   "fse_end": 13542,
-  "core_start": 13462,
-  "core_end": 13542,
-  "window_length": 81,
-  "core_length": 81,
+  "fse_length": 81,
   "datasets": {
     "incarnato_invitro": {
-      "window": {
-        "spearman": 0.3491937489628916,
-        "spearman_pvalue": 0.0013977619725197663,
-        "auroc": 0.7256235827664399,
-        "n_reactive": 21,
-        "n_unreactive": 21,
-        "coverage": 1.0,
-        "n_valid": 81
-      },
-      "core": {
-        "spearman": 0.3491937489628916,
-        "spearman_pvalue": 0.0013977619725197663,
-        "auroc": 0.7256235827664399,
-        "n_reactive": 21,
-        "n_unreactive": 21,
-        "coverage": 1.0,
-        "n_valid": 81
-      }
+      "dataset": "incarnato_invitro",
+      "spearman": 0.11776858987493795,
+      "spearman_pvalue": 0.29505703020575363,
+      "auroc": 0.5997732426303855,
+      "n_reactive": 21,
+      "n_unreactive": 21,
+      "coverage": 1.0,
+      "n_valid": 81
     },
     "incarnato_invivo": {
-      "window": {
-        "spearman": 0.41859729311674215,
-        "spearman_pvalue": 0.00011147439247090533,
-        "auroc": 0.79375,
-        "n_reactive": 20,
-        "n_unreactive": 20,
-        "coverage": 0.9876543209876543,
-        "n_valid": 80
-      },
-      "core": {
-        "spearman": 0.41859729311674215,
-        "spearman_pvalue": 0.00011147439247090533,
-        "auroc": 0.79375,
-        "n_reactive": 20,
-        "n_unreactive": 20,
-        "coverage": 0.9876543209876543,
-        "n_valid": 80
-      }
+      "dataset": "incarnato_invivo",
+      "spearman": 0.03978938963279338,
+      "spearman_pvalue": 0.7260199143105697,
+      "auroc": 0.55,
+      "n_reactive": 20,
+      "n_unreactive": 20,
+      "coverage": 0.9876543209876543,
+      "n_valid": 80
     },
     "pyle": {
-      "window": {
-        "spearman": 0.12205791610677434,
-        "spearman_pvalue": 0.2776949950372623,
-        "auroc": 0.5986394557823129,
-        "n_reactive": 21,
-        "n_unreactive": 21,
-        "coverage": 1.0,
-        "n_valid": 81
-      },
-      "core": {
-        "spearman": 0.12205791610677434,
-        "spearman_pvalue": 0.2776949950372623,
-        "auroc": 0.5986394557823129,
-        "n_reactive": 21,
-        "n_unreactive": 21,
-        "coverage": 1.0,
-        "n_valid": 81
-      }
+      "dataset": "pyle",
+      "spearman": 0.029674334144587585,
+      "spearman_pvalue": 0.7925691507099452,
+      "auroc": 0.5714285714285714,
+      "n_reactive": 21,
+      "n_unreactive": 21,
+      "coverage": 1.0,
+      "n_valid": 81
     },
     "zhang_invitro": {
-      "window": {
-        "spearman": 0.4370022251218395,
-        "spearman_pvalue": 4.523647386783759e-05,
-        "auroc": 0.802721088435374,
-        "n_reactive": 21,
-        "n_unreactive": 21,
-        "coverage": 1.0,
-        "n_valid": 81
-      },
-      "core": {
-        "spearman": 0.4370022251218395,
-        "spearman_pvalue": 4.523647386783759e-05,
-        "auroc": 0.802721088435374,
-        "n_reactive": 21,
-        "n_unreactive": 21,
-        "coverage": 1.0,
-        "n_valid": 81
-      }
+      "dataset": "zhang_invitro",
+      "spearman": 0.10974527677560662,
+      "spearman_pvalue": 0.3294086678230317,
+      "auroc": 0.528344671201814,
+      "n_reactive": 21,
+      "n_unreactive": 21,
+      "coverage": 1.0,
+      "n_valid": 81
     },
     "zhang_invivo": {
-      "window": {
-        "spearman": 0.4893660005518591,
-        "spearman_pvalue": 3.5511130375819637e-06,
-        "auroc": 0.8116883116883117,
-        "n_reactive": 21,
-        "n_unreactive": 22,
-        "coverage": 1.0,
-        "n_valid": 81
-      },
-      "core": {
-        "spearman": 0.4893660005518591,
-        "spearman_pvalue": 3.5511130375819637e-06,
-        "auroc": 0.8116883116883117,
-        "n_reactive": 21,
-        "n_unreactive": 22,
-        "coverage": 1.0,
-        "n_valid": 81
-      }
+      "dataset": "zhang_invivo",
+      "spearman": 0.11880241116304076,
+      "spearman_pvalue": 0.290808576287107,
+      "auroc": 0.5292207792207793,
+      "n_reactive": 21,
+      "n_unreactive": 22,
+      "coverage": 1.0,
+      "n_valid": 81
     }
   },
   "dataset_agreement": [
@@ -179,46 +126,550 @@
       "n_overlap": 81
     }
   ],
-  "tier_analysis": {
-    "FIRM": {
-      "mean_reactivity": 0.16024464831804283,
-      "std_reactivity": 0.2076878731051141,
-      "n_positions": 30
+  "tier_analysis": [
+    {
+      "dataset": "incarnato_invitro",
+      "structure_type": "MEA",
+      "tier": "FIRM",
+      "n": 30,
+      "mean": 0.16024464831804283,
+      "median": 0.08314220183486237,
+      "std": 0.2076878731051141,
+      "ci_95_lower": 0.09053994648318048,
+      "ci_95_upper": 0.24034308103975535
     },
-    "SOFT": {
-      "mean_reactivity": 0.21916411824668705,
-      "std_reactivity": 0.3003236989771774,
-      "n_positions": 18
+    {
+      "dataset": "incarnato_invitro",
+      "structure_type": "MEA",
+      "tier": "SOFT",
+      "n": 18,
+      "mean": 0.21916411824668705,
+      "median": 0.11123853211009174,
+      "std": 0.3003236989771774,
+      "ci_95_lower": 0.0910375254841998,
+      "ci_95_upper": 0.37690972222222213
     },
-    "FLOPPY": {
-      "mean_reactivity": 0.40940366972477066,
-      "std_reactivity": 0.3766420910211208,
-      "n_positions": 33
+    {
+      "dataset": "incarnato_invitro",
+      "structure_type": "MEA",
+      "tier": "FLOPPY",
+      "n": 0,
+      "mean": NaN,
+      "median": NaN,
+      "std": NaN,
+      "ci_95_lower": NaN,
+      "ci_95_upper": NaN
     },
-    "unpaired": {
-      "mean_reactivity": NaN,
-      "std_reactivity": NaN,
-      "n_positions": 0
+    {
+      "dataset": "incarnato_invitro",
+      "structure_type": "MEA",
+      "tier": "unpaired",
+      "n": 33,
+      "mean": 0.40940366972477066,
+      "median": 0.28325688073394495,
+      "std": 0.3766420910211208,
+      "ci_95_lower": 0.2888865721434529,
+      "ci_95_upper": 0.5410785029190992
+    },
+    {
+      "dataset": "incarnato_invitro",
+      "structure_type": "MFE",
+      "tier": "FIRM",
+      "n": 30,
+      "mean": 0.16024464831804283,
+      "median": 0.08314220183486237,
+      "std": 0.2076878731051141,
+      "ci_95_lower": 0.09053994648318048,
+      "ci_95_upper": 0.24034308103975535
+    },
+    {
+      "dataset": "incarnato_invitro",
+      "structure_type": "MFE",
+      "tier": "SOFT",
+      "n": 14,
+      "mean": 0.23394495412844038,
+      "median": 0.09690366972477063,
+      "std": 0.3343309284687593,
+      "ci_95_lower": 0.07699868938401055,
+      "ci_95_upper": 0.42454333224115326
+    },
+    {
+      "dataset": "incarnato_invitro",
+      "structure_type": "MFE",
+      "tier": "FLOPPY",
+      "n": 2,
+      "mean": 0.016055045871559634,
+      "median": 0.016055045871559634,
+      "std": 0.016055045871559634,
+      "ci_95_lower": 0.0,
+      "ci_95_upper": 0.03211009174311927
+    },
+    {
+      "dataset": "incarnato_invitro",
+      "structure_type": "MFE",
+      "tier": "unpaired",
+      "n": 35,
+      "mean": 0.4042267365661861,
+      "median": 0.28325688073394495,
+      "std": 0.36447662188419094,
+      "ci_95_lower": 0.2949139908256881,
+      "ci_95_upper": 0.5332331258191351
+    },
+    {
+      "dataset": "incarnato_invivo",
+      "structure_type": "MEA",
+      "tier": "FIRM",
+      "n": 30,
+      "mean": 0.1902512973004486,
+      "median": 0.09795347210075195,
+      "std": 0.21864050161484383,
+      "ci_95_lower": 0.1133689969486714,
+      "ci_95_upper": 0.2738275707927617
+    },
+    {
+      "dataset": "incarnato_invivo",
+      "structure_type": "MEA",
+      "tier": "SOFT",
+      "n": 18,
+      "mean": 0.2959723760843225,
+      "median": 0.14926243367733633,
+      "std": 0.32493104498429853,
+      "ci_95_lower": 0.15841892924934697,
+      "ci_95_upper": 0.4477988001995342
+    },
+    {
+      "dataset": "incarnato_invivo",
+      "structure_type": "MEA",
+      "tier": "FLOPPY",
+      "n": 0,
+      "mean": NaN,
+      "median": NaN,
+      "std": NaN,
+      "ci_95_lower": NaN,
+      "ci_95_upper": NaN
+    },
+    {
+      "dataset": "incarnato_invivo",
+      "structure_type": "MEA",
+      "tier": "unpaired",
+      "n": 32,
+      "mean": 0.46698443239461196,
+      "median": 0.3667424639962677,
+      "std": 0.34753305498759474,
+      "ci_95_lower": 0.3596337768205929,
+      "ci_95_upper": 0.5902451023263945
+    },
+    {
+      "dataset": "incarnato_invivo",
+      "structure_type": "MFE",
+      "tier": "FIRM",
+      "n": 30,
+      "mean": 0.1902512973004486,
+      "median": 0.09795347210075195,
+      "std": 0.21864050161484383,
+      "ci_95_lower": 0.1133689969486714,
+      "ci_95_upper": 0.2738275707927617
+    },
+    {
+      "dataset": "incarnato_invivo",
+      "structure_type": "MFE",
+      "tier": "SOFT",
+      "n": 14,
+      "mean": 0.3231881522943265,
+      "median": 0.18103900647192547,
+      "std": 0.3567377120798798,
+      "ci_95_lower": 0.15353228050009546,
+      "ci_95_upper": 0.5123109231448388
+    },
+    {
+      "dataset": "incarnato_invivo",
+      "structure_type": "MFE",
+      "tier": "FLOPPY",
+      "n": 2,
+      "mean": 0.055098828056672974,
+      "median": 0.055098828056672974,
+      "std": 0.041688531280974786,
+      "ci_95_lower": 0.013410296775698183,
+      "ci_95_upper": 0.09678735933764776
+    },
+    {
+      "dataset": "incarnato_invivo",
+      "structure_type": "MFE",
+      "tier": "unpaired",
+      "n": 34,
+      "mean": 0.45988743582092567,
+      "median": 0.3667424639962677,
+      "std": 0.33764559107796693,
+      "ci_95_lower": 0.3514025078283888,
+      "ci_95_upper": 0.5803142159435046
+    },
+    {
+      "dataset": "pyle",
+      "structure_type": "MEA",
+      "tier": "FIRM",
+      "n": 30,
+      "mean": 0.053666387732843775,
+      "median": -0.023535123089635894,
+      "std": 0.2980591062661435,
+      "ci_95_lower": -0.04555618019430273,
+      "ci_95_upper": 0.15091022987069377
+    },
+    {
+      "dataset": "pyle",
+      "structure_type": "MEA",
+      "tier": "SOFT",
+      "n": 18,
+      "mean": 0.19617887560082176,
+      "median": 0.1174832623349705,
+      "std": 0.3495691514551216,
+      "ci_95_lower": 0.05490097522156049,
+      "ci_95_upper": 0.3727957330976244
+    },
+    {
+      "dataset": "pyle",
+      "structure_type": "MEA",
+      "tier": "FLOPPY",
+      "n": 0,
+      "mean": NaN,
+      "median": NaN,
+      "std": NaN,
+      "ci_95_lower": NaN,
+      "ci_95_upper": NaN
+    },
+    {
+      "dataset": "pyle",
+      "structure_type": "MEA",
+      "tier": "unpaired",
+      "n": 33,
+      "mean": 0.21543384122525328,
+      "median": 0.049567565339539224,
+      "std": 0.41197662484357866,
+      "ci_95_lower": 0.08617624920033791,
+      "ci_95_upper": 0.36185090514313006
+    },
+    {
+      "dataset": "pyle",
+      "structure_type": "MFE",
+      "tier": "FIRM",
+      "n": 30,
+      "mean": 0.053666387732843775,
+      "median": -0.023535123089635894,
+      "std": 0.2980591062661435,
+      "ci_95_lower": -0.04555618019430273,
+      "ci_95_upper": 0.15091022987069377
+    },
+    {
+      "dataset": "pyle",
+      "structure_type": "MFE",
+      "tier": "SOFT",
+      "n": 14,
+      "mean": 0.24263756308607295,
+      "median": 0.13707972643985136,
+      "std": 0.3797766283509312,
+      "ci_95_lower": 0.06626967238189709,
+      "ci_95_upper": 0.44096746278859866
+    },
+    {
+      "dataset": "pyle",
+      "structure_type": "MFE",
+      "tier": "FLOPPY",
+      "n": 2,
+      "mean": -0.28731993883956114,
+      "median": -0.28731993883956114,
+      "std": 0.16570631866891647,
+      "ci_95_lower": -0.4530262575084776,
+      "ci_95_upper": -0.12161362017064467
+    },
+    {
+      "dataset": "pyle",
+      "structure_type": "MFE",
+      "tier": "unpaired",
+      "n": 35,
+      "mean": 0.22337858616349288,
+      "median": 0.10259356114310089,
+      "std": 0.38600262542702607,
+      "ci_95_lower": 0.09965795074021835,
+      "ci_95_upper": 0.3500610398676595
+    },
+    {
+      "dataset": "zhang_invitro",
+      "structure_type": "MEA",
+      "tier": "FIRM",
+      "n": 30,
+      "mean": 0.07945945945945945,
+      "median": 0.03513513513513514,
+      "std": 0.1267763483966274,
+      "ci_95_lower": 0.038373873873873865,
+      "ci_95_upper": 0.12663063063063063
+    },
+    {
+      "dataset": "zhang_invitro",
+      "structure_type": "MEA",
+      "tier": "SOFT",
+      "n": 18,
+      "mean": 0.15795795795795797,
+      "median": 0.13445945945945947,
+      "std": 0.1511742105328105,
+      "ci_95_lower": 0.09015765765765767,
+      "ci_95_upper": 0.22635322822822826
+    },
+    {
+      "dataset": "zhang_invitro",
+      "structure_type": "MEA",
+      "tier": "FLOPPY",
+      "n": 0,
+      "mean": NaN,
+      "median": NaN,
+      "std": NaN,
+      "ci_95_lower": NaN,
+      "ci_95_upper": NaN
+    },
+    {
+      "dataset": "zhang_invitro",
+      "structure_type": "MEA",
+      "tier": "unpaired",
+      "n": 33,
+      "mean": 0.45016380016380014,
+      "median": 0.25135135135135134,
+      "std": 0.40595032413819,
+      "ci_95_lower": 0.3227528665028665,
+      "ci_95_upper": 0.5943724406224407
+    },
+    {
+      "dataset": "zhang_invitro",
+      "structure_type": "MFE",
+      "tier": "FIRM",
+      "n": 30,
+      "mean": 0.07945945945945945,
+      "median": 0.03513513513513514,
+      "std": 0.1267763483966274,
+      "ci_95_lower": 0.038373873873873865,
+      "ci_95_upper": 0.12663063063063063
+    },
+    {
+      "dataset": "zhang_invitro",
+      "structure_type": "MFE",
+      "tier": "SOFT",
+      "n": 14,
+      "mean": 0.13465250965250966,
+      "median": 0.08986486486486486,
+      "std": 0.15079151073453972,
+      "ci_95_lower": 0.06041747104247105,
+      "ci_95_upper": 0.22413851351351355
+    },
+    {
+      "dataset": "zhang_invitro",
+      "structure_type": "MFE",
+      "tier": "FLOPPY",
+      "n": 2,
+      "mean": 0.21486486486486486,
+      "median": 0.21486486486486486,
+      "std": 0.03378378378378377,
+      "ci_95_lower": 0.1810810810810811,
+      "ci_95_upper": 0.24864864864864863
+    },
+    {
+      "dataset": "zhang_invitro",
+      "structure_type": "MFE",
+      "tier": "unpaired",
+      "n": 35,
+      "mean": 0.4395366795366795,
+      "median": 0.25135135135135134,
+      "std": 0.39848198110855426,
+      "ci_95_lower": 0.3155376447876448,
+      "ci_95_upper": 0.5771891891891893
+    },
+    {
+      "dataset": "zhang_invivo",
+      "structure_type": "MEA",
+      "tier": "FIRM",
+      "n": 30,
+      "mean": 0.11212121212121212,
+      "median": 0.0109717868338558,
+      "std": 0.250674850115239,
+      "ci_95_lower": 0.03385449320794148,
+      "ci_95_upper": 0.20329414838035526
+    },
+    {
+      "dataset": "zhang_invivo",
+      "structure_type": "MEA",
+      "tier": "SOFT",
+      "n": 18,
+      "mean": 0.24869383490073144,
+      "median": 0.15752351097178682,
+      "std": 0.30506827402576164,
+      "ci_95_lower": 0.1254702194357367,
+      "ci_95_upper": 0.40980929989550674
+    },
+    {
+      "dataset": "zhang_invivo",
+      "structure_type": "MEA",
+      "tier": "FLOPPY",
+      "n": 0,
+      "mean": NaN,
+      "median": NaN,
+      "std": NaN,
+      "ci_95_lower": NaN,
+      "ci_95_upper": NaN
+    },
+    {
+      "dataset": "zhang_invivo",
+      "structure_type": "MEA",
+      "tier": "unpaired",
+      "n": 33,
+      "mean": 0.5246034007789493,
+      "median": 0.5893416927899686,
+      "std": 0.35417785054479567,
+      "ci_95_lower": 0.4040538614990026,
+      "ci_95_upper": 0.6453073050251733
+    },
+    {
+      "dataset": "zhang_invivo",
+      "structure_type": "MFE",
+      "tier": "FIRM",
+      "n": 30,
+      "mean": 0.11212121212121212,
+      "median": 0.0109717868338558,
+      "std": 0.250674850115239,
+      "ci_95_lower": 0.03385449320794148,
+      "ci_95_upper": 0.20329414838035526
+    },
+    {
+      "dataset": "zhang_invivo",
+      "structure_type": "MFE",
+      "tier": "SOFT",
+      "n": 14,
+      "mean": 0.26735333631885355,
+      "median": 0.12225705329153604,
+      "std": 0.33938459277219185,
+      "ci_95_lower": 0.11240203761755486,
+      "ci_95_upper": 0.46377071204657416
+    },
+    {
+      "dataset": "zhang_invivo",
+      "structure_type": "MFE",
+      "tier": "FLOPPY",
+      "n": 2,
+      "mean": 0.10736677115987461,
+      "median": 0.10736677115987461,
+      "std": 0.04780564263322885,
+      "ci_95_lower": 0.05956112852664577,
+      "ci_95_upper": 0.15517241379310345
+    },
+    {
+      "dataset": "zhang_invivo",
+      "structure_type": "MFE",
+      "tier": "unpaired",
+      "n": 35,
+      "mean": 0.5094491715181371,
+      "median": 0.5423197492163009,
+      "std": 0.34990771695169925,
+      "ci_95_lower": 0.4035467980295567,
+      "ci_95_upper": 0.6257109270040303
     }
-  },
-  "shape_directed_folding": {
-    "dataset_used": "incarnato_invitro",
-    "mfe_unconstrained": -26.0,
-    "mfe_shape": -51.79999923706055,
-    "bp_distance_mfe": 4,
-    "bp_distance_mea": 1,
-    "mfe_structure": ".....(((((((.(((.......))))))))))......(((((((((((((.........))).))))))))...))...",
-    "mfe_structure_shape": ".....((((((.((((.......))))))))))......(((((((((((((((....)).))).))))))))...))..."
-  },
+  ],
+  "shape_directed_folding": [
+    {
+      "dataset": "incarnato_invitro",
+      "is_icshape": false,
+      "bp_distance_mfe": 4,
+      "bp_distance_mea": 1,
+      "f1_mfe": 0.9166666666666666,
+      "f1_mea": 0.9795918367346939,
+      "tier_changes": {
+        "common_pairs": 24,
+        "tier_changes": 0,
+        "pairs_only_unconstrained": 0,
+        "pairs_only_shape": 1
+      }
+    },
+    {
+      "dataset": "incarnato_invivo",
+      "is_icshape": false,
+      "bp_distance_mfe": 2,
+      "bp_distance_mea": 1,
+      "f1_mfe": 0.9565217391304348,
+      "f1_mea": 0.9787234042553191,
+      "tier_changes": {
+        "common_pairs": 23,
+        "tier_changes": 0,
+        "pairs_only_unconstrained": 1,
+        "pairs_only_shape": 0
+      }
+    },
+    {
+      "dataset": "pyle",
+      "is_icshape": false,
+      "bp_distance_mfe": 30,
+      "bp_distance_mea": 2,
+      "f1_mfe": 0.39999999999999997,
+      "f1_mea": 0.9565217391304348,
+      "tier_changes": {
+        "common_pairs": 22,
+        "tier_changes": 0,
+        "pairs_only_unconstrained": 2,
+        "pairs_only_shape": 0
+      }
+    },
+    {
+      "dataset": "zhang_invitro",
+      "is_icshape": true,
+      "bp_distance_mfe": 6,
+      "bp_distance_mea": 1,
+      "f1_mfe": 0.8749999999999999,
+      "f1_mea": 0.9795918367346939,
+      "tier_changes": {
+        "common_pairs": 24,
+        "tier_changes": 0,
+        "pairs_only_unconstrained": 0,
+        "pairs_only_shape": 1
+      }
+    },
+    {
+      "dataset": "zhang_invivo",
+      "is_icshape": true,
+      "bp_distance_mfe": 9,
+      "bp_distance_mea": 8,
+      "f1_mfe": 0.8,
+      "f1_mea": 0.8260869565217391,
+      "tier_changes": {
+        "common_pairs": 19,
+        "tier_changes": 0,
+        "pairs_only_unconstrained": 5,
+        "pairs_only_shape": 3
+      }
+    }
+  ],
   "genome_control": {
-    "n_windows": 50,
-    "window_length": 81,
-    "fse_percentiles": {
-      "incarnato_invitro": 65.3061224489796,
-      "incarnato_invivo": 78.0,
-      "pyle": 44.0,
-      "zhang_invitro": 92.0,
-      "zhang_invivo": 78.0
+    "incarnato_invitro": {
+      "spearman": 0.11776858987493795,
+      "percentile": 55.64738292011019,
+      "empirical_pvalue": 0.44352617079889806,
+      "n_windows": 363
+    },
+    "incarnato_invivo": {
+      "spearman": 0.03978938963279338,
+      "percentile": 38.58695652173913,
+      "empirical_pvalue": 0.6141304347826086,
+      "n_windows": 368
+    },
+    "pyle": {
+      "spearman": 0.029674334144587585,
+      "percentile": 50.67750677506775,
+      "empirical_pvalue": 0.4932249322493225,
+      "n_windows": 369
+    },
+    "zhang_invitro": {
+      "spearman": 0.10974527677560662,
+      "percentile": 48.78048780487805,
+      "empirical_pvalue": 0.5121951219512195,
+      "n_windows": 369
+    },
+    "zhang_invivo": {
+      "spearman": 0.11880241116304076,
+      "percentile": 46.34146341463415,
+      "empirical_pvalue": 0.5365853658536586,
+      "n_windows": 369
     }
   }
 }

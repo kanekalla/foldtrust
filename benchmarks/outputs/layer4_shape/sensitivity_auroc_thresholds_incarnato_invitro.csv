@@ -1,0 +1,4 @@
+dataset,threshold_reactive,threshold_unreactive,auroc,n_reactive,n_unreactive
+incarnato_invitro,0.6,0.4,0.584022038567493,33,33
+incarnato_invitro,0.75,0.25,0.5997732426303855,21,21
+incarnato_invitro,0.8,0.2,0.619281045751634,17,18
