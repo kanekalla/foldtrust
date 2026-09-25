@@ -1,0 +1,167 @@
+======================================================================
+FOLDTRUST BENCHMARK LAYERS 1-3
+======================================================================
+
+
+======================================================================
+LAYER 1: SCORING CORRECTNESS
+======================================================================
+Testing parsers...
+  ✓ Dot-bracket parser
+  ✓ Nested bracket parser
+  ✓ Multiple bracket types
+All parser tests passed!
+
+Testing tier regression...
+  Strong GC hairpin: 6 pairs, 6 FIRM (>= 0.85)
+  MFE structure: ((((((....))))))
+  MFE energy: -10.90 kcal/mol
+  ✓ Tier regression test passed
+
+Testing metrics computation...
+  ✓ Perfect prediction test
+  ✓ FP/FN test
+  ✓ Slip tolerance test
+
+Layer 1 tests complete. Results saved to benchmarks/outputs/layer1/layer1_tests.json
+
+======================================================================
+LAYER 2: STRUCTURE ACCURACY
+======================================================================
+Running benchmark with max_length=500
+  Sampling 200 structures per dataset
+
+Loading ArchiveII...
+  Loaded 200 structures
+
+Loading bpRNA TS0...
+  Loaded 200 structures
+
+Loading Rfam seed...
+  Loaded 200 structures
+
+Total structures: 600
+
+Evaluating ViennaRNA predictions...
+(This may take several minutes)
+  Processed 50/600...
+  Processed 100/600...
+  Processed 150/600...
+  Processed 200/600...
+  Processed 250/600...
+  Processed 300/600...
+  Processed 350/600...
+  Processed 400/600...
+  Processed 450/600...
+  Processed 500/600...
+  Processed 550/600...
+  Processed 600/600...
+
+Raw results saved to benchmarks/outputs/layer2/layer2_raw_results.csv
+
+Computing summary statistics...
+
+Summary statistics saved to benchmarks/outputs/layer2
+
+======================================================================
+LAYER 3: CALIBRATION
+======================================================================
+Running calibration with max_length=500
+
+Loading datasets...
+  Sampled 200 ArchiveII, 200 bpRNA, 200 Rfam
+Total structures: 600
+
+Collecting candidate pairs (p > 0.001)...
+  Processed 50/600...
+  Processed 100/600...
+  Processed 150/600...
+  Processed 200/600...
+  Processed 250/600...
+  Processed 300/600...
+  Processed 350/600...
+  Processed 400/600...
+  Processed 450/600...
+  Processed 500/600...
+  Processed 550/600...
+  Processed 600/600...
+  Total candidate pairs: 181390
+  Positive pairs: 20437 (11.27%)
+
+Computing calibration metrics...
+  ECE: 0.0692
+  AUROC: 0.8870
+  AUPRC: 0.6028
+
+Analyzing tier performance...
+  Processed 50/600...
+  Processed 100/600...
+  Processed 150/600...
+  Processed 200/600...
+  Processed 250/600...
+  Processed 300/600...
+  Processed 350/600...
+  Processed 400/600...
+  Processed 450/600...
+  Processed 500/600...
+  Processed 550/600...
+  Processed 600/600...
+
+Computing tier summaries with bootstrap CIs...
+
+Tier Summary:
+  FIRM   : PPV = 0.664 [0.638, 0.688], Coverage = 0.497, N = 600, Pairs = 16202
+  SOFT   : PPV = 0.335 [0.309, 0.361], Coverage = 0.105, N = 600, Pairs = 8191
+  FLOPPY : PPV = 0.177 [0.151, 0.205], Coverage = 0.035, N = 600, Pairs = 5450
+
+Results saved to benchmarks/outputs/layer3
+
+======================================================================
+GENERATING FIGURES
+======================================================================
+
+Generating figures...
+  Saved method comparison to benchmarks/outputs/figures/layer2_method_comparison.png
+  Saved F1 vs length plot to benchmarks/outputs/figures/layer2_f1_vs_length.png
+  Saved F1 by family plot to benchmarks/outputs/figures/layer2_f1_by_family.png
+  Saved reliability diagram to benchmarks/outputs/figures/layer3_reliability_diagram.png
+  Saved tier PPV plot to benchmarks/outputs/figures/layer3_tier_ppv.png
+All figures generated!
+
+======================================================================
+BENCHMARK COMPLETE
+======================================================================
+
+Runtime: 2.6 minutes
+
+Results saved to: benchmarks/outputs
+  Layer 1: benchmarks/outputs/layer1
+  Layer 2: benchmarks/outputs/layer2
+  Layer 3: benchmarks/outputs/layer3
+  Figures: benchmarks/outputs/figures
+
+======================================================================
+HEADLINE METRICS
+======================================================================
+
+Layer 2 (Structure Accuracy):
+  Total structures: 600
+    ArchiveII: 200
+    bpRNA TS0: 200
+    Rfam seed: 200
+  MFE F1: 0.548 [0.526, 0.570]
+  MEA F1: 0.563 [0.542, 0.585]
+
+Layer 3 (Calibration):
+  Candidate pairs: 181,390
+  Positive pairs: 20,437
+  ECE: 0.0692
+  AUROC: 0.8870
+  AUPRC: 0.6028
+
+  Tier PPVs (95% CI):
+    FIRM   : 0.664 [0.638, 0.688]
+    SOFT   : 0.335 [0.309, 0.361]
+    FLOPPY : 0.177 [0.151, 0.205]
+
+======================================================================

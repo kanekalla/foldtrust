@@ -1,0 +1,45 @@
+{
+  "n_structures": 600,
+  "n_candidate_pairs": 181390,
+  "n_positive_pairs": 20437,
+  "ece": 0.06915250418038191,
+  "auroc": 0.8869932614060777,
+  "auprc": 0.6028052419163001,
+  "n_bins": 10,
+  "prob_floor": 0.001,
+  "tier_summary": [
+    {
+      "tier": "FIRM",
+      "ppv_mean": 0.6642472665850683,
+      "ppv_ci_lower": 0.6375980071272497,
+      "ppv_ci_upper": 0.6882635714170324,
+      "coverage_mean": 0.4973013176586436,
+      "coverage_ci_lower": 0.4761722970238513,
+      "coverage_ci_upper": 0.5203280732867549,
+      "n_structures": 600,
+      "total_pairs": 16202.0
+    },
+    {
+      "tier": "SOFT",
+      "ppv_mean": 0.3349737659226707,
+      "ppv_ci_lower": 0.3090428214678173,
+      "ppv_ci_upper": 0.3611046634289065,
+      "coverage_mean": 0.10526457861311393,
+      "coverage_ci_lower": 0.09431011504995207,
+      "coverage_ci_upper": 0.11589721962249966,
+      "n_structures": 600,
+      "total_pairs": 8191.0
+    },
+    {
+      "tier": "FLOPPY",
+      "ppv_mean": 0.17731058329886587,
+      "ppv_ci_lower": 0.1506474150428927,
+      "ppv_ci_upper": 0.2052269288017559,
+      "coverage_mean": 0.03496184227834184,
+      "coverage_ci_lower": 0.028315553995657113,
+      "coverage_ci_upper": 0.04232365681142323,
+      "n_structures": 600,
+      "total_pairs": 5450.0
+    }
+  ]
+}
