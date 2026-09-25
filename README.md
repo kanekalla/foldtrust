@@ -136,25 +136,22 @@ foldtrust report my_rna.fa -o output/my_rna
 
 ### Benchmark Analysis
 
-Validate FoldTrust's reliability predictions against reference structures:
+Benchmark infrastructure for validating FoldTrust predictions:
 
 ```bash
-# Run all benchmark analyses
-foldtrust benchmark all -o benchmarks/outputs
+# Note: Full benchmark suite requires external datasets
+# See benchmarks/IMPLEMENTATION_STATUS.md for data availability details
 
-# Run specific analyses
-foldtrust benchmark reference -o benchmarks/outputs
-foldtrust benchmark calibration -o benchmarks/outputs
+# Temperature-based robustness analysis (implementable)
 foldtrust benchmark robustness -o benchmarks/outputs
 ```
 
-Results include:
-- **Reference structure accuracy:** Sensitivity, PPV, F1, MCC vs curated structures
-- **Calibration metrics:** Reliability diagram, ECE, AUROC, AUPRC
-- **Tier accuracy:** PPV of FIRM/SOFT/FLOPPY classifications
-- **Robustness:** Tier stability across disease cases
+**Status:** Benchmark infrastructure implemented and tested. Data availability constraints documented:
+- **Reference structures (ArchiveII):** Dataset no longer hosted at documented URLs (see `benchmarks/ARCHIVEII_ATTEMPTS.md`)
+- **SHAPE probing:** Data located but coordinate mapping required (see `benchmarks/SHAPE_DATA_INVESTIGATION.md`)
+- **Robustness:** Temperature sweep implementable; parameter file comparison requires additional ViennaRNA data
 
-See `benchmarks/outputs/` and `NOTES.md` § 9 for detailed results and honest interpretation.
+See `NOTES.md` § 9 for honest assessment of data availability and implementation constraints.
 
 ## Output
 
@@ -242,7 +239,7 @@ foldtrust/
 
 ## Roadmap / Future Work
 
-- **Benchmark validation:** ✅ Complete. See `benchmarks/outputs/` and NOTES.md § 9 for reference structure accuracy, calibration metrics, and tier reliability analysis.
+- **Benchmark validation:** Partial implementation. Infrastructure complete; awaiting dataset availability (ArchiveII) and coordinate mapping (SHAPE data). See `NOTES.md` § 9 and `benchmarks/IMPLEMENTATION_STATUS.md`.
 - Web app deployment for interactive reports
 - Docker container with ViennaRNA pre-installed
 - Integration with SHAPE/DMS reactivity data for constrained folding

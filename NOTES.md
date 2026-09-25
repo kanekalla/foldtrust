@@ -230,135 +230,109 @@ Case-level extra DOIs are listed in each generated report and `data/cases/*/meta
 
 ---
 
-## 9. Benchmark: Validation of FoldTrust Reliability Predictions
+## 9. Benchmark: Data Availability and Implementation Constraints
 
-**Goal:** Prove (or honestly disprove) that FoldTrust's reliability classifications (FIRM/SOFT/FLOPPY) predict which base pairs are correct against known reference structures.
+**Goal:** Validate FoldTrust's reliability classifications against standard benchmark datasets and experimental probing data.
 
-### 9.1 Methods
+### 9.1 Investigation Summary
 
-Four benchmark analyses were implemented via `foldtrust benchmark <analysis>`:
+Benchmark implementation attempted four analyses as specified:
 
-1. **Reference structure accuracy:** MFE structure prediction compared to curated reference structures, measured by sensitivity, PPV, F1, and MCC.
-2. **Calibration of pair probabilities:** Reliability diagram, Expected Calibration Error (ECE), AUROC, and AUPRC for discrimination of true vs false pairs. Tier accuracy (PPV) for FIRM/SOFT/FLOPPY classifications.
-3. **Experimental probing correlation:** Spearman correlation between unpaired probability and SHAPE/DMS reactivity (infrastructure implemented; public datasets not included in MVP due to availability constraints).
-4. **Robustness:** Tier stability across the five disease-case windows under baseline ViennaRNA conditions.
+1. **Reference structure accuracy** (ArchiveII dataset)
+2. **Calibration of pair probabilities** (reliability diagram, tier accuracy)
+3. **Experimental probing correlation** (SHAPE-MaP reactivity)
+4. **Robustness** (parameter sets, temperature, window jitter)
 
-**Command used:**
-```bash
-foldtrust benchmark all -o benchmarks/outputs
-```
+### 9.2 Data Availability Findings
 
-**Dataset:** 15 curated RNA structures (tetraloops, hairpins, internal loops, stacked stems) for reference and calibration analyses. Disease case windows (sars2-fse, smn2-iss-n1, cftr-5utr, mapt-e10, hcv-ires-dii) for robustness.
+#### 9.2.1 ArchiveII Dataset
 
-**Environment:** ViennaRNA 2.5.1, Turner 2004 parameters, 37°C / 1 M NaCl assumptions (CLI-based; parameter sweeps require Python bindings and are noted as future work).
+**Status:** NOT ACCESSIBLE
 
-### 9.2 Results
+**Attempts documented in `benchmarks/ARCHIVEII_ATTEMPTS.md`:**
+- Mathews Lab direct URL (rna.urmc.rochester.edu/RNAstructure/Supplemental/ArchiveII/archiveII.tar.gz): HTTP 404
+- RNA STRAND v2.0 download: Connection timeout
+- Published benchmark repositories (mxfold2, LinearPartition, E2Efold, allegro): No .ct/.bpseq files distributed
+- Public databases (Rfam, PDB): Require per-family extraction and manual curation
 
-#### 9.2.1 Reference Structure Accuracy
+**Conclusion:** The canonical ArchiveII dataset referenced in RNA structure prediction literature (e.g., Mathews lab 2004-2010 publications) is no longer hosted at its documented URLs as of September 2026. Published papers cite ArchiveII but do not redistribute the data in their repositories.
 
-**Headline:** ViennaRNA MFE predictions show moderate agreement with simple reference structures.
+**Decision per user instruction:** "If you truly cannot get real reference data, say so and do not report reference metrics at all." Reference structure accuracy metrics are **not reported**.
 
-| Metric | Mean | Std |
-|--------|------|-----|
-| Sensitivity | 0.067 | 0.258 |
-| PPV | 0.067 | 0.258 |
-| F1 | 0.067 | 0.258 |
-| MCC | 0.047 | 0.264 |
+#### 9.2.2 SHAPE-MaP Reactivity Data
 
-**Stratified by length:**
-- 0-50 nt (N=12): F1 = 0.083
-- 50-100 nt (N=3): F1 = 0.000
+**Status:** DATA FOUND, COORDINATE MAPPING REQUIRED
 
-**Interpretation:** The curated test set included simple structures (hairpins, tetraloops) where ViennaRNA should perform well, yet overall accuracy is low. This reflects two realities: (1) even "simple" RNAs can have alternative folds, and (2) thermodynamic models under solution-phase assumptions don't always match comparative or experimental structures. These results are honest: the model is not perfect, and the benchmark infrastructure is working correctly to expose this.
+**Data source:** 
+- Repository: https://github.com/DasLab/SARS_CoV-2_shape_comparison (cloned Sep 25, 2026)
+- Files: `zhang_invivo_reactivity.csv`, `incarnato_invivo_reactivity.csv`, `pyle_reactivity.csv`
+- Coverage: Genome-wide SARS-CoV-2 (29,903 positions)
+- Citations: Manfredonia et al. 2020 (doi:10.1038/s41586-020-2681-1), Huston et al. 2021
 
-Full results: `benchmarks/outputs/reference_benchmark_report.md`
+**Issue documented in `benchmarks/SHAPE_DATA_INVESTIGATION.md`:**  
+The frameshift element sequence in `data/cases/sars2-fse/sequence.fa` (181 nt) does not match any substring of the reference genome (`refseq.txt`) in the DasLab repository. Proper implementation requires:
+1. Resolving sequence source (viral isolate/strain differences)
+2. Mapping FSE coordinates to genome positions
+3. Extracting corresponding SHAPE values
 
-#### 9.2.2 Calibration of Base-Pair Probabilities
+**Estimated time:** 2-4 hours for coordinate resolution and validation.
 
-**Headline:** Pair probabilities are moderately calibrated; tier classifications show limited discriminatory power on this test set.
+**Decision:** SHAPE probing analysis **not completed** in this iteration. Infrastructure exists (`foldtrust.benchmark.probing`); data ingestion deferred pending coordinate mapping.
 
-| Metric | Mean | Std |
-|--------|------|-----|
-| Expected Calibration Error (ECE) | 0.034 | 0.014 |
-| AUROC (pair discrimination) | 0.521 | 0.107 |
-| AUPRC (pair discrimination) | 0.049 | 0.082 |
+#### 9.2.3 Robustness Analysis
 
-**Tier accuracy (PPV of pairs in each tier matching reference):**
+**Status:** TEMPERATURE SWEEP IMPLEMENTABLE; PARAMETER FILES NOT FOUND
 
-| Tier | Mean PPV | Total Pairs |
-|------|----------|-------------|
-| FIRM (P ≥ 0.85) | 0.000 | 45 |
-| SOFT (0.5 ≤ P < 0.85) | 0.000 | 34 |
-| FLOPPY (P < 0.5) | 0.000 | 16 |
+**ViennaRNA capabilities verified:**
+- Temperature control: RNAfold `-T` flag available ✓
+- Parameter files: RNAfold `-P` flag present, but alternative parameter sets (Andronescu 2007, Langdon 2018) not found in ViennaRNA 2.5.1 installation
+- Window jitter: Requires flanking genomic sequence not included in disease case files
 
-**Interpretation:** The low ECE (0.034) suggests pair probabilities are reasonably well-calibrated in terms of average predicted vs observed frequency. However, AUROC near 0.5 and tier PPV values of 0.0 indicate that on this particular curated test set, the reliability tiers did not successfully discriminate correct from incorrect pairs. This is a negative but honest result: the tier classification (firm/soft/floppy) is a useful heuristic for ensemble thinking but does not guarantee predictive accuracy on all RNA structures. The benchmark reveals that ViennaRNA's pair probabilities—while internally consistent—do not always align with comparative or experimental reference structures for these test cases.
+**What can be implemented:**
+- Temperature sweep (24°C, 37°C, 42°C) on five disease cases
+- Tier stability reporting (fraction of pairs/stems changing FIRM/SOFT/FLOPPY classification)
 
-**Key insight:** FoldTrust's value is not universal structure prediction accuracy (which ViennaRNA alone cannot provide), but rather **transparent reporting of ensemble uncertainty**. The benchmark confirms that MFE-only approaches hide this uncertainty; FoldTrust exposes it.
+**Limitations:**
+- Parameter set comparison (Turner 2004 vs alternatives) not feasible without locating or downloading alternative .par files
+- Window jitter requires genomic context beyond the curated disease windows
 
-Reliability diagram: `benchmarks/outputs/reliability_diagram.png`  
-Full results: `benchmarks/outputs/calibration_report.md`
+### 9.3 Honest Assessment
 
-#### 9.2.3 Experimental Probing Correlation
+**What this investigation demonstrates:**
+1. Benchmark data availability in RNA structure prediction is challenging: canonical datasets (ArchiveII) are no longer hosted, and experimental data (SHAPE) requires coordinate mapping not trivial to resolve.
+2. The benchmark infrastructure (`foldtrust.benchmark.*` modules) is correctly implemented: scoring works (F1=1.0 on exact matches), calibration metrics compute properly, dataset loaders function.
+3. Reporting invalid metrics (e.g., F1=0.067 from mismatched hand-written test structures) would be scientifically dishonest.
 
-**Status:** Infrastructure implemented (`foldtrust.benchmark.probing`), but public SHAPE/DMS datasets for the disease cases (especially SARS-CoV-2 FSE) require manual extraction from supplementary tables or restricted-access repositories. Probing analysis was skipped in this benchmark run to avoid fabricating data.
+**What was NOT done:**
+- Reference structure accuracy: No ArchiveII → no metrics reported
+- SHAPE correlation: Data located but coordinates unresolved → analysis deferred
+- Full robustness: Temperature sweep implementable; parameter/jitter analysis requires additional data/files
 
-**Future work:** Integrate openly available SHAPE-MaP datasets (e.g., from Huston et al. 2021 for SARS-CoV-2, or Weeks lab repositories) and report Spearman correlation between unpaired probability and reactivity. The probing module is ready; only data ingestion remains.
+**What FoldTrust provides:**
+FoldTrust's value remains **transparency about ensemble uncertainty**. The tool correctly computes base-pair probabilities and classifies stems (FIRM/SOFT/FLOPPY) to expose MFE ambiguity. Benchmark validation against gold-standard datasets would strengthen the scientific claim, but the core functionality—asking for pair probabilities instead of only MFE—is independently valuable.
 
-#### 9.2.4 Robustness Analysis
+### 9.4 Reproducibility
 
-**Headline:** Tier distributions across the five disease cases show heterogeneity, consistent with the MVP case-by-case results.
+**Data sources investigated:**
+- ArchiveII: Attempted rna.urmc.rochester.edu, www.rnasoft.ca, GitHub repos (documented in `benchmarks/ARCHIVEII_ATTEMPTS.md`)
+- SHAPE: https://github.com/DasLab/SARS_CoV-2_shape_comparison (successfully cloned)
 
-| Case | Length | FIRM | SOFT | FLOPPY | Total Stems |
-|------|--------|------|------|--------|-------------|
-| cftr-5utr | 268 | 3 | 9 | 5 | 17 |
-| hcv-ires-dii | 268 | 12 | 4 | 2 | 18 |
-| mapt-e10 | 268 | 7 | 10 | 2 | 19 |
-| sars2-fse | 181 | 1 | 0 | 7 | 8 |
-| smn2-iss-n1 | 201 | 3 | 5 | 5 | 13 |
+**Code status:**
+- Benchmark modules: Fully implemented, tested (17 tests pass)
+- Metrics: Validated (sensitivity/PPV/F1/MCC, calibration, tier accuracy)
+- CLI: `foldtrust benchmark <analysis>` functional
 
-**Mean:** 5.2 FIRM, 5.6 SOFT, 4.2 FLOPPY per case.
+**Limitations documented:**
+- `benchmarks/IMPLEMENTATION_STATUS.md`: Honest assessment of what is/isn't implementable
+- No fabricated data, no invalid metrics reported
 
-**Interpretation:** The SARS-CoV-2 frameshift element (sars2-fse) remains the outlier with 7/8 floppy stems, while HCV IRES Domain II (hcv-ires-dii) has 12/18 firm stems. This distribution is stable under baseline ViennaRNA conditions. Temperature and parameter-set sweeps (Turner 2004 vs Andronescu 2007/Langdon 2018) require ViennaRNA Python bindings and are documented as future enhancements.
+### 9.5 Recommendation for Future Work
 
-Full results: `benchmarks/outputs/robustness_report.md`
-
-### 9.3 Honest Interpretation and Limitations
-
-**What the benchmark proves:**
-- FoldTrust's infrastructure correctly computes base-pair probabilities and classifies stems by mean pair probability.
-- The tier system (FIRM/SOFT/FLOPPY) provides a structured way to report ensemble uncertainty that MFE-only tools hide.
-- The benchmark framework is functional and produces reproducible metrics.
-
-**What the benchmark does not prove:**
-- That reliability tiers universally predict structure correctness. On the curated test set, tier PPV was 0.0, indicating the tiers did not discriminate true from false pairs for these particular structures.
-- That ViennaRNA's thermodynamic model is accurate for all RNA contexts. The low F1 scores reflect known limitations of nearest-neighbor models under solution-phase assumptions.
-
-**Core claim validated:** FoldTrust's scientific contribution is **transparency about ensemble uncertainty**, not universal structure prediction. The MFE cartoon hides competing folds; FoldTrust exposes them. The benchmark confirms this reporting works correctly, even when the underlying thermodynamic model (ViennaRNA) has known accuracy limits.
-
-**Limitations of this benchmark:**
-1. **Test set size:** 15 reference structures and 5 disease cases. Larger benchmarks (e.g., full ArchiveII or bpRNA-1m) require scalable dataset pipelines.
-2. **Reference structures:** Simplified or manually curated. Real comparative structures from Rfam or experimentally validated PDB structures would strengthen the analysis.
-3. **No probing data:** SHAPE/DMS correlation analysis deferred due to public data access constraints.
-4. **CLI-only ViennaRNA:** Parameter sweeps (temperature, Turner vs Andronescu) require Python bindings (future work).
-5. **Mac-16GB constraint:** Subset of 15-50 sequences kept runtime practical. Full-scale benchmarks feasible but not required for MVP validation.
-
-### 9.4 Take-Home
-
-The benchmark infrastructure is complete, tested, and produces real results. The findings are honest: **FoldTrust's reliability tiers expose ensemble uncertainty correctly, but do not guarantee structure accuracy**. That is the intended outcome—asking for pair probabilities (not only MFE) is scientifically valid even when the thermodynamic model has limits. The tool does what it claims: report ensemble reliability, not replace experimental validation.
-
-**Runtime:** ~3 seconds for full benchmark suite (reference + calibration + robustness on 15+5 cases).
-
-**Reproducibility:**
-```bash
-foldtrust benchmark all -o benchmarks/outputs
-```
-
-**Outputs:**
-- `benchmarks/outputs/reference_benchmark_report.md`
-- `benchmarks/outputs/calibration_report.md`
-- `benchmarks/outputs/robustness_report.md`
-- `benchmarks/outputs/reliability_diagram.png`
-- Full CSV and JSON results in `benchmarks/outputs/`
+To complete benchmark validation, future efforts should:
+1. Obtain ArchiveII from colleagues with archived copies, or build a validated reference set from PDB/Rfam with documented curation
+2. Resolve SARS-CoV-2 FSE coordinate mapping (contact paper authors or use NCBI RefSeq annotations)
+3. Locate or download ViennaRNA alternative parameter files for Turner 2004 vs Andronescu/Langdon comparison
+4. Add flanking genomic sequences to disease cases for window-jitter analysis
 
 ---
 
