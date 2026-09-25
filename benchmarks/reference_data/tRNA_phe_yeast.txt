@@ -1,0 +1,2 @@
+Source: Yeast tRNA-Phe from PDB 1EHZ, Rfam RF00005
+Length: 76

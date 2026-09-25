@@ -1,0 +1,2 @@
+Source: E. coli 5S rRNA from Rfam RF00001
+Length: 112

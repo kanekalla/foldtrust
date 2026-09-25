@@ -127,46 +127,35 @@ def demo():
 def benchmark(
     analysis: str = typer.Argument(
         ...,
-        help="Analysis type: 'reference', 'calibration', 'probing', 'robustness', or 'all'"
+        help="Analysis type: 'all' for complete 6-layer benchmark, or individual layers"
     ),
     output: Path = typer.Option("benchmarks/outputs", "-o", "--output", help="Output directory"),
-    max_length: int = typer.Option(500, help="Maximum sequence length for reference benchmark"),
-    max_sequences: int = typer.Option(50, help="Maximum sequences for calibration analysis"),
 ):
     """Run benchmark analyses to validate FoldTrust predictions."""
-    from foldtrust.benchmark.reference import run_reference_benchmark
-    from foldtrust.benchmark.calibration import run_calibration_analysis
-    from foldtrust.benchmark.probing import run_probing_analysis
-    from foldtrust.benchmark.robustness import run_robustness_analysis
-    from foldtrust.benchmark.datasets import fetch_archiveii
-    from foldtrust.utils import find_case_directories
+    from foldtrust.benchmark.runner import run_all_benchmarks
 
     output.mkdir(parents=True, exist_ok=True)
 
-    if analysis in ["reference", "all"]:
-        console.print("[bold cyan]Running reference structure benchmark...[/bold cyan]")
-        run_reference_benchmark(output, max_length=max_length, max_sequences=None)
-
-    if analysis in ["calibration", "all"]:
-        console.print("[bold cyan]Running calibration analysis...[/bold cyan]")
-        data_dir = output / "data"
-        dataset_file = fetch_archiveii(data_dir, max_length=max_length)
-        run_calibration_analysis(output, dataset_file, max_sequences=max_sequences)
-
-    if analysis in ["probing", "all"]:
-        console.print("[bold cyan]Running probing analysis...[/bold cyan]")
-        console.print("[yellow]Note: Probing analysis requires SHAPE data (not included in MVP)[/yellow]")
-
-    if analysis in ["robustness", "all"]:
-        console.print("[bold cyan]Running robustness analysis...[/bold cyan]")
-        cases_dir = Path("data/cases")
-        if cases_dir.exists():
-            case_dirs = find_case_directories(cases_dir)
-            run_robustness_analysis(output, case_dirs)
-        else:
-            console.print("[yellow]data/cases not found; skipping robustness analysis[/yellow]")
-
-    console.print(f"\n[green]✓ Benchmark complete. Results in {output}[/green]")
+    if analysis == "all":
+        console.print("[bold cyan]Running complete 6-layer benchmark analysis...[/bold cyan]")
+        console.print("[dim]This will take several minutes...[/dim]\n")
+        
+        try:
+            results = run_all_benchmarks(output, verbose=True)
+            
+            console.print("\n[bold green]✓ Benchmark complete![/bold green]")
+            console.print(f"Results saved to: [bold]{output}[/bold]")
+            console.print(f"Summary: {output / 'benchmark_summary.json'}")
+            console.print(f"Figures: {output / 'figures'}")
+            
+        except Exception as e:
+            console.print(f"[red]Error running benchmark: {e}[/red]")
+            raise typer.Exit(1)
+    
+    else:
+        console.print(f"[yellow]For now, only 'all' is supported. Use: foldtrust benchmark all[/yellow]")
+        console.print("[dim]Individual layer commands coming soon...[/dim]")
+        raise typer.Exit(1)
 
 
 if __name__ == "__main__":

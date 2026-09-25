@@ -1,0 +1,4 @@
+name,length,ref_pairs,pred_pairs,tp,fp,fn,sensitivity,ppv,f1
+5S_rRNA_ecoli,112,32,30,0,30,32,0.0,0.0,0.0
+U1_snRNA_human,210,62,63,0,63,62,0.0,0.0,0.0
+tRNA_phe_yeast,76,19,21,19,2,0,1.0,0.9047619047619048,0.95

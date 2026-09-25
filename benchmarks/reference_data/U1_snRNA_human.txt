@@ -1,0 +1,2 @@
+Source: Human U1 snRNA from Rfam RF00003
+Length: 210

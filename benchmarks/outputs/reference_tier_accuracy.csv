@@ -1,0 +1,4 @@
+name,length,firm_total,firm_correct,firm_ppv,soft_total,soft_correct,soft_ppv,floppy_total,floppy_correct,floppy_ppv
+5S_rRNA_ecoli,112,0,0,0.0,0,0,0.0,30,0,0.0
+U1_snRNA_human,210,0,0,0.0,0,0,0.0,57,0,0.0
+tRNA_phe_yeast,76,0,0,0.0,0,0,0.0,21,19,0.9047619047619048
