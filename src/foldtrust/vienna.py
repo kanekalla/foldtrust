@@ -22,52 +22,40 @@ class ViennaRNAError(Exception):
 
 
 def check_viennarna() -> bool:
-    """Check if ViennaRNA is available."""
+    """Check if ViennaRNA is available (Python API)."""
     try:
-        result = subprocess.run(["RNAfold", "--version"], capture_output=True, text=True, timeout=5)
-        return result.returncode == 0
-    except (subprocess.SubprocessError, FileNotFoundError):
+        import RNA
+        return True
+    except ImportError:
         return False
 
 
 def fold_mfe(sequence: str) -> Tuple[str, float]:
     """
-    Compute MFE structure using RNAfold.
+    Compute MFE structure using ViennaRNA Python API.
 
     Returns:
         (structure, energy) tuple where structure is dot-bracket notation
     """
     if not check_viennarna():
-        raise ViennaRNAError("RNAfold not found. Install ViennaRNA: brew install viennarna")
+        raise ViennaRNAError("ViennaRNA Python package not found. Install: pip install ViennaRNA")
 
     try:
-        result = subprocess.run(
-            ["RNAfold", "--noPS"],
-            input=f">seq\n{sequence}\n",
-            capture_output=True,
-            text=True,
-            timeout=60,
-        )
-
-        if result.returncode != 0:
-            raise ViennaRNAError(f"RNAfold failed: {result.stderr}")
-
-        lines = result.stdout.strip().split("\n")
-        structure_line = lines[-1]
-
-        match = re.search(r"([.()\[\]{}]+)\s+\(\s*(-?\d+\.\d+)\s*\)", structure_line)
-        if not match:
-            raise ViennaRNAError(f"Could not parse RNAfold output: {structure_line}")
-
-        structure = match.group(1)
-        energy = float(match.group(2))
-
+        import RNA
+        
+        md = RNA.md()
+        md.uniq_ML = 1
+        fc = RNA.fold_compound(sequence, md)
+        
+        # MFE returns [structure, energy]
+        result = fc.mfe()
+        structure = result[0]
+        energy = result[1] if len(result) > 1 else 0.0
+        
         return structure, energy
 
-    except subprocess.TimeoutExpired:
-        raise ViennaRNAError("RNAfold timed out")
     except Exception as e:
-        raise ViennaRNAError(f"RNAfold error: {e}")
+        raise ViennaRNAError(f"MFE computation error: {e}")
 
 
 def compute_pair_probabilities(sequence: str) -> np.ndarray:
