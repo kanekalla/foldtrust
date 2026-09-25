@@ -53,3 +53,4 @@ data/_cache/
 # OS
 .DS_Store
 Thumbs.db
+data/_cache/
