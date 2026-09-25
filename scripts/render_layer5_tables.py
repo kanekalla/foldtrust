@@ -119,7 +119,10 @@ def render_doc_tables(output_dir: Path) -> dict:
     # Window context BP distances
     metrics_df = pd.read_csv(output_dir / "window_context_metrics.csv")
     bp_dist_means = metrics_df.groupby("flank_size")["bp_distance_mea"].mean()
-    lines = ["| Flank Size (nt) | Mean MEA BP Distance |", "|-----------------|----------------------|"]
+    lines = [
+        "| Flank Size (nt) | Mean MEA BP Distance |",
+        "|-----------------|----------------------|",
+    ]
     for flank_size, mean_dist in bp_dist_means.items():
         lines.append(f"| {flank_size} | {mean_dist:.1f} |")
     tables["window_bp_distance"] = "\n".join(lines)

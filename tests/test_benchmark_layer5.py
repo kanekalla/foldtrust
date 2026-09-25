@@ -15,7 +15,7 @@ from foldtrust.utils import read_fasta
 from foldtrust.vienna import compute_pair_probs_with_params, fold_with_params, parse_stems
 
 try:
-    import RNA
+    import RNA  # noqa: F401
 
     HAS_RNA = True
 except ImportError:
@@ -110,7 +110,6 @@ def test_retention_of_self_is_one():
 @pytest.mark.skipif(not HAS_RNA, reason="ViennaRNA not available")
 def test_mfe_stems_retained_in_same_mfe():
     """Self-retention: MFE stems retained in the same MFE structure = 1.0."""
-    import pandas as pd
 
     cases_dir = Path("data/cases")
     if not cases_dir.exists():
@@ -306,6 +305,7 @@ def test_flank_extraction_is_exact_substring():
 def test_flank_boundaries_match_core():
     """Left flank ends exactly where core starts, right flank begins exactly where core ends."""
     import pandas as pd
+
     from foldtrust.benchmark.layer5_robustness import (
         CASE_COORDS,
         extract_sequence_from_fasta,
@@ -366,7 +366,7 @@ def test_flank_boundaries_match_core():
             if not pd.isna(left_coords) and left_flank:
                 # Parse coordinates
                 parts = left_coords.split(":")
-                accession = parts[0]
+                _accession = parts[0]  # noqa: F841
                 start, end = map(int, parts[1].split("-"))
 
                 # Left flank should end at core_start - 1
@@ -384,7 +384,7 @@ def test_flank_boundaries_match_core():
             # Test: right flank begins exactly where core ends
             if not pd.isna(right_coords) and right_flank:
                 parts = right_coords.split(":")
-                accession = parts[0]
+                _accession = parts[0]  # noqa: F841
                 start, end = map(int, parts[1].split("-"))
 
                 # Right flank should start at core_end + 1
