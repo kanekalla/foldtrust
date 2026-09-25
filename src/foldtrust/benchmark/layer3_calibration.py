@@ -21,7 +21,7 @@ from foldtrust.benchmark.layer2_accuracy import (
     remove_pseudoknots,
     bootstrap_ci
 )
-from foldtrust.benchmark.layer1_scoring import parse_dot_bracket
+from foldtrust.benchmark.layer1_scoring import parse_dotbracket
 
 
 def compute_pair_probabilities(sequence: str, temperature: float = 37.0) -> np.ndarray:
@@ -194,7 +194,7 @@ def analyze_tiers(
             md.temperature = temperature
             fc = RNA.fold_compound(sequence, md)
             mfe_structure, _ = fc.mfe()
-            mfe_pairs = parse_dot_bracket(mfe_structure)
+            mfe_pairs = parse_dotbracket(mfe_structure)
             
             # Classify MFE pairs into tiers
             tier_stats = {

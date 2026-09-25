@@ -15,9 +15,14 @@ import pandas as pd
 from collections import defaultdict
 
 from foldtrust.benchmark.layer1_scoring import (
-    parse_dot_bracket,
+    parse_dotbracket,
     parse_bpseq,
-    compute_metrics
+    compute_exact_metrics,
+    compute_slip_metrics,
+    fold_mfe,
+    compute_bpp_matrix,
+    remove_pseudoknots,
+    sequence_sha1,
 )
 
 
@@ -113,7 +118,7 @@ def load_rfam_seed(cache_dir: Path, max_length: Optional[int] = 500) -> List[Dic
                 continue
             
             # Parse structure
-            pairs = parse_dot_bracket(entry['structure'])
+            pairs = parse_dotbracket(entry['structure'])
             
             structures.append({
                 'name': entry['seq_id'],
@@ -191,7 +196,7 @@ def predict_structure_vienna(
     else:
         raise ValueError(f"Unknown method: {method}")
     
-    return parse_dot_bracket(structure)
+    return parse_dotbracket(structure)
 
 
 def bootstrap_ci(values: List[float], n_bootstrap: int = 1000, ci: float = 0.95) -> Tuple[float, float, float]:
