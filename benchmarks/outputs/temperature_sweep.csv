@@ -1,0 +1,11 @@
+case,length,baseline_temp,comparison_temp,common_pairs,changed_pairs,stability,firm_to_soft,firm_to_floppy,soft_to_firm,soft_to_floppy,floppy_to_firm,floppy_to_soft
+cftr-5utr,268,37.0,24.0,69,0,1.0,0,0,0,0,0,0
+cftr-5utr,268,37.0,42.0,81,0,1.0,0,0,0,0,0,0
+hcv-ires-dii,268,37.0,24.0,50,0,1.0,0,0,0,0,0,0
+hcv-ires-dii,268,37.0,42.0,74,0,1.0,0,0,0,0,0,0
+mapt-e10,268,37.0,24.0,70,0,1.0,0,0,0,0,0,0
+mapt-e10,268,37.0,42.0,72,0,1.0,0,0,0,0,0,0
+sars2-fse,181,37.0,24.0,7,0,1.0,0,0,0,0,0,0
+sars2-fse,181,37.0,42.0,52,0,1.0,0,0,0,0,0,0
+smn2-iss-n1,201,37.0,24.0,57,0,1.0,0,0,0,0,0,0
+smn2-iss-n1,201,37.0,42.0,51,0,1.0,0,0,0,0,0,0

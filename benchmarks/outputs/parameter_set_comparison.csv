@@ -1,0 +1,11 @@
+case,length,comparison,common_pairs,changed_pairs,stability,firm_to_soft,firm_to_floppy,soft_to_firm,soft_to_floppy,floppy_to_firm,floppy_to_soft
+cftr-5utr,268,Turner2004_vs_Andronescu2007,81,0,1.0,0,0,0,0,0,0
+cftr-5utr,268,Turner2004_vs_Langdon2018,81,0,1.0,0,0,0,0,0,0
+hcv-ires-dii,268,Turner2004_vs_Andronescu2007,74,0,1.0,0,0,0,0,0,0
+hcv-ires-dii,268,Turner2004_vs_Langdon2018,74,0,1.0,0,0,0,0,0,0
+mapt-e10,268,Turner2004_vs_Andronescu2007,75,0,1.0,0,0,0,0,0,0
+mapt-e10,268,Turner2004_vs_Langdon2018,75,0,1.0,0,0,0,0,0,0
+sars2-fse,181,Turner2004_vs_Andronescu2007,52,0,1.0,0,0,0,0,0,0
+sars2-fse,181,Turner2004_vs_Langdon2018,52,0,1.0,0,0,0,0,0,0
+smn2-iss-n1,201,Turner2004_vs_Andronescu2007,57,0,1.0,0,0,0,0,0,0
+smn2-iss-n1,201,Turner2004_vs_Langdon2018,57,0,1.0,0,0,0,0,0,0
