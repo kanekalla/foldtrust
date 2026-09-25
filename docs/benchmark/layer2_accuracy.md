@@ -63,9 +63,9 @@ python scripts/run_layers_1_2_3.py
 
 | Method | Sensitivity | PPV | F1 | MCC |
 |--------|-------------|-----|----|----|
-| MFE | 0.639 | 0.499 | 0.548 | 0.556 |
-| MEA | 0.641 | 0.521 | 0.563 | 0.569 |
-| CENTROID | 0.622 | 0.551 | 0.570 | 0.576 |
+| MFE | 0.639 | 0.499 | 0.548 | -0.404 |
+| MEA | 0.641 | 0.521 | 0.563 | -0.396 |
+| CENTROID | 0.622 | 0.551 | 0.570 | -0.388 |
 
 ### Per-Dataset F1 (Mean of Per-Structure)
 

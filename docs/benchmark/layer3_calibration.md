@@ -9,11 +9,20 @@ Are ViennaRNA base-pair probabilities well-calibrated? That is, do pairs with pr
 Same 600-structure sample from Layer 2 (ArchiveII 200, bpRNA TS0 200, Rfam seed 200; all ≤500 nt, seed 42).
 
 For each structure:
-- **Reference**: Known pairs (after pseudoknot removal)
-- **Candidates**: All pairs with base-pair probability > 0.001
+- **Reference**: Known pairs (after greedy pseudoknot removal, same as Layer 2)
+- **Candidates**: All pairs (i<j) with base-pair probability p > 0.001
 - **MFE structure**: Used for tier analysis
 
-Total: 181,390 candidate pairs, 20,437 correct (11.27%).
+**Definitions**:
+- **Candidates**: All pairs i<j with bpp p > 1e-3
+- **Positives**: Pairs in the reference after the same greedy pseudoknot removal as Layer 2
+- **10 equal-width bins** on [0,1] (last bin closed)
+- **ECE** = sum_b (n_b/N) |mean_p_b - frac_true_b|
+- **ECE restricted to p≥0.5** = same formula over only candidates with p≥0.5
+- **AUROC** over all candidates
+- **Tier PPV over MFE pairs**: MFE pairs binned by their bpp into FIRM p≥0.85 / SOFT 0.5-0.85 / FLOPPY <0.5; pooled PPV = true/total
+
+Total: 185,653 candidate pairs, 21,191 correct (11.41%).
 
 ## Method
 
@@ -41,35 +50,35 @@ python scripts/run_layers_1_2_3.py
 
 | Metric | Value |
 |--------|------:|
-| ECE | 0.0692 |
-| ECE (p≥0.5) | 0.3302 |
-| AUROC | 0.8870 |
-| AUPRC | 0.6028 |
-| Candidates (p>0.001) | 181,390 |
-| Positive pairs | 20,437 (11.27%) |
+| ECE | 0.0664 |
+| ECE (p≥0.5) | 0.3174 |
+| AUROC | 0.8889 |
+| AUPRC | 0.6153 |
+| Candidates (p>0.001) | 185,653 |
+| Positive pairs | 21,191 (11.41%) |
 
 ### Reliability Per Bin
 
 | Bin | Mean Prob | Fraction Correct | Count |
 |-----|-----------|------------------|-------|
-| [0.0, 0.1) | 0.014 | 0.027 | 134,654 |
-| [0.1, 0.2) | 0.143 | 0.109 | 8,937 |
-| [0.2, 0.3) | 0.248 | 0.147 | 4,940 |
-| [0.3, 0.4) | 0.349 | 0.188 | 3,669 |
-| [0.4, 0.5) | 0.452 | 0.216 | 3,409 |
-| [0.5, 0.6) | 0.548 | 0.298 | 2,732 |
-| [0.6, 0.7) | 0.651 | 0.285 | 2,579 |
-| [0.7, 0.8) | 0.750 | 0.344 | 2,602 |
-| [0.8, 0.9) | 0.854 | 0.410 | 3,671 |
-| [0.9, 1.0] | 0.976 | 0.681 | 14,197 |
+| [0.0, 0.1) | 0.014 | 0.027 | 138,095 |
+| [0.1, 0.2) | 0.143 | 0.108 | 9,138 |
+| [0.2, 0.3) | 0.248 | 0.156 | 5,027 |
+| [0.3, 0.4) | 0.350 | 0.187 | 3,698 |
+| [0.4, 0.5) | 0.452 | 0.224 | 3,359 |
+| [0.5, 0.6) | 0.548 | 0.279 | 2,695 |
+| [0.6, 0.7) | 0.650 | 0.278 | 2,611 |
+| [0.7, 0.8) | 0.750 | 0.358 | 2,839 |
+| [0.8, 0.9) | 0.853 | 0.441 | 3,833 |
+| [0.9, 1.0] | 0.976 | 0.700 | 14,358 |
 
 ### MFE-Pair Tier PPV
 
 | Tier | Pooled PPV | N Structures | N Pairs |
 |------|------------|--------------|---------|
-| FIRM | 0.664 | 600 | 16,202 |
-| SOFT | 0.335 | 600 | 8,191 |
-| FLOPPY | 0.177 | 600 | 5,450 |
+| FIRM | 0.674 | 582 | 16,417 |
+| SOFT | 0.299 | 585 | 8,518 |
+| FLOPPY | 0.146 | 466 | 5,504 |
 
 **Tier definitions**: FIRM = p≥0.85, SOFT = 0.5≤p<0.85, FLOPPY = p<0.5. MFE pairs are binned by their own base-pair probability. Pooled PPV = (sum correct pairs) / (sum all pairs) across all structures. N Structures = number of structures with ≥1 pair in that tier (same structure can contribute to multiple tiers).
 
@@ -78,16 +87,16 @@ python scripts/run_layers_1_2_3.py
 **Discrimination (ranking)**: ViennaRNA probabilities rank pairs well (AUROC 0.887), distinguishing correct from incorrect pairs significantly better than random (0.5).
 
 **Calibration (accuracy)**: Probabilities are **systematically overconfident** for p ≥ 0.5:
-- Pairs predicted at mean p ~ 0.95 (bin [0.9,1.0]) are correct only 68% of the time (gap: 27 points)
-- Pairs predicted at p ~ 0.85 (bin [0.8,0.9)) are correct 41% of the time (gap: 44 points)
-- **ECE restricted to p≥0.5 = 0.330** (overall ECE 0.069 is misleading because 74% of candidates sit in [0,0.1) where calibration is near-perfect)
+- The [0.9,1.0] bin (mean p ~ 0.98) has frac_true ~0.70, i.e. high-probability pairs are overconfident against these references
+- Pairs predicted at p ~ 0.85 (bin [0.8,0.9)) are correct 44% of the time (gap: 41 points)
+- **ECE restricted to p≥0.5 = 0.317** (overall ECE 0.066 is dominated by the large [0,0.1) bin where calibration is near-perfect)
 
 **Practical impact (MFE tiers)**:
-- **FIRM pairs** (mean p ~ 0.95) are correct ~66% of the time. This is **useful but far from certain**: roughly 1 in 3 high-confidence pairs is wrong.
-- **SOFT pairs** (p ~ 0.5–0.85) are correct ~34% of the time
-- **FLOPPY pairs** (p < 0.5) are correct ~18% of the time (slightly better than the 11% base rate, but not by much)
+- **FIRM pairs** (p≥0.85) are correct ~67% of the time. This is **useful but far from certain**: roughly 1 in 3 high-confidence pairs is wrong.
+- **SOFT pairs** (p ~ 0.5–0.85) are correct ~30% of the time
+- **FLOPPY pairs** (p < 0.5, MFE only) are correct ~15% of the time (vs 4.4% for all-candidate FLOPPY)
 
-**Conclusion**: Base-pair probabilities successfully rank pairs, but **should not be interpreted as literal confidence**. A "95% confident" pair is actually ~66% likely to be correct. Users relying on these probabilities for decision-making (e.g., primer design, therapeutic targeting) should apply empirical recalibration.
+**Conclusion**: Base-pair probabilities successfully rank pairs, but **should not be interpreted as literal confidence**. A "95% confident" pair is actually ~70% likely to be correct against these references. Users relying on these probabilities for decision-making (e.g., primer design, therapeutic targeting) should apply empirical recalibration.
 
 ## Limitations
 
@@ -98,11 +107,3 @@ python scripts/run_layers_1_2_3.py
 5. **No recalibration attempted**: We report raw ViennaRNA probabilities; post-hoc recalibration (isotonic regression, Platt scaling) could improve calibration
 6. **MFE-only tiers**: MEA and centroid tier analysis not included (future work)
 
-## Note on Expected Values
-
-An independent review computed slightly different Layer 3 metrics on the same sample (ECE 0.0664 vs 0.0692, FIRM PPV 0.674 vs 0.664, SOFT 0.299 vs 0.335, FLOPPY 0.146 vs 0.177). The differences (all <0.04) are due to implementation details:
-- Sample order and RNG state during candidate enumeration
-- Bin-edge handling (inclusive vs exclusive boundaries)
-- Tie-breaking in AUROC/AUPRC computation
-
-Layer 2 metrics match the review exactly, confirming the reference data and folding are correct. The calibration differences do not affect the qualitative conclusion: ViennaRNA probabilities rank pairs well but are systematically overconfident for p≥0.5.
