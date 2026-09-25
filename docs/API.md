@@ -175,8 +175,8 @@ import foldtrust as ft
 
 # Load reference structure
 fd = ft.io.read_reference_structure(
-    "benchmarks/reference_data/tRNA_phe_yeast.fa",
-    "benchmarks/reference_data/tRNA_phe_yeast.ct"
+    "benchmarks/reference_data/5S_rRNA_ecoli.fa",
+    "benchmarks/reference_data/5S_rRNA_ecoli.ct"
 )
 
 # Predict structure

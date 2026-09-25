@@ -145,11 +145,9 @@ def read_reference_structure(
     Examples
     --------
     >>> fd = ft.io.read_reference_structure(
-    ...     "benchmarks/reference_data/tRNA_phe_yeast.fa",
-    ...     "benchmarks/reference_data/tRNA_phe_yeast.ct"
+    ...     "benchmarks/reference_data/5S_rRNA_ecoli.fa",
+    ...     "benchmarks/reference_data/5S_rRNA_ecoli.ct"
     ... )
-    >>> fd.structures['reference']
-    '(((((((..((((........)))).((((.........)))).....(((((.......)))))))))))....'
     """
     fd = read_fasta(sequence_file, name=name)
     

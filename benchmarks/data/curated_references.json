@@ -1,14 +1,5 @@
 [
   {
-    "name": "tRNA-Phe_yeast_PDB",
-    "sequence": "GCGGAUUUAGCUCAGUUGGGAGAGCGCCAGACUGAAGAUCUGGAGGUCCUGUGUUCGAUCCACAGAAUUCGCACCA",
-    "structure": "(((((((..((((........)))).(((((.......))))).....(((((.......))))))))))))....",
-    "length": 76,
-    "source": "PDB_1EHZ",
-    "citation": "Sussman et al. 1978, doi:10.1016/0022-2836(78)90294-9",
-    "note": "Classic yeast tRNA-Phe crystal structure; structure is ViennaRNA MFE prediction"
-  },
-  {
     "name": "5S_rRNA_E.coli",
     "sequence": "UGCCUGGCGGCCGUAGCGCGGUGGUCCCACCUGACCCCAUGCCGAACUCAGAAGUGAAACGCCGUAGCGCCGAUGGUAGUGUGGGGUCUCCCCAUGCGAGAGUAGGGAACUGCCAGGCAU",
     "structure": "(((((((((...(((((.......)))))......((((((.......)))))).....)))))))))(((((((..((((.........))))..((((.......)))).))))))).",
