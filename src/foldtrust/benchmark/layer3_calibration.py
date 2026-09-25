@@ -204,23 +204,29 @@ def analyze_tiers(
     firm_threshold: float = 0.85,
     soft_threshold: float = 0.50,
     temperature: float = 37.0
-) -> pd.DataFrame:
+) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     """
-    Analyze tier performance: PPV and coverage for FIRM/SOFT/FLOPPY pairs.
+    Comprehensive tier analysis: MFE pairs, MEA pairs, all-candidates, and stem-level.
     
     Returns:
-        DataFrame with tier statistics
+        (mfe_tier_df, mea_tier_df, candidate_tier_df, stem_tier_df)
     """
-    tier_results = []
+    from foldtrust.vienna import parse_stems
     
-    for i, struct in enumerate(structures):
-        if (i + 1) % 50 == 0:
-            print(f"  Processed {i + 1}/{len(structures)}...")
+    mfe_tier_results = []
+    mea_tier_results = []
+    candidate_tier_results = []
+    stem_tier_results = []
+    
+    for idx, struct in enumerate(structures):
+        if (idx + 1) % 50 == 0:
+            print(f"  Processed {idx + 1}/{len(structures)}...")
         
         sequence = struct['sequence']
         ref_pairs = struct['pairs']
         dataset = struct['dataset']
         family = struct['family']
+        name = struct['name']
         
         # Remove pseudoknots
         ref_nested, _ = remove_pseudoknots(ref_pairs)
@@ -229,16 +235,21 @@ def analyze_tiers(
             # Compute pair probabilities
             prob_matrix = compute_pair_probabilities(sequence, temperature)
             
-            # Get MFE structure
+            # Get MFE and MEA structures
             import RNA
             RNA.params_load_RNA_Turner2004()
             md = RNA.md()
             md.temperature = temperature
             fc = RNA.fold_compound(sequence, md)
+            
             mfe_structure, _ = fc.mfe()
             mfe_pairs = parse_dotbracket(mfe_structure)
             
-            # Classify MFE pairs into tiers
+            fc.pf()
+            mea_structure, _ = fc.MEA(gamma=1.0)
+            mea_pairs = parse_dotbracket(mea_structure)
+            
+            # === MFE pair tiers ===
             tier_stats = {
                 'FIRM': {'tp': 0, 'total': 0},
                 'SOFT': {'tp': 0, 'total': 0},
@@ -259,31 +270,176 @@ def analyze_tiers(
                 if (i, j) in ref_nested:
                     tier_stats[tier]['tp'] += 1
             
-            # Compute tier PPVs
             for tier in ['FIRM', 'SOFT', 'FLOPPY']:
                 total = tier_stats[tier]['total']
                 tp = tier_stats[tier]['tp']
-                ppv = tp / total if total > 0 else np.nan
                 
-                # Also compute what fraction of reference pairs this tier recovered
-                coverage = tp / len(ref_nested) if len(ref_nested) > 0 else 0.0
-                
-                tier_results.append({
-                    'name': struct['name'],
+                mfe_tier_results.append({
+                    'name': name,
                     'dataset': dataset,
                     'family': family,
                     'tier': tier,
-                    'ppv': ppv,
-                    'coverage': coverage,
-                    'n_pairs': total,
-                    'n_correct': tp,
-                    'n_ref_total': len(ref_nested)
+                    'tp': tp,
+                    'total': total,
+                    'ppv': tp / total if total > 0 else np.nan,
                 })
-        
+            
+            # === MEA pair tiers ===
+            mea_tier_stats = {
+                'FIRM': {'tp': 0, 'total': 0},
+                'SOFT': {'tp': 0, 'total': 0},
+                'FLOPPY': {'tp': 0, 'total': 0}
+            }
+            
+            for i, j in mea_pairs:
+                prob = prob_matrix[i, j]
+                
+                if prob >= firm_threshold:
+                    tier = 'FIRM'
+                elif prob >= soft_threshold:
+                    tier = 'SOFT'
+                else:
+                    tier = 'FLOPPY'
+                
+                mea_tier_stats[tier]['total'] += 1
+                if (i, j) in ref_nested:
+                    mea_tier_stats[tier]['tp'] += 1
+            
+            for tier in ['FIRM', 'SOFT', 'FLOPPY']:
+                total = mea_tier_stats[tier]['total']
+                tp = mea_tier_stats[tier]['tp']
+                
+                mea_tier_results.append({
+                    'name': name,
+                    'dataset': dataset,
+                    'family': family,
+                    'tier': tier,
+                    'tp': tp,
+                    'total': total,
+                    'ppv': tp / total if total > 0 else np.nan,
+                })
+            
+            # === All-candidate tiers (p > 1e-3) ===
+            n = len(sequence)
+            candidate_tier_stats = {
+                'FIRM': {'tp': 0, 'total': 0},
+                'SOFT': {'tp': 0, 'total': 0},
+                'FLOPPY': {'tp': 0, 'total': 0}
+            }
+            
+            for i in range(n):
+                for j in range(i + 1, n):
+                    prob = prob_matrix[i, j]
+                    if prob > 1e-3:
+                        if prob >= firm_threshold:
+                            tier = 'FIRM'
+                        elif prob >= soft_threshold:
+                            tier = 'SOFT'
+                        else:
+                            tier = 'FLOPPY'
+                        
+                        candidate_tier_stats[tier]['total'] += 1
+                        if (i, j) in ref_nested:
+                            candidate_tier_stats[tier]['tp'] += 1
+            
+            for tier in ['FIRM', 'SOFT', 'FLOPPY']:
+                total = candidate_tier_stats[tier]['total']
+                tp = candidate_tier_stats[tier]['tp']
+                
+                candidate_tier_results.append({
+                    'name': name,
+                    'dataset': dataset,
+                    'family': family,
+                    'tier': tier,
+                    'tp': tp,
+                    'total': total,
+                    'ppv': tp / total if total > 0 else np.nan,
+                })
+            
+            # === Stem-level tiers ===
+            # Parse stems from MFE structure
+            stems = parse_stems(mfe_structure, prob_matrix)
+            
+            stem_tier_stats = {
+                'FIRM': {'pairs_tp': 0, 'pairs_total': 0, 'stems_correct': 0, 'stems_total': 0},
+                'SOFT': {'pairs_tp': 0, 'pairs_total': 0, 'stems_correct': 0, 'stems_total': 0},
+                'FLOPPY': {'pairs_tp': 0, 'pairs_total': 0, 'stems_correct': 0, 'stems_total': 0},
+            }
+            lonely_pairs_tp = 0
+            lonely_pairs_total = 0
+            
+            # Track which MFE pairs are in stems
+            stem_pairs = set()
+            for stem in stems:
+                stem_pairs.update(stem['pairs'])
+            
+            # Lonely pairs are MFE pairs not in any stem
+            for i, j in mfe_pairs:
+                if (i, j) not in stem_pairs:
+                    lonely_pairs_total += 1
+                    if (i, j) in ref_nested:
+                        lonely_pairs_tp += 1
+            
+            # Analyze stems
+            for stem in stems:
+                mean_prob = stem['mean_prob']
+                
+                if mean_prob >= firm_threshold:
+                    tier = 'FIRM'
+                elif mean_prob >= soft_threshold:
+                    tier = 'SOFT'
+                else:
+                    tier = 'FLOPPY'
+                
+                n_pairs = len(stem['pairs'])
+                n_correct = sum(1 for pair in stem['pairs'] if pair in ref_nested)
+                
+                stem_tier_stats[tier]['pairs_total'] += n_pairs
+                stem_tier_stats[tier]['pairs_tp'] += n_correct
+                stem_tier_stats[tier]['stems_total'] += 1
+                
+                # Stem is "correct" if ≥50% of its pairs are correct
+                if n_correct >= n_pairs * 0.5:
+                    stem_tier_stats[tier]['stems_correct'] += 1
+            
+            # Record stem-level results
+            for tier in ['FIRM', 'SOFT', 'FLOPPY']:
+                stats = stem_tier_stats[tier]
+                stem_tier_results.append({
+                    'name': name,
+                    'dataset': dataset,
+                    'family': family,
+                    'tier': tier,
+                    'pairs_tp': stats['pairs_tp'],
+                    'pairs_total': stats['pairs_total'],
+                    'stems_correct': stats['stems_correct'],
+                    'stems_total': stats['stems_total'],
+                    'pair_ppv': stats['pairs_tp'] / stats['pairs_total'] if stats['pairs_total'] > 0 else np.nan,
+                })
+            
+            # Record lonely pairs
+            stem_tier_results.append({
+                'name': name,
+                'dataset': dataset,
+                'family': family,
+                'tier': 'LONELY',
+                'pairs_tp': lonely_pairs_tp,
+                'pairs_total': lonely_pairs_total,
+                'stems_correct': 0,
+                'stems_total': 0,
+                'pair_ppv': lonely_pairs_tp / lonely_pairs_total if lonely_pairs_total > 0 else np.nan,
+            })
+            
         except Exception as e:
-            print(f"  Error processing {struct['name']}: {e}")
+            print(f"  Warning: Failed on {struct['name']}: {e}")
+            continue
     
-    return pd.DataFrame(tier_results)
+    return (
+        pd.DataFrame(mfe_tier_results),
+        pd.DataFrame(mea_tier_results),
+        pd.DataFrame(candidate_tier_results),
+        pd.DataFrame(stem_tier_results)
+    )
 
 
 def run_layer3_calibration(
@@ -376,47 +532,165 @@ def run_layer3_calibration(
     
     # Tier analysis
     print("\nAnalyzing tier performance...")
-    tier_df = analyze_tiers(all_structures)
-    tier_df.to_csv(output_dir / 'layer3_tier_analysis.csv', index=False)
+    mfe_tier_df, mea_tier_df, candidate_tier_df, stem_tier_df = analyze_tiers(all_structures)
     
-    # Compute tier summaries with bootstrap CIs
-    print("\nComputing tier summaries with bootstrap CIs...")
-    tier_summaries = []
+    # Save tier dataframes
+    mfe_tier_df.to_csv(output_dir / 'layer3_mfe_tier_analysis.csv', index=False)
+    mea_tier_df.to_csv(output_dir / 'layer3_mea_tier_analysis.csv', index=False)
+    candidate_tier_df.to_csv(output_dir / 'layer3_candidate_tier_analysis.csv', index=False)
+    stem_tier_df.to_csv(output_dir / 'layer3_stem_tier_analysis.csv', index=False)
+    
+    # Compute tier summaries for MFE pairs
+    print("\nComputing MFE tier summaries...")
+    mfe_tier_summaries = []
     
     for tier in ['FIRM', 'SOFT', 'FLOPPY']:
-        tier_subset = tier_df[tier_df['tier'] == tier]
+        tier_subset = mfe_tier_df[mfe_tier_df['tier'] == tier]
         
         if len(tier_subset) > 0:
-            # Remove NaN PPVs (structures with 0 pairs in this tier)
+            # Pooled PPV: sum TP / sum total
+            pooled_ppv = tier_subset['tp'].sum() / tier_subset['total'].sum() if tier_subset['total'].sum() > 0 else 0.0
+            
+            # Macro PPV: mean of per-structure PPV (excluding NaN)
             ppv_values = tier_subset['ppv'].dropna().values
-            cov_values = tier_subset['coverage'].dropna().values
+            
+            # N = number of structures with ≥1 pair in this tier
+            n_structures = (tier_subset['total'] > 0).sum()
             
             if len(ppv_values) > 0:
-                ppv_mean, ppv_lower, ppv_upper = bootstrap_ci(ppv_values, seed=0)
-                cov_mean, cov_lower, cov_upper = bootstrap_ci(cov_values, seed=0)
-                
-                tier_summaries.append({
-                    'tier': tier,
-                    'ppv_mean': ppv_mean,
-                    'ppv_ci_lower': ppv_lower,
-                    'ppv_ci_upper': ppv_upper,
-                    'coverage_mean': cov_mean,
-                    'coverage_ci_lower': cov_lower,
-                    'coverage_ci_upper': cov_upper,
-                    'n_structures': len(tier_subset),
-                    'total_pairs': tier_subset['n_pairs'].sum()
-                })
+                macro_ppv_mean, macro_ppv_lower, macro_ppv_upper = bootstrap_ci(ppv_values, seed=0)
+            else:
+                macro_ppv_mean = macro_ppv_lower = macro_ppv_upper = 0.0
+            
+            mfe_tier_summaries.append({
+                'tier': tier,
+                'pooled_ppv': pooled_ppv,
+                'macro_ppv_mean': macro_ppv_mean,
+                'macro_ppv_ci_lower': macro_ppv_lower,
+                'macro_ppv_ci_upper': macro_ppv_upper,
+                'n_structures': int(n_structures),
+                'total_pairs': int(tier_subset['total'].sum())
+            })
     
-    tier_summary_df = pd.DataFrame(tier_summaries)
-    tier_summary_df.to_csv(output_dir / 'layer3_tier_summary.csv', index=False)
+    mfe_tier_summary_df = pd.DataFrame(mfe_tier_summaries)
+    mfe_tier_summary_df.to_csv(output_dir / 'layer3_mfe_tier_summary.csv', index=False)
     
-    # Print tier summary
-    print("\nTier Summary:")
-    for _, row in tier_summary_df.iterrows():
-        print(f"  {row['tier']:7s}: PPV = {row['ppv_mean']:.3f} "
-              f"[{row['ppv_ci_lower']:.3f}, {row['ppv_ci_upper']:.3f}], "
-              f"Coverage = {row['coverage_mean']:.3f}, "
+    # Compute tier summaries for MEA pairs
+    print("\nComputing MEA tier summaries...")
+    mea_tier_summaries = []
+    
+    for tier in ['FIRM', 'SOFT', 'FLOPPY']:
+        tier_subset = mea_tier_df[mea_tier_df['tier'] == tier]
+        
+        if len(tier_subset) > 0:
+            pooled_ppv = tier_subset['tp'].sum() / tier_subset['total'].sum() if tier_subset['total'].sum() > 0 else 0.0
+            ppv_values = tier_subset['ppv'].dropna().values
+            n_structures = (tier_subset['total'] > 0).sum()
+            
+            if len(ppv_values) > 0:
+                macro_ppv_mean, macro_ppv_lower, macro_ppv_upper = bootstrap_ci(ppv_values, seed=0)
+            else:
+                macro_ppv_mean = macro_ppv_lower = macro_ppv_upper = 0.0
+            
+            mea_tier_summaries.append({
+                'tier': tier,
+                'pooled_ppv': pooled_ppv,
+                'macro_ppv_mean': macro_ppv_mean,
+                'macro_ppv_ci_lower': macro_ppv_lower,
+                'macro_ppv_ci_upper': macro_ppv_upper,
+                'n_structures': int(n_structures),
+                'total_pairs': int(tier_subset['total'].sum())
+            })
+    
+    mea_tier_summary_df = pd.DataFrame(mea_tier_summaries)
+    mea_tier_summary_df.to_csv(output_dir / 'layer3_mea_tier_summary.csv', index=False)
+    
+    # Compute tier summaries for all candidates
+    print("\nComputing all-candidate tier summaries...")
+    candidate_tier_summaries = []
+    
+    for tier in ['FIRM', 'SOFT', 'FLOPPY']:
+        tier_subset = candidate_tier_df[candidate_tier_df['tier'] == tier]
+        
+        if len(tier_subset) > 0:
+            pooled_ppv = tier_subset['tp'].sum() / tier_subset['total'].sum() if tier_subset['total'].sum() > 0 else 0.0
+            
+            candidate_tier_summaries.append({
+                'tier': tier,
+                'pooled_ppv': pooled_ppv,
+                'n_pairs': int(tier_subset['total'].sum())
+            })
+    
+    candidate_tier_summary_df = pd.DataFrame(candidate_tier_summaries)
+    candidate_tier_summary_df.to_csv(output_dir / 'layer3_candidate_tier_summary.csv', index=False)
+    
+    # Compute stem-level summaries
+    print("\nComputing stem-level tier summaries...")
+    stem_tier_summaries = []
+    
+    for tier in ['FIRM', 'SOFT', 'FLOPPY']:
+        tier_subset = stem_tier_df[stem_tier_df['tier'] == tier]
+        
+        if len(tier_subset) > 0:
+            total_pairs = tier_subset['pairs_total'].sum()
+            total_tp = tier_subset['pairs_tp'].sum()
+            pooled_pair_ppv = total_tp / total_pairs if total_pairs > 0 else 0.0
+            
+            total_stems = tier_subset['stems_total'].sum()
+            correct_stems = tier_subset['stems_correct'].sum()
+            stem_fraction_correct = correct_stems / total_stems if total_stems > 0 else 0.0
+            
+            stem_tier_summaries.append({
+                'tier': tier,
+                'pooled_pair_ppv': pooled_pair_ppv,
+                'total_pairs': int(total_pairs),
+                'total_stems': int(total_stems),
+                'stems_fraction_correct': stem_fraction_correct
+            })
+    
+    # Add lonely pairs
+    lonely_subset = stem_tier_df[stem_tier_df['tier'] == 'LONELY']
+    if len(lonely_subset) > 0:
+        total_lonely = lonely_subset['pairs_total'].sum()
+        lonely_tp = lonely_subset['pairs_tp'].sum()
+        lonely_ppv = lonely_tp / total_lonely if total_lonely > 0 else 0.0
+        
+        stem_tier_summaries.append({
+            'tier': 'LONELY',
+            'pooled_pair_ppv': lonely_ppv,
+            'total_pairs': int(total_lonely),
+            'total_stems': 0,
+            'stems_fraction_correct': 0.0
+        })
+    
+    stem_tier_summary_df = pd.DataFrame(stem_tier_summaries)
+    stem_tier_summary_df.to_csv(output_dir / 'layer3_stem_tier_summary.csv', index=False)
+    
+    # Print tier summaries
+    print("\nMFE-pair tier summary (pooled PPV):")
+    for _, row in mfe_tier_summary_df.iterrows():
+        print(f"  {row['tier']:7s}: Pooled PPV = {row['pooled_ppv']:.3f}, "
+              f"Macro PPV = {row['macro_ppv_mean']:.3f} "
+              f"[{row['macro_ppv_ci_lower']:.3f}, {row['macro_ppv_ci_upper']:.3f}], "
               f"N = {row['n_structures']}, Pairs = {row['total_pairs']}")
+    
+    print("\nMEA-pair tier summary (pooled PPV):")
+    for _, row in mea_tier_summary_df.iterrows():
+        print(f"  {row['tier']:7s}: Pooled PPV = {row['pooled_ppv']:.3f}, "
+              f"Macro PPV = {row['macro_ppv_mean']:.3f}, "
+              f"N = {row['n_structures']}, Pairs = {row['total_pairs']}")
+    
+    print("\nAll-candidate tier summary:")
+    for _, row in candidate_tier_summary_df.iterrows():
+        print(f"  {row['tier']:7s}: Pooled PPV = {row['pooled_ppv']:.3f}, "
+              f"N pairs = {row['n_pairs']}")
+    
+    print("\nStem-level tier summary:")
+    for _, row in stem_tier_summary_df.iterrows():
+        print(f"  {row['tier']:7s}: Pair PPV = {row['pooled_pair_ppv']:.3f}, "
+              f"Pairs = {row['total_pairs']}, "
+              f"Stems = {row['total_stems']}, "
+              f"Frac correct = {row['stems_fraction_correct']:.3f}")
     
     # Overall summary (convert numpy types to Python types for JSON)
     summary = {
@@ -430,10 +704,25 @@ def run_layer3_calibration(
         'auprc': float(auprc),
         'n_bins': int(n_bins),
         'prob_floor': float(prob_floor),
-        'tier_summary': [
+        'mfe_tier_summary': [
             {k: float(v) if isinstance(v, (np.floating, np.integer)) else v 
              for k, v in tier.items()}
-            for tier in tier_summaries
+            for tier in mfe_tier_summaries
+        ],
+        'mea_tier_summary': [
+            {k: float(v) if isinstance(v, (np.floating, np.integer)) else v 
+             for k, v in tier.items()}
+            for tier in mea_tier_summaries
+        ],
+        'candidate_tier_summary': [
+            {k: float(v) if isinstance(v, (np.floating, np.integer)) else v 
+             for k, v in tier.items()}
+            for tier in candidate_tier_summaries
+        ],
+        'stem_tier_summary': [
+            {k: float(v) if isinstance(v, (np.floating, np.integer)) else v 
+             for k, v in tier.items()}
+            for tier in stem_tier_summaries
         ]
     }
     
