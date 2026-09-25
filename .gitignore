@@ -43,6 +43,16 @@ output/
 # Cache data (benchmark data archives and extracted files)
 data/_cache/
 
+# Raw benchmark data (recovered from cache via fetch script)
+archiveII/
+rfam/
+genome/
+vienna_params/
+tool_data_releases/
+shape/
+MANIFEST.md
+SHA256SUMS
+
 # IDEs
 .vscode/
 .idea/

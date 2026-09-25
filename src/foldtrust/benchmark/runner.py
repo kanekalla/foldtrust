@@ -83,7 +83,7 @@ def run_all_benchmarks(
         results["layers"]["layer2_reference"] = layer2
         if verbose:
             print(f"✓ Layer 2 using existing reference accuracy results")
-            print(f"  (3 curated structures: tRNA-Phe, 5S rRNA, U1 snRNA)")
+            print(f"  (curated structures from Rfam and comparative analysis)")
     except Exception as e:
         print(f"✗ Layer 2 failed: {e}")
         results["layers"]["layer2_reference"] = {"error": str(e)}

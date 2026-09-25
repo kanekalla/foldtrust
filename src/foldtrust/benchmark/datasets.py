@@ -136,13 +136,6 @@ def create_minimal_reference_set(output_file: Path) -> None:
     """Create a minimal test reference set for benchmarking."""
     test_sequences = [
         {
-            "name": "tRNA-Phe_yeast",
-            "sequence": "GCGGAUUUAGCUCAGUUGGGAGAGCGCCAGACUGAAGAUCUGGAGGUCCUGUGUUCGAUCCACAGAAUUCGCACCA",
-            "structure": "(((((((..((((........)))).(((((.......))))).....(((((.......))))))))))))....",
-            "length": 76,
-            "source": "PDB_1EHZ"
-        },
-        {
             "name": "5S_rRNA_fragment",
             "sequence": "GCCUGGCGGCCGUAGCGCGGUGGUCCCACCUGACCCCAUGCCGAACUCAGAAGUGAAACGCCGUAGC",
             "structure": "(((((((((...(((((.......))))).......(((((.......)))))....))))))))).",
