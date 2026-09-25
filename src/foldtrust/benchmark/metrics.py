@@ -1,7 +1,7 @@
 """Core metrics for structure prediction and calibration evaluation."""
 
 import numpy as np
-from typing import Dict, List, Tuple, Optional
+from typing import Dict, List, Tuple, Optional, Set
 from sklearn.metrics import roc_auc_score, average_precision_score
 
 
@@ -259,3 +259,107 @@ def compute_tier_accuracy(
             tier_accuracy[tier] = {"ppv": 0.0, "count": 0}
     
     return tier_accuracy
+
+
+def remove_pseudoknots(pairs: Set[Tuple[int, int]]) -> Set[Tuple[int, int]]:
+    """
+    Remove pseudoknots using greedy algorithm (keep longest compatible pairs).
+    
+    Args:
+        pairs: Set of base pairs (i, j) tuples
+        
+    Returns:
+        Set of non-crossing base pairs
+    """
+    if not pairs:
+        return set()
+    
+    # Sort by span length (descending)
+    sorted_pairs = sorted(pairs, key=lambda p: p[1] - p[0], reverse=True)
+    
+    canonical = []
+    for pair in sorted_pairs:
+        # Check if this pair crosses any accepted pair
+        crosses = False
+        for accepted in canonical:
+            a1, a2 = accepted
+            p1, p2 = pair
+            # Crossing condition: a1 < p1 < a2 < p2 or p1 < a1 < p2 < a2
+            if (a1 < p1 < a2 < p2) or (p1 < a1 < p2 < a2):
+                crosses = True
+                break
+        
+        if not crosses:
+            canonical.append(pair)
+    
+    return set(canonical)
+
+
+def compute_structure_metrics(ref_pairs: Set[Tuple[int, int]], 
+                              pred_pairs: Set[Tuple[int, int]]) -> Dict[str, float]:
+    """
+    Compute exact structure accuracy metrics.
+    
+    Args:
+        ref_pairs: Set of reference base pairs
+        pred_pairs: Set of predicted base pairs
+        
+    Returns:
+        Dictionary with sensitivity, ppv, f1, tp, fp, fn
+    """
+    tp = len(ref_pairs & pred_pairs)
+    fp = len(pred_pairs - ref_pairs)
+    fn = len(ref_pairs - pred_pairs)
+    
+    sensitivity = tp / (tp + fn) if (tp + fn) > 0 else 0.0
+    ppv = tp / (tp + fp) if (tp + fp) > 0 else 0.0
+    f1 = 2 * tp / (2 * tp + fp + fn) if (2 * tp + fp + fn) > 0 else 0.0
+    
+    return {
+        "sensitivity": sensitivity,
+        "ppv": ppv,
+        "f1": f1,
+        "tp": tp,
+        "fp": fp,
+        "fn": fn,
+    }
+
+
+def compute_slip_tolerant_metrics(ref_pairs: Set[Tuple[int, int]], 
+                                   pred_pairs: Set[Tuple[int, int]]) -> Dict[str, float]:
+    """
+    Compute slip-tolerant structure accuracy metrics.
+    
+    A predicted pair (i,j) is a slip-TP if any of (i,j), (i±1,j), (i,j±1) is in reference.
+    A reference pair is recovered if any of (i,j), (i±1,j), (i,j±1) is predicted.
+    
+    Args:
+        ref_pairs: Set of reference base pairs
+        pred_pairs: Set of predicted base pairs
+        
+    Returns:
+        Dictionary with sensitivity, ppv, f1
+    """
+    # Count slip-TP for PPV: predicted pairs with a match
+    slip_tp_pred = 0
+    for i, j in pred_pairs:
+        neighbors = {(i, j), (i-1, j), (i+1, j), (i, j-1), (i, j+1)}
+        if neighbors & ref_pairs:
+            slip_tp_pred += 1
+    
+    # Count recovered reference pairs for sensitivity
+    slip_tp_ref = 0
+    for i, j in ref_pairs:
+        neighbors = {(i, j), (i-1, j), (i+1, j), (i, j-1), (i, j+1)}
+        if neighbors & pred_pairs:
+            slip_tp_ref += 1
+    
+    ppv = slip_tp_pred / len(pred_pairs) if len(pred_pairs) > 0 else 0.0
+    sensitivity = slip_tp_ref / len(ref_pairs) if len(ref_pairs) > 0 else 0.0
+    f1 = 2 * ppv * sensitivity / (ppv + sensitivity) if (ppv + sensitivity) > 0 else 0.0
+    
+    return {
+        "sensitivity": sensitivity,
+        "ppv": ppv,
+        "f1": f1,
+    }

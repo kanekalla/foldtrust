@@ -1,5 +1,6 @@
 """Layer 1: Scoring correctness - unit tests and sanity checks."""
 
+import json
 from pathlib import Path
 from typing import Dict
 import numpy as np
@@ -26,7 +27,7 @@ def compute_metrics_from_pairs(ref_pairs: set, pred_pairs: set) -> Dict:
     }
 
 
-def run_scoring_tests(output_dir: Path) -> Dict:
+def run_layer1_tests(output_dir: Path) -> Dict:
     """
     Layer 1: Known-answer unit tests proving metric code is correct.
     
@@ -65,8 +66,9 @@ def run_scoring_tests(output_dir: Path) -> Dict:
     
     results["tests"].append({
         "name": "Perfect match",
-        "passed": test1_pass,
-        **metrics
+        "passed": bool(test1_pass),
+        **{k: float(v) if isinstance(v, (int, float, np.number)) else v 
+           for k, v in metrics.items()}
     })
     results["tests_total"] += 1
     if test1_pass:
@@ -90,8 +92,9 @@ def run_scoring_tests(output_dir: Path) -> Dict:
     
     results["tests"].append({
         "name": "No overlap",
-        "passed": test2_pass,
-        **metrics
+        "passed": bool(test2_pass),
+        **{k: float(v) if isinstance(v, (int, float, np.number)) else v 
+           for k, v in metrics.items()}
     })
     results["tests_total"] += 1
     if test2_pass:
@@ -117,8 +120,9 @@ def run_scoring_tests(output_dir: Path) -> Dict:
     
     results["tests"].append({
         "name": "Half overlap",
-        "passed": test3_pass,
-        **metrics
+        "passed": bool(test3_pass),
+        **{k: float(v) if isinstance(v, (int, float, np.number)) else v 
+           for k, v in metrics.items()}
     })
     results["tests_total"] += 1
     if test3_pass:
@@ -156,7 +160,7 @@ def run_scoring_tests(output_dir: Path) -> Dict:
     
     results["tests"].append({
         "name": "Calibration (ECE)",
-        "passed": test4_pass,
+        "passed": bool(test4_pass),
         "ece": float(ece),
     })
     results["tests_total"] += 1
@@ -180,8 +184,8 @@ def run_scoring_tests(output_dir: Path) -> Dict:
     
     results["tests"].append({
         "name": "Tier accuracy (FIRM)",
-        "passed": test5_pass,
-        "firm_ppv": firm_ppv,
+        "passed": bool(test5_pass),
+        "firm_ppv": float(firm_ppv),
     })
     results["tests_total"] += 1
     if test5_pass:
@@ -190,12 +194,20 @@ def run_scoring_tests(output_dir: Path) -> Dict:
     else:
         print(f"  ✗ FAIL")
     
-    # Save results
-    df = pd.DataFrame(results["tests"])
-    output_path = output_dir / "layer1_scoring_tests.csv"
-    df.to_csv(output_path, index=False)
+    # Save results to both JSON and CSV
+    json_path = output_dir / "layer1_tests.json"
+    with open(json_path, "w") as f:
+        json.dump(results, f, indent=2)
     
-    print(f"\n✓ Saved to {output_path}")
+    df = pd.DataFrame(results["tests"])
+    csv_path = output_dir / "layer1_tests.csv"
+    df.to_csv(csv_path, index=False)
+    
+    print(f"\n✓ Saved to {json_path} and {csv_path}")
     print(f"\nSummary: {results['tests_passed']}/{results['tests_total']} tests passed")
     
     return results
+
+
+# Backwards compatibility alias
+run_scoring_tests = run_layer1_tests

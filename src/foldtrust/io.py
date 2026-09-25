@@ -4,11 +4,112 @@ Functions for loading sequences, reference structures, and experimental data.
 """
 
 from pathlib import Path
-from typing import Union, Optional, Dict, List
+from typing import Union, Optional, Dict, List, Set
 import pandas as pd
 import numpy as np
 
 from foldtrust._core import FoldData, FoldDataCollection
+
+
+def parse_dotbracket(structure: str) -> Set[tuple]:
+    """
+    Parse dot-bracket notation to extract base pairs.
+    
+    Supports (), [], {}, <> bracket types for pseudoknots.
+    
+    Parameters
+    ----------
+    structure : str
+        Structure in dot-bracket notation
+        
+    Returns
+    -------
+    set of (int, int)
+        Set of base pairs (i, j) where i < j (0-indexed)
+    """
+    pairs = set()
+    stacks = {"(": [], "[": [], "{": [], "<": []}
+    closers = {")": "(", "]": "[", "}": "{", ">": "<"}
+    
+    for i, char in enumerate(structure):
+        if char in stacks:
+            stacks[char].append(i)
+        elif char in closers:
+            opener = closers[char]
+            if not stacks[opener]:
+                raise ValueError(f"Unbalanced bracket at position {i}")
+            j = stacks[opener].pop()
+            pairs.add((j, i) if j < i else (i, j))
+    
+    # Check for unbalanced brackets
+    for opener, stack in stacks.items():
+        if stack:
+            raise ValueError(f"Unbalanced '{opener}' brackets")
+    
+    return pairs
+
+
+def parse_bpseq(filename: Union[str, Path]) -> Set[tuple]:
+    """
+    Parse bpseq file format.
+    
+    Format: each line is "position base pairing_partner"
+    
+    Parameters
+    ----------
+    filename : str or Path
+        Path to bpseq file
+        
+    Returns
+    -------
+    set of (int, int)
+        Set of base pairs (i, j) where i < j (0-indexed)
+    """
+    pairs = set()
+    with open(filename) as f:
+        for line in f:
+            line = line.strip()
+            if not line or line.startswith("#"):
+                continue
+            parts = line.split()
+            if len(parts) >= 3:
+                i = int(parts[0]) - 1  # Convert to 0-indexed
+                j = int(parts[2]) - 1
+                if j >= 0:  # 0 means unpaired
+                    pairs.add((min(i, j), max(i, j)))
+    return pairs
+
+
+def parse_ct(filename: Union[str, Path]) -> Set[tuple]:
+    """
+    Parse CT (Connectivity Table) file format.
+    
+    Format: 
+    Line 1: N [header]
+    Lines 2-N+1: i base i-1 i+1 j i
+    where j is the pairing partner (0 if unpaired)
+    
+    Parameters
+    ----------
+    filename : str or Path
+        Path to CT file
+        
+    Returns
+    -------
+    set of (int, int)
+        Set of base pairs (i, j) where i < j (0-indexed)
+    """
+    pairs = set()
+    with open(filename) as f:
+        lines = f.readlines()
+        for line in lines[1:]:  # Skip header
+            parts = line.strip().split()
+            if len(parts) >= 5:
+                i = int(parts[0]) - 1  # Convert to 0-indexed
+                j = int(parts[4]) - 1
+                if j >= 0 and i < j:
+                    pairs.add((i, j))
+    return pairs
 
 
 def read_fasta(filename: Union[str, Path], name: Optional[str] = None) -> FoldData:

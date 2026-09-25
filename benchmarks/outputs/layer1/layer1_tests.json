@@ -1,4 +1,48 @@
 {
+  "tests": [
+    {
+      "name": "Perfect match",
+      "passed": true,
+      "sensitivity": 1.0,
+      "ppv": 1.0,
+      "f1": 1.0,
+      "tp": 5.0,
+      "fp": 0.0,
+      "fn": 0.0
+    },
+    {
+      "name": "No overlap",
+      "passed": true,
+      "sensitivity": 0.0,
+      "ppv": 0.0,
+      "f1": 0.0,
+      "tp": 0.0,
+      "fp": 3.0,
+      "fn": 3.0
+    },
+    {
+      "name": "Half overlap",
+      "passed": true,
+      "sensitivity": 0.5,
+      "ppv": 0.5,
+      "f1": 0.5,
+      "tp": 2.0,
+      "fp": 2.0,
+      "fn": 2.0
+    },
+    {
+      "name": "Calibration (ECE)",
+      "passed": true,
+      "ece": 0.0
+    },
+    {
+      "name": "Tier accuracy (FIRM)",
+      "passed": true,
+      "firm_ppv": 1.0
+    }
+  ],
+  "tests_total": 5,
+  "tests_passed": 5,
   "parser_tests": true,
   "tier_regression": true
 }

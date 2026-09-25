@@ -1,0 +1,6 @@
+name,passed,sensitivity,ppv,f1,tp,fp,fn,ece,firm_ppv
+Perfect match,True,1.0,1.0,1.0,5.0,0.0,0.0,,
+No overlap,True,0.0,0.0,0.0,0.0,3.0,3.0,,
+Half overlap,True,0.5,0.5,0.5,2.0,2.0,2.0,,
+Calibration (ECE),True,,,,,,,0.0,
+Tier accuracy (FIRM),True,,,,,,,,1.0
