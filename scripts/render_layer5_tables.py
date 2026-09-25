@@ -85,6 +85,52 @@ def compute_per_case_mean(df: pd.DataFrame, condition_col: str) -> pd.DataFrame:
     return pd.DataFrame(results)
 
 
+def render_doc_tables(output_dir: Path) -> dict:
+    """
+    Render doc-ready result tables from CSVs.
+
+    Returns:
+        Dictionary with markdown table strings for embedding in docs
+    """
+    tables = {}
+
+    # Temperature stem retention
+    temp_df = pd.read_csv(output_dir / "temperature_stem_retention.csv")
+    pooled = compute_pooled_retention(temp_df, "temperature")
+    pivot = pooled.pivot_table(index="tier", columns="temperature", values="pooled_retention")
+    col_order = ["37C_baseline", "25.0C", "30.0C", "42.0C"]
+    pivot = pivot[[c for c in col_order if c in pivot.columns]]
+    tables["temperature_pooled"] = pivot.to_markdown()
+
+    # Parameter stem retention
+    params_df = pd.read_csv(output_dir / "parameters_stem_retention.csv")
+    pooled = compute_pooled_retention(params_df, "parameters")
+    pivot = pooled.pivot_table(index="tier", columns="parameters", values="pooled_retention")
+    col_order = ["Turner2004_baseline", "Andronescu2007", "Langdon2018"]
+    pivot = pivot[[c for c in col_order if c in pivot.columns]]
+    tables["parameters_pooled"] = pivot.to_markdown()
+
+    # Window context stem retention
+    window_df = pd.read_csv(output_dir / "window_context_stem_retention.csv")
+    pooled = compute_pooled_retention(window_df, "flank_size")
+    pivot = pooled.pivot_table(index="tier", columns="flank_size", values="pooled_retention")
+    tables["window_pooled"] = pivot.to_markdown()
+
+    # Window context BP distances
+    metrics_df = pd.read_csv(output_dir / "window_context_metrics.csv")
+    bp_dist_means = metrics_df.groupby("flank_size")["bp_distance_mea"].mean()
+    lines = ["| Flank Size (nt) | Mean MEA BP Distance |", "|-----------------|----------------------|"]
+    for flank_size, mean_dist in bp_dist_means.items():
+        lines.append(f"| {flank_size} | {mean_dist:.1f} |")
+    tables["window_bp_distance"] = "\n".join(lines)
+
+    # MFE energies
+    mfe_df = pd.read_csv(output_dir / "parameters_mfe_energies.csv")
+    tables["mfe_energies"] = mfe_df.to_markdown(index=False)
+
+    return tables
+
+
 def render_tables(output_dir: Path) -> str:
     """
     Render all Layer 5 summary tables from CSVs.
@@ -215,6 +261,10 @@ def main():
         f.write(tables_md)
 
     print(f"✓ Rendered tables to {output_file}")
+
+    # Render doc tables
+    doc_tables = render_doc_tables(output_dir)
+    print(f"✓ Rendered {len(doc_tables)} doc-ready tables")
 
     # Also print to console
     print("\n" + tables_md)
