@@ -40,6 +40,9 @@ rna.ps
 out/
 output/
 
+# Data cache (benchmark data)
+data/_cache/
+
 # IDEs
 .vscode/
 .idea/

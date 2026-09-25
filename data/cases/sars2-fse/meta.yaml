@@ -8,7 +8,7 @@ why_structure_matters: |
 teaching_point: |
   Competing structures and pseudoknot formation mean the MFE alone is insufficient.
   This region demonstrates ensemble complexity relevant to antiviral RNA targeting.
-coordinates: "NC_045512.2:13468-13638 (shortened functional window)"
+coordinates: "NC_045512.2:13462-13542 (slippery site 13462-13468 + stem-loops 13476-13542)"
 references:
   - title: "Programmed -1 Ribosomal Frameshift in SARS-CoV-2"
     doi: "10.1126/science.abc3546"

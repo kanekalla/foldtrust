@@ -70,66 +70,36 @@ def compute_pair_probabilities(sequence: str) -> np.ndarray:
     Returns:
         NxN matrix where element [i,j] is probability of pairing between positions i and j
     """
-    if not check_viennarna():
-        raise ViennaRNAError("RNAfold not found. Install ViennaRNA: brew install viennarna")
+    try:
+        import RNA
+    except ImportError:
+        raise ViennaRNAError("ViennaRNA Python package not found. Install: pip install ViennaRNA")
 
     n = len(sequence)
     prob_matrix = np.zeros((n, n))
 
     try:
-        result = subprocess.run(
-            ["RNAfold", "-p", "--noPS"],
-            input=f">seq\n{sequence}\n",
-            capture_output=True,
-            text=True,
-            timeout=120,
-        )
-
-        if result.returncode != 0:
-            raise ViennaRNAError(f"RNAfold partition function failed: {result.stderr}")
-
-        dp_file = Path("seq_dp.ps")
-        if not dp_file.exists():
-            raise ViennaRNAError("RNAfold did not generate dot plot PostScript file")
-
-        with open(dp_file, "r") as f:
-            in_data_section = False
-            for line in f:
-                line = line.strip()
-
-                if line == "/sequence { (":
-                    in_data_section = False
-                elif line.startswith("%start of base pair probability data"):
-                    in_data_section = True
-                    continue
-                elif in_data_section:
-                    if line.startswith("showpage"):
-                        break
-
-                    parts = line.split()
-                    if len(parts) >= 4 and parts[3] == "ubox":
-                        try:
-                            i = int(parts[0]) - 1
-                            j = int(parts[1]) - 1
-                            sqrt_prob = float(parts[2])
-                            prob = sqrt_prob * sqrt_prob
-
-                            if 0 <= i < n and 0 <= j < n:
-                                prob_matrix[i, j] = prob
-                                prob_matrix[j, i] = prob
-                        except (ValueError, IndexError):
-                            continue
-
-        dp_file.unlink()
-
-        dot_file = Path("dot.ps")
-        if dot_file.exists():
-            dot_file.unlink()
+        # Create fold compound
+        md = RNA.md()
+        md.uniq_ML = 1
+        fc = RNA.fold_compound(sequence, md)
+        
+        # Compute partition function
+        fc.pf()
+        
+        # Get base-pair probabilities
+        bpp = fc.bpp()
+        
+        # Convert to matrix (ViennaRNA uses 1-based indexing)
+        for i in range(1, n + 1):
+            for j in range(i + 1, n + 1):
+                prob = bpp[i][j]
+                if prob > 0:
+                    prob_matrix[i - 1, j - 1] = prob
+                    prob_matrix[j - 1, i - 1] = prob
 
         return prob_matrix
 
-    except subprocess.TimeoutExpired:
-        raise ViennaRNAError("RNAfold partition function timed out")
     except Exception as e:
         raise ViennaRNAError(f"Partition function error: {e}")
 

@@ -127,16 +127,44 @@ def demo():
 def benchmark(
     analysis: str = typer.Argument(
         ...,
-        help="Analysis type: 'all' for complete 6-layer benchmark, or individual layers"
+        help="Analysis type: 'all', 'layer4_shape', or individual layers"
     ),
     output: Path = typer.Option("benchmarks/outputs", "-o", "--output", help="Output directory"),
+    n_windows: int = typer.Option(50, help="Number of genome control windows (layer4_shape)"),
+    seed: int = typer.Option(42, help="Random seed"),
 ):
     """Run benchmark analyses to validate FoldTrust predictions."""
-    from foldtrust.benchmark.runner import run_all_benchmarks
-
     output.mkdir(parents=True, exist_ok=True)
 
+    # Layer 4: SHAPE analysis (standalone)
+    if analysis == "layer4_shape":
+        console.print("[bold cyan]Running Layer 4: SHAPE Agreement Analysis...[/bold cyan]")
+        from foldtrust.benchmark.shape import run_layer4_shape_analysis
+        
+        cache_dir = Path("data/_cache")
+        if not cache_dir.exists():
+            console.print("[red]Error: data/_cache not found. Extract benchmark data bundle first.[/red]")
+            raise typer.Exit(1)
+        
+        layer4_output = output / "layer4_shape"
+        run_layer4_shape_analysis(
+            cache_dir,
+            layer4_output,
+            n_genome_windows=n_windows,
+            seed=seed
+        )
+        console.print(f"\n[green]✓ Layer 4 complete. Results in {layer4_output}[/green]")
+        return
+    
+    # Comprehensive benchmark runner (all layers)
     if analysis == "all":
+        try:
+            from foldtrust.benchmark.runner import run_all_benchmarks
+        except ImportError:
+            console.print("[red]Error: benchmark runner not found[/red]")
+            console.print("[yellow]For now, use 'layer4_shape' for SHAPE analysis[/yellow]")
+            raise typer.Exit(1)
+        
         console.print("[bold cyan]Running complete 6-layer benchmark analysis...[/bold cyan]")
         console.print("[dim]This will take several minutes...[/dim]\n")
         
@@ -151,10 +179,9 @@ def benchmark(
         except Exception as e:
             console.print(f"[red]Error running benchmark: {e}[/red]")
             raise typer.Exit(1)
-    
     else:
-        console.print(f"[yellow]For now, only 'all' is supported. Use: foldtrust benchmark all[/yellow]")
-        console.print("[dim]Individual layer commands coming soon...[/dim]")
+        console.print(f"[yellow]Supported: 'all' (complete benchmark) or 'layer4_shape' (SHAPE analysis)[/yellow]")
+        console.print("[dim]Use: foldtrust benchmark layer4_shape[/dim]")
         raise typer.Exit(1)
 
 

@@ -1,0 +1,224 @@
+{
+  "fse_start": 13462,
+  "fse_end": 13542,
+  "core_start": 13462,
+  "core_end": 13542,
+  "window_length": 81,
+  "core_length": 81,
+  "datasets": {
+    "incarnato_invitro": {
+      "window": {
+        "spearman": 0.3491937489628916,
+        "spearman_pvalue": 0.0013977619725197663,
+        "auroc": 0.7256235827664399,
+        "n_reactive": 21,
+        "n_unreactive": 21,
+        "coverage": 1.0,
+        "n_valid": 81
+      },
+      "core": {
+        "spearman": 0.3491937489628916,
+        "spearman_pvalue": 0.0013977619725197663,
+        "auroc": 0.7256235827664399,
+        "n_reactive": 21,
+        "n_unreactive": 21,
+        "coverage": 1.0,
+        "n_valid": 81
+      }
+    },
+    "incarnato_invivo": {
+      "window": {
+        "spearman": 0.41859729311674215,
+        "spearman_pvalue": 0.00011147439247090533,
+        "auroc": 0.79375,
+        "n_reactive": 20,
+        "n_unreactive": 20,
+        "coverage": 0.9876543209876543,
+        "n_valid": 80
+      },
+      "core": {
+        "spearman": 0.41859729311674215,
+        "spearman_pvalue": 0.00011147439247090533,
+        "auroc": 0.79375,
+        "n_reactive": 20,
+        "n_unreactive": 20,
+        "coverage": 0.9876543209876543,
+        "n_valid": 80
+      }
+    },
+    "pyle": {
+      "window": {
+        "spearman": 0.12205791610677434,
+        "spearman_pvalue": 0.2776949950372623,
+        "auroc": 0.5986394557823129,
+        "n_reactive": 21,
+        "n_unreactive": 21,
+        "coverage": 1.0,
+        "n_valid": 81
+      },
+      "core": {
+        "spearman": 0.12205791610677434,
+        "spearman_pvalue": 0.2776949950372623,
+        "auroc": 0.5986394557823129,
+        "n_reactive": 21,
+        "n_unreactive": 21,
+        "coverage": 1.0,
+        "n_valid": 81
+      }
+    },
+    "zhang_invitro": {
+      "window": {
+        "spearman": 0.4370022251218395,
+        "spearman_pvalue": 4.523647386783759e-05,
+        "auroc": 0.802721088435374,
+        "n_reactive": 21,
+        "n_unreactive": 21,
+        "coverage": 1.0,
+        "n_valid": 81
+      },
+      "core": {
+        "spearman": 0.4370022251218395,
+        "spearman_pvalue": 4.523647386783759e-05,
+        "auroc": 0.802721088435374,
+        "n_reactive": 21,
+        "n_unreactive": 21,
+        "coverage": 1.0,
+        "n_valid": 81
+      }
+    },
+    "zhang_invivo": {
+      "window": {
+        "spearman": 0.4893660005518591,
+        "spearman_pvalue": 3.5511130375819637e-06,
+        "auroc": 0.8116883116883117,
+        "n_reactive": 21,
+        "n_unreactive": 22,
+        "coverage": 1.0,
+        "n_valid": 81
+      },
+      "core": {
+        "spearman": 0.4893660005518591,
+        "spearman_pvalue": 3.5511130375819637e-06,
+        "auroc": 0.8116883116883117,
+        "n_reactive": 21,
+        "n_unreactive": 22,
+        "coverage": 1.0,
+        "n_valid": 81
+      }
+    }
+  },
+  "dataset_agreement": [
+    {
+      "dataset1": "incarnato_invitro",
+      "dataset2": "incarnato_invivo",
+      "spearman": 0.851714464721663,
+      "pvalue": 1.3502512048852197e-23,
+      "n_overlap": 80
+    },
+    {
+      "dataset1": "incarnato_invitro",
+      "dataset2": "pyle",
+      "spearman": 0.2695173604847125,
+      "pvalue": 0.014967590246468238,
+      "n_overlap": 81
+    },
+    {
+      "dataset1": "incarnato_invitro",
+      "dataset2": "zhang_invitro",
+      "spearman": 0.5323028730526563,
+      "pvalue": 3.145235596334268e-07,
+      "n_overlap": 81
+    },
+    {
+      "dataset1": "incarnato_invitro",
+      "dataset2": "zhang_invivo",
+      "spearman": 0.5558332557508695,
+      "pvalue": 7.180250982240016e-08,
+      "n_overlap": 81
+    },
+    {
+      "dataset1": "incarnato_invivo",
+      "dataset2": "pyle",
+      "spearman": 0.2867218269811338,
+      "pvalue": 0.009921918078046533,
+      "n_overlap": 80
+    },
+    {
+      "dataset1": "incarnato_invivo",
+      "dataset2": "zhang_invitro",
+      "spearman": 0.5162815612397982,
+      "pvalue": 9.49042786147837e-07,
+      "n_overlap": 80
+    },
+    {
+      "dataset1": "incarnato_invivo",
+      "dataset2": "zhang_invivo",
+      "spearman": 0.5352236706054788,
+      "pvalue": 3.1372696674386597e-07,
+      "n_overlap": 80
+    },
+    {
+      "dataset1": "pyle",
+      "dataset2": "zhang_invitro",
+      "spearman": 0.3155788282315839,
+      "pvalue": 0.00410749455737985,
+      "n_overlap": 81
+    },
+    {
+      "dataset1": "pyle",
+      "dataset2": "zhang_invivo",
+      "spearman": 0.3587174136351971,
+      "pvalue": 0.0010074058979580838,
+      "n_overlap": 81
+    },
+    {
+      "dataset1": "zhang_invitro",
+      "dataset2": "zhang_invivo",
+      "spearman": 0.825737946638447,
+      "pvalue": 2.4365333224189563e-21,
+      "n_overlap": 81
+    }
+  ],
+  "tier_analysis": {
+    "FIRM": {
+      "mean_reactivity": 0.16024464831804283,
+      "std_reactivity": 0.2076878731051141,
+      "n_positions": 30
+    },
+    "SOFT": {
+      "mean_reactivity": 0.21916411824668705,
+      "std_reactivity": 0.3003236989771774,
+      "n_positions": 18
+    },
+    "FLOPPY": {
+      "mean_reactivity": 0.40940366972477066,
+      "std_reactivity": 0.3766420910211208,
+      "n_positions": 33
+    },
+    "unpaired": {
+      "mean_reactivity": NaN,
+      "std_reactivity": NaN,
+      "n_positions": 0
+    }
+  },
+  "shape_directed_folding": {
+    "dataset_used": "incarnato_invitro",
+    "mfe_unconstrained": -26.0,
+    "mfe_shape": -51.79999923706055,
+    "bp_distance_mfe": 4,
+    "bp_distance_mea": 1,
+    "mfe_structure": ".....(((((((.(((.......))))))))))......(((((((((((((.........))).))))))))...))...",
+    "mfe_structure_shape": ".....((((((.((((.......))))))))))......(((((((((((((((....)).))).))))))))...))..."
+  },
+  "genome_control": {
+    "n_windows": 50,
+    "window_length": 81,
+    "fse_percentiles": {
+      "incarnato_invitro": 65.3061224489796,
+      "incarnato_invivo": 78.0,
+      "pyle": 44.0,
+      "zhang_invitro": 92.0,
+      "zhang_invivo": 78.0
+    }
+  }
+}
