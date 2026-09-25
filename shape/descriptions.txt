@@ -1,0 +1,5 @@
+The conservation track includes the conservation across SARS-related strains including SARS-related bat coronaviruses and SARS sequences. 
+
+The structure tracks indicate regions with predicted structures in white and orange, with grey indicating no predicted structure. In structure tracks, white indicates base-paired nucleotides, and orange indicates loop nucleotides. 
+
+The reactivity tracks are normalized by removing outlier values (values above the maximum of 1.5 * inter-quartile range and the 95th percentile), scaling by the mean of the top 10th percentile of values, windsorizing the data to fall in the range 0 to 2, and dividing by 2.

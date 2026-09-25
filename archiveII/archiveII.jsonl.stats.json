@@ -1,0 +1,16 @@
+{
+ "total": 3975,
+ "per_family": {
+  "16s": 110,
+  "23s": 35,
+  "5s": 1283,
+  "RNaseP": 454,
+  "grp1": 98,
+  "grp2": 11,
+  "srp": 928,
+  "tRNA": 557,
+  "telomerase": 37,
+  "tmRNA": 462
+ },
+ "ct_files_with_more_than_one_structure": 0
+}

@@ -1,0 +1,80 @@
+{
+ "ViennaRNA_version": "2.7.2",
+ "api_has": {
+  "params_load_RNA_Turner2004": true,
+  "params_load_RNA_Andronescu2007": true,
+  "params_load_RNA_Langdon2018": true,
+  "params_load": true
+ },
+ "method": "fresh process per measurement; params loaded, then RNA.md() created, then fold_compound(seq, md).mfe()",
+ "results": {
+  "RF00005:AAEU02004214.1/433-498": {
+   "length": 66,
+   "sequence": "AUUCAAAUAGCUUAUAUUUAGAGUAUGACACUGAAGAUGUCAUGGAGAUUAAUUAAUCUUUGAAUA",
+   "params_load_RNA_Turner2004": {
+    "rc": 1,
+    "structure": "(((((((((.....))))).))))((((((.......))))))(((((((....))))))).....",
+    "mfe_kcal_mol": -10.2
+   },
+   "params_load_RNA_Andronescu2007": {
+    "rc": 1,
+    "structure": "..(((((((.....))))).))..((((((.......))))))((((((......)))))).....",
+    "mfe_kcal_mol": -10.7
+   },
+   "params_load_RNA_Langdon2018": {
+    "rc": 1,
+    "structure": "(((((....((((.......))))((((((.......)))))).((((((....))))))))))).",
+    "mfe_kcal_mol": -12.0
+   },
+   "rna_turner2004.par": {
+    "rc": 1,
+    "structure": "(((((((((.....))))).))))((((((.......))))))(((((((....))))))).....",
+    "mfe_kcal_mol": -10.2
+   },
+   "rna_andronescu2007.par": {
+    "rc": 1,
+    "structure": "..(((((((.....))))).))..((((((.......))))))((((((......)))))).....",
+    "mfe_kcal_mol": -10.7
+   },
+   "rna_langdon2018.par": {
+    "rc": 1,
+    "structure": "(((((....((((.......))))((((((.......)))))).((((((....))))))))))).",
+    "mfe_kcal_mol": -12.0
+   }
+  },
+  "NC_045512.2:13462-13542 (FSE)": {
+   "length": 81,
+   "sequence": "UUUAAACGGGUUUGCGGUGUAAGUGCAGCCCGUCUUACACCGUGCGGCACAGGCACUAGUACUGAUGUCGUAUACAGGGCU",
+   "params_load_RNA_Turner2004": {
+    "rc": 1,
+    "structure": ".....(((((((.(((.......))))))))))......(((((((((((((.........))).))))))))...))...",
+    "mfe_kcal_mol": -26.0
+   },
+   "params_load_RNA_Andronescu2007": {
+    "rc": 1,
+    "structure": ".............((((((((((..........))))))))(((((((((((.........))).))))))..))...)).",
+    "mfe_kcal_mol": -22.26
+   },
+   "params_load_RNA_Langdon2018": {
+    "rc": 1,
+    "structure": ".............((((((((((..........))))))))))(((((((((.........))).))))))..........",
+    "mfe_kcal_mol": -24.7
+   },
+   "rna_turner2004.par": {
+    "rc": 1,
+    "structure": ".....(((((((.(((.......))))))))))......(((((((((((((.........))).))))))))...))...",
+    "mfe_kcal_mol": -26.0
+   },
+   "rna_andronescu2007.par": {
+    "rc": 1,
+    "structure": ".............((((((((((..........))))))))(((((((((((.........))).))))))..))...)).",
+    "mfe_kcal_mol": -22.26
+   },
+   "rna_langdon2018.par": {
+    "rc": 1,
+    "structure": ".............((((((((((..........))))))))))(((((((((.........))).))))))..........",
+    "mfe_kcal_mol": -24.7
+   }
+  }
+ }
+}

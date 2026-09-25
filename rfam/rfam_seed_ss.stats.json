@@ -1,0 +1,158 @@
+{
+ "mode": "wuss",
+ "total_records": 468,
+ "families": {
+  "RF00005": {
+   "id": "tRNA",
+   "seed_seqs": 954,
+   "kept": 25,
+   "non_ACGU": 1,
+   "too_long": 0,
+   "mean_pairs": 20.5
+  },
+  "RF00001": {
+   "id": "5S_rRNA",
+   "seed_seqs": 712,
+   "kept": 25,
+   "non_ACGU": 17,
+   "too_long": 0,
+   "mean_pairs": 30.6
+  },
+  "RF00017": {
+   "id": "Metazoa_SRP",
+   "seed_seqs": 91,
+   "kept": 25,
+   "non_ACGU": 0,
+   "too_long": 0,
+   "mean_pairs": 93.1
+  },
+  "RF01854": {
+   "id": "Bacteria_large_SRP",
+   "seed_seqs": 92,
+   "kept": 25,
+   "non_ACGU": 0,
+   "too_long": 0,
+   "mean_pairs": 54.4
+  },
+  "RF00010": {
+   "id": "RNaseP_bact_a",
+   "seed_seqs": 458,
+   "kept": 25,
+   "non_ACGU": 8,
+   "too_long": 125,
+   "mean_pairs": 96.0
+  },
+  "RF00003": {
+   "id": "U1",
+   "seed_seqs": 100,
+   "kept": 25,
+   "non_ACGU": 0,
+   "too_long": 0,
+   "mean_pairs": 41.6
+  },
+  "RF00004": {
+   "id": "U2",
+   "seed_seqs": 208,
+   "kept": 25,
+   "non_ACGU": 2,
+   "too_long": 0,
+   "mean_pairs": 39.8
+  },
+  "RF00015": {
+   "id": "U4",
+   "seed_seqs": 177,
+   "kept": 25,
+   "non_ACGU": 2,
+   "too_long": 0,
+   "mean_pairs": 24.4
+  },
+  "RF00026": {
+   "id": "U6",
+   "seed_seqs": 188,
+   "kept": 25,
+   "non_ACGU": 1,
+   "too_long": 0,
+   "mean_pairs": 4.7
+  },
+  "RF00050": {
+   "id": "FMN",
+   "seed_seqs": 146,
+   "kept": 25,
+   "non_ACGU": 0,
+   "too_long": 0,
+   "mean_pairs": 25.6
+  },
+  "RF00162": {
+   "id": "SAM",
+   "seed_seqs": 457,
+   "kept": 25,
+   "non_ACGU": 0,
+   "too_long": 0,
+   "mean_pairs": 29.2
+  },
+  "RF00167": {
+   "id": "Purine",
+   "seed_seqs": 133,
+   "kept": 25,
+   "non_ACGU": 0,
+   "too_long": 0,
+   "mean_pairs": 19.5
+  },
+  "RF00059": {
+   "id": "TPP",
+   "seed_seqs": 115,
+   "kept": 25,
+   "non_ACGU": 1,
+   "too_long": 0,
+   "mean_pairs": 24.0
+  },
+  "RF00174": {
+   "id": "Cobalamin",
+   "seed_seqs": 434,
+   "kept": 25,
+   "non_ACGU": 1,
+   "too_long": 0,
+   "mean_pairs": 38.1
+  },
+  "RF00504": {
+   "id": "Glycine",
+   "seed_seqs": 44,
+   "kept": 25,
+   "non_ACGU": 0,
+   "too_long": 0,
+   "mean_pairs": 20.0
+  },
+  "RF00380": {
+   "id": "Magnesium",
+   "seed_seqs": 159,
+   "kept": 25,
+   "non_ACGU": 1,
+   "too_long": 0,
+   "mean_pairs": 41.4
+  },
+  "RF00168": {
+   "id": "Lysine",
+   "seed_seqs": 47,
+   "kept": 25,
+   "non_ACGU": 0,
+   "too_long": 0,
+   "mean_pairs": 46.7
+  },
+  "RF00234": {
+   "id": "glmS",
+   "seed_seqs": 18,
+   "kept": 18,
+   "non_ACGU": 0,
+   "too_long": 0,
+   "mean_pairs": 36.2
+  },
+  "RF00023": {
+   "id": "tmRNA",
+   "seed_seqs": 477,
+   "kept": 25,
+   "non_ACGU": 9,
+   "too_long": 25,
+   "mean_pairs": 65.2
+  }
+ }
+}

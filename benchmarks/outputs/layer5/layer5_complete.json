@@ -12,9 +12,43 @@
         "firm": 2,
         "soft": 3,
         "floppy": 0
+      },
+      "retention": {
+        "firm": {
+          "count": 2,
+          "retention": 1.0
+        },
+        "soft": {
+          "count": 3,
+          "retention": 0.6666666666666666
+        },
+        "floppy": {
+          "count": 0,
+          "retention": null
+        }
       }
     },
     "temperature": {
+      "37C_baseline": {
+        "mfe_energy": -26.0,
+        "ensemble_defect": 14.676838690399485,
+        "bp_distance_mfe": 0,
+        "bp_distance_mea": 0,
+        "stem_retention": {
+          "firm": {
+            "count": 2,
+            "retention": 1.0
+          },
+          "soft": {
+            "count": 3,
+            "retention": 0.6666666666666666
+          },
+          "floppy": {
+            "count": 0,
+            "retention": null
+          }
+        }
+      },
       "25.0C": {
         "mfe_energy": -33.16999816894531,
         "ensemble_defect": 34.52865393189731,
@@ -86,6 +120,26 @@
       }
     },
     "parameters": {
+      "Turner2004_baseline": {
+        "mfe_energy": -26.0,
+        "ensemble_defect": 14.676838690399485,
+        "bp_distance_mfe": 0,
+        "bp_distance_mea": 0,
+        "stem_retention": {
+          "firm": {
+            "count": 2,
+            "retention": 1.0
+          },
+          "soft": {
+            "count": 3,
+            "retention": 0.6666666666666666
+          },
+          "floppy": {
+            "count": 0,
+            "retention": null
+          }
+        }
+      },
       "Andronescu2007": {
         "mfe_energy": -22.260000228881836,
         "ensemble_defect": 22.826723951375058,
@@ -148,13 +202,17 @@
           },
           "soft": {
             "count": 3,
-            "retention": 1.0
+            "retention": 0.6666666666666666
           },
           "floppy": {
             "count": 0,
-            "retention": 1.0
+            "retention": null
           }
-        }
+        },
+        "left_accession_coords": null,
+        "right_accession_coords": null,
+        "left_clipped": false,
+        "right_clipped": false
       },
       "flank_25": {
         "flank_size": 25,
@@ -162,7 +220,7 @@
         "right_flank_len": 25,
         "extended_len": 131,
         "mfe_energy": -35.599998474121094,
-        "bp_distance_mea": 38,
+        "bp_distance_mea": 22,
         "stem_retention": {
           "firm": {
             "count": 2,
@@ -176,7 +234,11 @@
             "count": 0,
             "retention": null
           }
-        }
+        },
+        "left_accession_coords": "NC_045512.2:13437-13461",
+        "right_accession_coords": "NC_045512.2:13543-13567",
+        "left_clipped": false,
+        "right_clipped": false
       },
       "flank_50": {
         "flank_size": 50,
@@ -184,7 +246,7 @@
         "right_flank_len": 50,
         "extended_len": 181,
         "mfe_energy": -49.599998474121094,
-        "bp_distance_mea": 45,
+        "bp_distance_mea": 21,
         "stem_retention": {
           "firm": {
             "count": 2,
@@ -198,7 +260,11 @@
             "count": 0,
             "retention": null
           }
-        }
+        },
+        "left_accession_coords": "NC_045512.2:13412-13461",
+        "right_accession_coords": "NC_045512.2:13543-13592",
+        "left_clipped": false,
+        "right_clipped": false
       },
       "flank_100": {
         "flank_size": 100,
@@ -206,7 +272,7 @@
         "right_flank_len": 100,
         "extended_len": 281,
         "mfe_energy": -81.30000305175781,
-        "bp_distance_mea": 87,
+        "bp_distance_mea": 22,
         "stem_retention": {
           "firm": {
             "count": 2,
@@ -220,7 +286,11 @@
             "count": 0,
             "retention": null
           }
-        }
+        },
+        "left_accession_coords": "NC_045512.2:13362-13461",
+        "right_accession_coords": "NC_045512.2:13543-13642",
+        "left_clipped": false,
+        "right_clipped": false
       }
     }
   },
@@ -237,9 +307,43 @@
         "firm": 5,
         "soft": 4,
         "floppy": 0
+      },
+      "retention": {
+        "firm": {
+          "count": 5,
+          "retention": 1.0
+        },
+        "soft": {
+          "count": 4,
+          "retention": 0.75
+        },
+        "floppy": {
+          "count": 0,
+          "retention": null
+        }
       }
     },
     "temperature": {
+      "37C_baseline": {
+        "mfe_energy": -31.299999237060547,
+        "ensemble_defect": 22.261379737252682,
+        "bp_distance_mfe": 0,
+        "bp_distance_mea": 0,
+        "stem_retention": {
+          "firm": {
+            "count": 5,
+            "retention": 1.0
+          },
+          "soft": {
+            "count": 4,
+            "retention": 0.75
+          },
+          "floppy": {
+            "count": 0,
+            "retention": null
+          }
+        }
+      },
       "25.0C": {
         "mfe_energy": -43.630001068115234,
         "ensemble_defect": 22.855503851865297,
@@ -311,6 +415,26 @@
       }
     },
     "parameters": {
+      "Turner2004_baseline": {
+        "mfe_energy": -31.299999237060547,
+        "ensemble_defect": 22.261379737252682,
+        "bp_distance_mfe": 0,
+        "bp_distance_mea": 0,
+        "stem_retention": {
+          "firm": {
+            "count": 5,
+            "retention": 1.0
+          },
+          "soft": {
+            "count": 4,
+            "retention": 0.75
+          },
+          "floppy": {
+            "count": 0,
+            "retention": null
+          }
+        }
+      },
       "Andronescu2007": {
         "mfe_energy": -26.389999389648438,
         "ensemble_defect": 79.22119025851408,
@@ -373,13 +497,17 @@
           },
           "soft": {
             "count": 4,
-            "retention": 1.0
+            "retention": 0.75
           },
           "floppy": {
             "count": 0,
-            "retention": 1.0
+            "retention": null
           }
-        }
+        },
+        "left_accession_coords": null,
+        "right_accession_coords": null,
+        "left_clipped": false,
+        "right_clipped": false
       },
       "flank_25": {
         "flank_size": 25,
@@ -387,7 +515,7 @@
         "right_flank_len": 25,
         "extended_len": 204,
         "mfe_energy": -39.70000076293945,
-        "bp_distance_mea": 43,
+        "bp_distance_mea": 31,
         "stem_retention": {
           "firm": {
             "count": 5,
@@ -401,7 +529,11 @@
             "count": 0,
             "retention": null
           }
-        }
+        },
+        "left_accession_coords": "NG_008728.1:31974-31998",
+        "right_accession_coords": "NG_008728.1:32153-32177",
+        "left_clipped": false,
+        "right_clipped": false
       },
       "flank_50": {
         "flank_size": 50,
@@ -409,7 +541,7 @@
         "right_flank_len": 50,
         "extended_len": 254,
         "mfe_energy": -46.70000076293945,
-        "bp_distance_mea": 65,
+        "bp_distance_mea": 31,
         "stem_retention": {
           "firm": {
             "count": 5,
@@ -423,7 +555,11 @@
             "count": 0,
             "retention": null
           }
-        }
+        },
+        "left_accession_coords": "NG_008728.1:31949-31998",
+        "right_accession_coords": "NG_008728.1:32153-32202",
+        "left_clipped": false,
+        "right_clipped": false
       },
       "flank_100": {
         "flank_size": 100,
@@ -431,7 +567,7 @@
         "right_flank_len": 100,
         "extended_len": 354,
         "mfe_energy": -66.80000305175781,
-        "bp_distance_mea": 93,
+        "bp_distance_mea": 41,
         "stem_retention": {
           "firm": {
             "count": 5,
@@ -445,7 +581,11 @@
             "count": 0,
             "retention": null
           }
-        }
+        },
+        "left_accession_coords": "NG_008728.1:31899-31998",
+        "right_accession_coords": "NG_008728.1:32153-32252",
+        "left_clipped": false,
+        "right_clipped": false
       }
     }
   },
@@ -462,9 +602,43 @@
         "firm": 3,
         "soft": 4,
         "floppy": 7
+      },
+      "retention": {
+        "firm": {
+          "count": 3,
+          "retention": 1.0
+        },
+        "soft": {
+          "count": 4,
+          "retention": 0.75
+        },
+        "floppy": {
+          "count": 7,
+          "retention": 0.5714285714285714
+        }
       }
     },
     "temperature": {
+      "37C_baseline": {
+        "mfe_energy": -60.599998474121094,
+        "ensemble_defect": 54.9806419717584,
+        "bp_distance_mfe": 0,
+        "bp_distance_mea": 0,
+        "stem_retention": {
+          "firm": {
+            "count": 3,
+            "retention": 1.0
+          },
+          "soft": {
+            "count": 4,
+            "retention": 0.75
+          },
+          "floppy": {
+            "count": 7,
+            "retention": 0.5714285714285714
+          }
+        }
+      },
       "25.0C": {
         "mfe_energy": -77.41000366210938,
         "ensemble_defect": 74.87918480717859,
@@ -536,6 +710,26 @@
       }
     },
     "parameters": {
+      "Turner2004_baseline": {
+        "mfe_energy": -60.599998474121094,
+        "ensemble_defect": 54.9806419717584,
+        "bp_distance_mfe": 0,
+        "bp_distance_mea": 0,
+        "stem_retention": {
+          "firm": {
+            "count": 3,
+            "retention": 1.0
+          },
+          "soft": {
+            "count": 4,
+            "retention": 0.75
+          },
+          "floppy": {
+            "count": 7,
+            "retention": 0.5714285714285714
+          }
+        }
+      },
       "Andronescu2007": {
         "mfe_energy": -56.029998779296875,
         "ensemble_defect": 79.02420968727891,
@@ -598,13 +792,17 @@
           },
           "soft": {
             "count": 4,
-            "retention": 1.0
+            "retention": 0.75
           },
           "floppy": {
             "count": 7,
-            "retention": 1.0
+            "retention": 0.5714285714285714
           }
-        }
+        },
+        "left_accession_coords": null,
+        "right_accession_coords": null,
+        "left_clipped": false,
+        "right_clipped": false
       },
       "flank_25": {
         "flank_size": 25,
@@ -612,7 +810,7 @@
         "right_flank_len": 25,
         "extended_len": 225,
         "mfe_energy": -66.5,
-        "bp_distance_mea": 28,
+        "bp_distance_mea": 15,
         "stem_retention": {
           "firm": {
             "count": 3,
@@ -626,7 +824,11 @@
             "count": 7,
             "retention": 0.5714285714285714
           }
-        }
+        },
+        "left_accession_coords": null,
+        "right_accession_coords": "NM_000492.4:201-225",
+        "left_clipped": true,
+        "right_clipped": false
       },
       "flank_50": {
         "flank_size": 50,
@@ -634,7 +836,7 @@
         "right_flank_len": 50,
         "extended_len": 250,
         "mfe_energy": -70.80000305175781,
-        "bp_distance_mea": 26,
+        "bp_distance_mea": 13,
         "stem_retention": {
           "firm": {
             "count": 3,
@@ -648,7 +850,11 @@
             "count": 7,
             "retention": 0.42857142857142855
           }
-        }
+        },
+        "left_accession_coords": null,
+        "right_accession_coords": "NM_000492.4:201-250",
+        "left_clipped": true,
+        "right_clipped": false
       },
       "flank_100": {
         "flank_size": 100,
@@ -656,7 +862,7 @@
         "right_flank_len": 100,
         "extended_len": 300,
         "mfe_energy": -82.4000015258789,
-        "bp_distance_mea": 42,
+        "bp_distance_mea": 16,
         "stem_retention": {
           "firm": {
             "count": 3,
@@ -670,7 +876,11 @@
             "count": 7,
             "retention": 0.5714285714285714
           }
-        }
+        },
+        "left_accession_coords": null,
+        "right_accession_coords": "NM_000492.4:201-300",
+        "left_clipped": true,
+        "right_clipped": false
       }
     }
   },
@@ -687,9 +897,43 @@
         "firm": 7,
         "soft": 1,
         "floppy": 4
+      },
+      "retention": {
+        "firm": {
+          "count": 7,
+          "retention": 1.0
+        },
+        "soft": {
+          "count": 1,
+          "retention": 0.0
+        },
+        "floppy": {
+          "count": 4,
+          "retention": 0.0
+        }
       }
     },
     "temperature": {
+      "37C_baseline": {
+        "mfe_energy": -52.29999923706055,
+        "ensemble_defect": 32.993542414640174,
+        "bp_distance_mfe": 0,
+        "bp_distance_mea": 0,
+        "stem_retention": {
+          "firm": {
+            "count": 7,
+            "retention": 1.0
+          },
+          "soft": {
+            "count": 1,
+            "retention": 0.0
+          },
+          "floppy": {
+            "count": 4,
+            "retention": 0.0
+          }
+        }
+      },
       "25.0C": {
         "mfe_energy": -66.6500015258789,
         "ensemble_defect": 32.38816776221773,
@@ -761,6 +1005,26 @@
       }
     },
     "parameters": {
+      "Turner2004_baseline": {
+        "mfe_energy": -52.29999923706055,
+        "ensemble_defect": 32.993542414640174,
+        "bp_distance_mfe": 0,
+        "bp_distance_mea": 0,
+        "stem_retention": {
+          "firm": {
+            "count": 7,
+            "retention": 1.0
+          },
+          "soft": {
+            "count": 1,
+            "retention": 0.0
+          },
+          "floppy": {
+            "count": 4,
+            "retention": 0.0
+          }
+        }
+      },
       "Andronescu2007": {
         "mfe_energy": -50.06999969482422,
         "ensemble_defect": 45.942231411325835,
@@ -823,13 +1087,17 @@
           },
           "soft": {
             "count": 1,
-            "retention": 1.0
+            "retention": 0.0
           },
           "floppy": {
             "count": 4,
-            "retention": 1.0
+            "retention": 0.0
           }
-        }
+        },
+        "left_accession_coords": null,
+        "right_accession_coords": null,
+        "left_clipped": false,
+        "right_clipped": false
       },
       "flank_25": {
         "flank_size": 25,
@@ -837,7 +1105,7 @@
         "right_flank_len": 25,
         "extended_len": 233,
         "mfe_energy": -68.5999984741211,
-        "bp_distance_mea": 88,
+        "bp_distance_mea": 57,
         "stem_retention": {
           "firm": {
             "count": 7,
@@ -851,7 +1119,11 @@
             "count": 4,
             "retention": 0.5
           }
-        }
+        },
+        "left_accession_coords": "NG_007398.2:120793-120817",
+        "right_accession_coords": "NG_007398.2:121001-121025",
+        "left_clipped": false,
+        "right_clipped": false
       },
       "flank_50": {
         "flank_size": 50,
@@ -859,7 +1131,7 @@
         "right_flank_len": 50,
         "extended_len": 283,
         "mfe_energy": -80.19999694824219,
-        "bp_distance_mea": 35,
+        "bp_distance_mea": 7,
         "stem_retention": {
           "firm": {
             "count": 7,
@@ -873,7 +1145,11 @@
             "count": 4,
             "retention": 0.25
           }
-        }
+        },
+        "left_accession_coords": "NG_007398.2:120768-120817",
+        "right_accession_coords": "NG_007398.2:121001-121050",
+        "left_clipped": false,
+        "right_clipped": false
       },
       "flank_100": {
         "flank_size": 100,
@@ -881,7 +1157,7 @@
         "right_flank_len": 100,
         "extended_len": 383,
         "mfe_energy": -125.30000305175781,
-        "bp_distance_mea": 62,
+        "bp_distance_mea": 7,
         "stem_retention": {
           "firm": {
             "count": 7,
@@ -895,7 +1171,11 @@
             "count": 4,
             "retention": 0.25
           }
-        }
+        },
+        "left_accession_coords": "NG_007398.2:120718-120817",
+        "right_accession_coords": "NG_007398.2:121001-121100",
+        "left_clipped": false,
+        "right_clipped": false
       }
     }
   },
@@ -912,9 +1192,43 @@
         "firm": 3,
         "soft": 3,
         "floppy": 0
+      },
+      "retention": {
+        "firm": {
+          "count": 3,
+          "retention": 1.0
+        },
+        "soft": {
+          "count": 3,
+          "retention": 1.0
+        },
+        "floppy": {
+          "count": 0,
+          "retention": null
+        }
       }
     },
     "temperature": {
+      "37C_baseline": {
+        "mfe_energy": -23.799999237060547,
+        "ensemble_defect": 10.91977956200405,
+        "bp_distance_mfe": 0,
+        "bp_distance_mea": 0,
+        "stem_retention": {
+          "firm": {
+            "count": 3,
+            "retention": 1.0
+          },
+          "soft": {
+            "count": 3,
+            "retention": 1.0
+          },
+          "floppy": {
+            "count": 0,
+            "retention": null
+          }
+        }
+      },
       "25.0C": {
         "mfe_energy": -30.780000686645508,
         "ensemble_defect": 12.957861796609377,
@@ -986,6 +1300,26 @@
       }
     },
     "parameters": {
+      "Turner2004_baseline": {
+        "mfe_energy": -23.799999237060547,
+        "ensemble_defect": 10.91977956200405,
+        "bp_distance_mfe": 0,
+        "bp_distance_mea": 0,
+        "stem_retention": {
+          "firm": {
+            "count": 3,
+            "retention": 1.0
+          },
+          "soft": {
+            "count": 3,
+            "retention": 1.0
+          },
+          "floppy": {
+            "count": 0,
+            "retention": null
+          }
+        }
+      },
       "Andronescu2007": {
         "mfe_energy": -21.260000228881836,
         "ensemble_defect": 29.284660369597077,
@@ -1052,9 +1386,13 @@
           },
           "floppy": {
             "count": 0,
-            "retention": 1.0
+            "retention": null
           }
-        }
+        },
+        "left_accession_coords": null,
+        "right_accession_coords": null,
+        "left_clipped": false,
+        "right_clipped": false
       },
       "flank_25": {
         "flank_size": 25,
@@ -1062,7 +1400,7 @@
         "right_flank_len": 25,
         "extended_len": 125,
         "mfe_energy": -38.400001525878906,
-        "bp_distance_mea": 45,
+        "bp_distance_mea": 27,
         "stem_retention": {
           "firm": {
             "count": 3,
@@ -1076,7 +1414,11 @@
             "count": 0,
             "retention": null
           }
-        }
+        },
+        "left_accession_coords": "AF009606.1:19-43",
+        "right_accession_coords": "AF009606.1:119-143",
+        "left_clipped": false,
+        "right_clipped": false
       },
       "flank_50": {
         "flank_size": 50,
@@ -1084,7 +1426,7 @@
         "right_flank_len": 50,
         "extended_len": 168,
         "mfe_energy": -57.29999923706055,
-        "bp_distance_mea": 56,
+        "bp_distance_mea": 26,
         "stem_retention": {
           "firm": {
             "count": 3,
@@ -1098,7 +1440,11 @@
             "count": 0,
             "retention": null
           }
-        }
+        },
+        "left_accession_coords": "AF009606.1:1-43",
+        "right_accession_coords": "AF009606.1:119-168",
+        "left_clipped": true,
+        "right_clipped": false
       },
       "flank_100": {
         "flank_size": 100,
@@ -1106,7 +1452,7 @@
         "right_flank_len": 100,
         "extended_len": 218,
         "mfe_energy": -76.9000015258789,
-        "bp_distance_mea": 70,
+        "bp_distance_mea": 26,
         "stem_retention": {
           "firm": {
             "count": 3,
@@ -1120,7 +1466,11 @@
             "count": 0,
             "retention": null
           }
-        }
+        },
+        "left_accession_coords": "AF009606.1:1-43",
+        "right_accession_coords": "AF009606.1:119-218",
+        "left_clipped": true,
+        "right_clipped": false
       }
     }
   }
