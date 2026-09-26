@@ -42,6 +42,10 @@ dev = [
     "black>=23.0.0",
     "ruff>=0.1.0",
 ]
+docs = [
+    "nbconvert>=7.0.0",
+    "ipykernel>=6.0.0",
+]
 
 [project.scripts]
 foldtrust = "foldtrust.cli:app"
