@@ -241,25 +241,25 @@ Full case-level provenance (NCBI accessions, coordinates, landmark tables) in `d
 
 ## 9. Benchmark Results Summary
 
-**Updated:** September 26, 2026
+**Updated:** September 25, 2026
 
-FoldTrust's six-layer validation demonstrates that per-stem confidence tiers (FIRM/SOFT/FLOPPY) reliably rank structural reliability. Full results and methods in `BENCHMARK.md`.
+FoldTrust's six benchmark layers summarise what the six benchmark layers show about per-stem confidence tiers (FIRM/SOFT/FLOPPY). Full results and methods in `BENCHMARK.md`.
 
 ### Key Findings
 
-**Layer 1 (Scoring correctness):** 11/11 unit tests pass. Energy regression, parameter loading, BPP symmetry, unpaired probability calculation verified.
+**Layer 1 (Scoring correctness):** 5/5 scoring tests pass (perfect/no/half overlap, ECE, FIRM tier accuracy).
 
 **Layer 2 (Structure accuracy):** MEA F1 = 0.563 (95% CI: 0.542–0.585) on 600 ArchiveII/Rfam/bpRNA structures. Moderate agreement with comparative structures reflects thermodynamic vs. phylogenetic modeling differences.
 
-**Layer 3 (Calibration):** ECE = 0.0664; AUROC = 0.8889. Tier PPV: FIRM 0.674, SOFT 0.299, FLOPPY 0.146 (pooled over MFE pairs). FIRM tier reliably predicts true pairs.
+**Layer 3 (Calibration):** ECE = 0.0664; AUROC = 0.8889. Tier PPV: FIRM 0.674, SOFT 0.299, FLOPPY 0.146 (pooled over MFE pairs). Higher tiers had higher reference agreement (PPV FIRM 0.674 > SOFT 0.299 > FLOPPY 0.146).
 
-**Layer 4 (SHAPE agreement):** Spearman ρ = 0.29–0.55 (p < 0.015) on SARS-CoV-2 FSE across 5 datasets (Incarnato, Pyle, Zhang). Genome control: FSE ranks 87th–96th percentile vs. 369 control windows.
+**Layer 4 (SHAPE agreement):** Spearman ρ = 0.29–0.55 for 4 of 5 datasets (Pyle 0.16, n.s.); genome control 43rd–82nd percentile, empirical p 0.18–0.57 (not exceptional).
 
 **Layer 5 (Robustness):** FIRM tier retention: 95% at 25/30°C, 100% at 42°C (pooled over 5 disease cases). Andronescu2007 80%, Langdon2018 60% (vs. Turner2004 baseline). Window context: 50-100 nt flanks partially recover structure (MEA BP distance 19.6–22.4).
 
 ### Interpretation
 
-FoldTrust correctly ranks stem reliability within ViennaRNA's ensemble predictions. FIRM stems (P ≥ 0.85) have 67% PPV against reference structures and robust retention across temperatures. Lower layers (SOFT/FLOPPY) are increasingly uncertain. The system is a **hypothesis generator** for which predicted stems to prioritize; experimental validation remains essential.
+Higher tiers had higher reference agreement within ViennaRNA's ensemble predictions. FIRM stems (P ≥ 0.85) have 67% PPV against reference structures and robust retention across temperatures. Lower layers (SOFT/FLOPPY) are increasingly uncertain. The system is a **hypothesis generator** for which predicted stems to prioritize; experimental validation remains essential.
 
 **Limitations:** Thermodynamic model only (no phylogeny, no RBPs); SHAPE coverage limited to FSE; FLOPPY tier uninformative (PPV 0.15); parameter sensitivity (Andronescu/Langdon shift tiers); context dependence (flanks alter predictions).
 

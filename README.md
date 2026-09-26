@@ -58,7 +58,7 @@ FoldTrust ships with five curated disease-relevant RNA cases with verified NCBI 
 ### 4. MAPT Exon 10 5'ss Stem-Loop (mapt-e10)
 **Coordinates:** NG_007398.2:120818-121000(+), 183 nt  
 **Disease:** Frontotemporal dementia with parkinsonism (FTDP-17), tauopathies  
-**Biology:** Exon 10 (classic numbering, encodes tau R2 repeat) + 5' splice site stem-loop; mutations that stabilize the stem increase exon 10 inclusion (pathogenic 4R/3R ratio shift)  
+**Biology:** Exon 10 (classic numbering, encodes tau R2 repeat) + 5' splice site stem-loop; mutations that destabilize the stem increase exon 10 inclusion (pathogenic 4R/3R ratio shift)  
 **Teaching point:** cis-regulatory RNA structures control alternative splicing; ensemble analysis reveals mutation effects  
 **References:** [Grover et al. 1999](https://doi.org/10.1074/jbc.274.21.15134), [Varani et al. 1999](https://doi.org/10.1073/pnas.96.14.8229), [Hutton et al. 1998](https://doi.org/10.1038/31508)
 
@@ -143,7 +143,7 @@ foldtrust report my_rna.fa -o output/my_rna
 
 ### Benchmark Results
 
-**Six-layer validation** demonstrates FIRM/SOFT/FLOPPY tiers reliably rank structural confidence. See [`BENCHMARK.md`](BENCHMARK.md) for full results.
+**Six benchmark layers** (see [`BENCHMARK.md`](BENCHMARK.md)) test FIRM/SOFT/FLOPPY tiers using unit tests, reference structures, calibration analysis, SHAPE agreement, and robustness checks.
 
 ```bash
 # Run all layers (~3 min, 16GB machine)
@@ -153,10 +153,10 @@ foldtrust benchmark all --output benchmarks/outputs
 **Key findings:**
 - **Layer 2:** MEA F1 = 0.563 on 600 ArchiveII/Rfam/bpRNA structures
 - **Layer 3:** FIRM tier PPV = 0.674; AUROC = 0.889; ECE = 0.066
-- **Layer 4:** SHAPE correlation ρ = 0.29–0.55 (SARS-CoV-2 FSE, 5 datasets)
+- **Layer 4:** SHAPE correlation ρ 0.29–0.55 for 4 of 5 datasets (Pyle 0.16 n.s.); SARS-CoV-2 FSE
 - **Layer 5:** FIRM retention 95% at 25-42°C; 60-80% for alt. parameters
 
-FIRM tier reliably predicts high-confidence stems. SOFT/FLOPPY increasingly uncertain. Drug-discovery applications: ASO design (SMN2, MAPT), small-molecule targeting (FSE, HCV IRES). See [`docs/benchmark/impact.md`](docs/benchmark/impact.md).
+Higher tiers have higher reference agreement. Drug-discovery applications (hypothesis-level): ASO design (SMN2, MAPT), small-molecule targeting (FSE, HCV IRES). See [`docs/benchmark/impact.md`](docs/benchmark/impact.md).
 
 **Limitations:** Thermodynamic model only; FLOPPY tier uninformative (PPV 0.15); parameter/context sensitive.
 
@@ -249,7 +249,7 @@ foldtrust/
 
 ## Roadmap / Future Work
 
-- **Benchmark validation:** Core robustness analysis completed (parameter sets, temperature sweep). Reference accuracy validated on 3 curated structures. Remaining work: larger reference dataset, SHAPE coordinate mapping, window jitter with NCBI sequences. See `NOTES.md` § 9 for full results.
+- **Benchmark validation:** Six-layer validation completed (see `BENCHMARK.md` and `NOTES.md` § 9 for full results): unit tests, reference structure accuracy (600 structures from ArchiveII/Rfam/bpRNA), calibration analysis, SHAPE agreement (SARS-CoV-2 FSE, 5 datasets), and robustness checks (temperature, parameter sets, window context).
 - Web app deployment for interactive reports
 - Docker container with ViennaRNA pre-installed
 - Integration with SHAPE/DMS reactivity data for constrained folding
