@@ -1,7 +1,7 @@
-"""Validate DOIs in NOTES.md and BENCHMARK.md using Crossref API.
+"""Validate DOIs in all markdown files using Crossref API.
 
-Checks each DOI by querying the Crossref API and verifying that the
-title, first author, and year match expectations.
+Checks each DOI by querying the Crossref API and verifying metadata.
+Falls back to HEAD request for DataCite/Zenodo DOIs.
 
 Usage:
     python scripts/check_dois.py
@@ -16,49 +16,26 @@ from typing import Dict, List, Optional
 
 
 def extract_dois_from_file(filepath: Path) -> List[tuple]:
-    """Extract DOIs and context from markdown file."""
+    """Extract DOIs from markdown file."""
     dois = []
 
     with open(filepath, "r") as f:
         content = f.read()
 
-    # Match DOI patterns in markdown - be more strict
-    # Format: [DOI:10.xxxx/yyyy] or (https://doi.org/10.xxxx/yyyy)
-    # Extract just the DOI part
+    # Extract DOIs - use negative lookahead to stop before markdown closing )
+    # DOI suffix can contain alphanumerics, dots, hyphens, underscores, slashes
+    # and balanced parentheses (e.g., 10.1016/0888-7543(91)90503-7)
+    
+    # Basic pattern: 10.xxxx/yyy where yyy doesn't contain ) unless preceded by (
+    pattern = r"10\.\d{4,9}/(?:[a-zA-Z0-9.\-_;/]|(?:\([a-zA-Z0-9.\-_]+\)))+"
+    
+    for match in re.finditer(pattern, content):
+        doi = match.group(0)
+        # Strip any trailing punctuation
+        doi = doi.rstrip(".,;:!?")
+        dois.append((doi, filepath))
 
-    # Pattern 1: https://doi.org/10.xxxx/yyyy
-    for match in re.finditer(r"https://doi\.org/(10\.\d{4,}/[^\s\)]+)", content):
-        doi = match.group(1).rstrip(".)]")
-
-        start = max(0, content.rfind("\n", 0, match.start()))
-        end = content.find("\n", match.end())
-        if end == -1:
-            end = len(content)
-        context = content[start:end].strip()
-
-        dois.append((doi, context, filepath.name))
-
-    # Pattern 2: doi:10.xxxx/yyyy (not in URL)
-    for match in re.finditer(r"(?<!org/)doi:(10\.\d{4,}/[^\s\)]+)", content):
-        doi = match.group(1).rstrip(".)]")
-
-        start = max(0, content.rfind("\n", 0, match.start()))
-        end = content.find("\n", match.end())
-        if end == -1:
-            end = len(content)
-        context = content[start:end].strip()
-
-        dois.append((doi, context, filepath.name))
-
-    # Deduplicate while preserving order
-    seen = set()
-    unique_dois = []
-    for doi, context, fname in dois:
-        if doi not in seen:
-            seen.add(doi)
-            unique_dois.append((doi, context, fname))
-
-    return unique_dois
+    return dois
 
 
 def query_crossref(doi: str) -> Optional[Dict]:
@@ -67,7 +44,8 @@ def query_crossref(doi: str) -> Optional[Dict]:
 
     try:
         req = urllib.request.Request(
-            url, headers={"User-Agent": "FoldTrust/1.0 (mailto:kanekalla@users.noreply.github.com)"}
+            url,
+            headers={"User-Agent": "FoldTrust/1.0 (mailto:kanekalla@users.noreply.github.com)"},
         )
 
         with urllib.request.urlopen(req, timeout=10) as response:
@@ -78,9 +56,21 @@ def query_crossref(doi: str) -> Optional[Dict]:
         if e.code == 404:
             return None
         raise
-    except Exception as e:
-        print(f"    Error querying {doi}: {e}")
+    except Exception:
         return None
+
+
+def check_doi_redirect(doi: str) -> bool:
+    """Check if DOI redirects successfully (for DataCite/Zenodo)."""
+    url = f"https://doi.org/{doi}"
+
+    try:
+        req = urllib.request.Request(url, method="HEAD")
+        with urllib.request.urlopen(req, timeout=10) as response:
+            # Check if we get a 3xx redirect to a non-error page
+            return response.status in (200, 301, 302, 303, 307, 308)
+    except Exception:
+        return False
 
 
 def format_authors(authors: List[Dict]) -> str:
@@ -98,41 +88,36 @@ def format_authors(authors: List[Dict]) -> str:
         return f"{family} et al."
 
 
-def check_doi(doi: str, context: str) -> Dict:
+def check_doi(doi: str) -> Dict:
     """Check a single DOI and return validation results."""
-    result = {"doi": doi, "context": context, "valid": False, "error": None, "metadata": {}}
-
-    metadata = query_crossref(doi)
-
-    if metadata is None:
-        result["error"] = "DOI not found in Crossref"
-        return result
-
-    # Extract metadata
-    title = metadata.get("title", [""])[0]
-    authors = format_authors(metadata.get("author", []))
-
-    # Get publication year from various date fields
-    year = None
-    if "published-print" in metadata:
-        year = metadata["published-print"].get("date-parts", [[None]])[0][0]
-    elif "published-online" in metadata:
-        year = metadata["published-online"].get("date-parts", [[None]])[0][0]
-    elif "issued" in metadata:
-        year = metadata["issued"].get("date-parts", [[None]])[0][0]
-
-    container = metadata.get("container-title", [""])[0]
-    publisher = metadata.get("publisher", "")
-
-    result["valid"] = True
-    result["metadata"] = {
-        "title": title,
-        "authors": authors,
-        "year": year,
-        "journal": container,
-        "publisher": publisher,
+    result = {
+        "doi": doi,
+        "valid": False,
+        "error": None,
+        "title": None,
+        "authors": None,
     }
 
+    # Try Crossref first
+    metadata = query_crossref(doi)
+
+    if metadata:
+        title = metadata.get("title", [""])[0]
+        authors = format_authors(metadata.get("author", []))
+
+        result["valid"] = True
+        result["title"] = title
+        result["authors"] = authors
+        return result
+
+    # Fallback: try HEAD request for DataCite/Zenodo DOIs
+    if check_doi_redirect(doi):
+        result["valid"] = True
+        result["title"] = "(DataCite/Zenodo - redirect OK)"
+        result["authors"] = "(not available)"
+        return result
+
+    result["error"] = "DOI not found or inaccessible"
     return result
 
 
@@ -141,58 +126,88 @@ def main():
     print("DOI Validation")
     print("=" * 70)
 
-    # Files to check
-    files_to_check = [
-        Path("NOTES.md"),
-        Path("BENCHMARK.md") if Path("BENCHMARK.md").exists() else None,
-    ]
-    files_to_check = [f for f in files_to_check if f and f.exists()]
+    # Find all .md files, excluding data caches
+    repo_root = Path(".")
+    md_files = []
+    for md_file in repo_root.rglob("*.md"):
+        # Skip cache directories
+        if "/_cache/" in str(md_file) or "/data/_cache/" in str(md_file):
+            continue
+        md_files.append(md_file)
 
+    print(f"\nSearching {len(md_files)} markdown files...")
+
+    # Extract all DOIs
     all_dois = []
-    for filepath in files_to_check:
+    for filepath in sorted(md_files):
         dois = extract_dois_from_file(filepath)
         all_dois.extend(dois)
 
-    print(f"\nFound {len(all_dois)} DOIs across {len(files_to_check)} file(s)")
-    print()
+    # Deduplicate
+    unique_dois = {}
+    for doi, filepath in all_dois:
+        if doi not in unique_dois:
+            unique_dois[doi] = filepath
+
+    print(f"Found {len(unique_dois)} unique DOIs\n")
 
     results = []
     failed = []
 
-    for i, (doi, context, source_file) in enumerate(all_dois, 1):
-        print(f"[{i}/{len(all_dois)}] Checking {doi}...")
+    for i, (doi, filepath) in enumerate(sorted(unique_dois.items()), 1):
+        print(f"[{i}/{len(unique_dois)}] Checking {doi}...")
 
-        result = check_doi(doi, context)
+        result = check_doi(doi)
+        result["filepath"] = str(filepath)
         results.append(result)
 
         if not result["valid"]:
             print(f"  ✗ {result['error']}")
-            failed.append((doi, source_file, result["error"]))
+            failed.append((doi, filepath, result["error"]))
         else:
-            meta = result["metadata"]
-            print(f"  ✓ {meta['authors']} ({meta['year']}). {meta['title'][:60]}...")
-            print(f"    {meta['journal']}")
+            print(f"  ✓ {result['authors']}: {result['title'][:60]}...")
 
-        print()
-
-        # Rate limit: be nice to Crossref API
-        if i < len(all_dois):
+        # Rate limit
+        if i < len(unique_dois):
             time.sleep(1)
 
-    # Summary
-    print("=" * 70)
+    # Write output
+    output_file = Path("benchmarks/outputs/doi_check.txt")
+    output_file.parent.mkdir(parents=True, exist_ok=True)
+
+    with open(output_file, "w") as f:
+        f.write("DOI Validation Results\n")
+        f.write("=" * 70 + "\n\n")
+
+        for result in results:
+            f.write(f"DOI: {result['doi']}\n")
+            f.write(f"File: {result['filepath']}\n")
+            if result["valid"]:
+                f.write(f"Status: VALID\n")
+                f.write(f"Title: {result['title']}\n")
+                f.write(f"Authors: {result['authors']}\n")
+            else:
+                f.write(f"Status: FAILED\n")
+                f.write(f"Error: {result['error']}\n")
+            f.write("\n")
+
+        f.write("=" * 70 + "\n")
+        f.write(f"Total DOIs: {len(unique_dois)}\n")
+        f.write(f"Valid: {len(results) - len(failed)}\n")
+        f.write(f"Failed: {len(failed)}\n")
+
+    print("\n" + "=" * 70)
     print("SUMMARY")
     print("=" * 70)
-    print()
-    print(f"Total DOIs checked: {len(all_dois)}")
+    print(f"Total DOIs: {len(unique_dois)}")
     print(f"Valid: {len(results) - len(failed)}")
     print(f"Failed: {len(failed)}")
+    print(f"\nResults written to {output_file}")
 
     if failed:
         print("\n❌ Failed DOIs:")
-        for doi, source_file, error in failed:
-            print(f"  - {doi} (in {source_file}): {error}")
-        print("\nPlease fix or remove invalid DOIs.")
+        for doi, filepath, error in failed:
+            print(f"  - {doi} (in {filepath}): {error}")
         return 1
     else:
         print("\n✓ All DOIs are valid!")
