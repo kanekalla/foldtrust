@@ -34,7 +34,7 @@ FoldTrust tiers could triage ASO candidate sites by accessibility. However:
 **Target:** Frameshift-stimulating element (NC_045512.2:13462-13542)  
 **Therapeutic strategy:** Small molecules disrupting −1 ribosomal frameshifting
 
-**FoldTrust result:** 5 MFE stems: 2 FIRM (mean p 0.946, 0.981) and 3 SOFT (0.730, 0.847, 0.564); ViennaRNA cannot represent the FSE pseudoknot.
+**FoldTrust result:** 2 FIRM / 3 SOFT stems (mean-probability tiers; layer5_complete.json baseline); ViennaRNA cannot represent the FSE pseudoknot.
 
 **Drug-discovery question:** Can small molecules bind FIRM stems to alter frameshifting efficiency?
 
@@ -42,11 +42,11 @@ The FSE directs −1 programmed ribosomal frameshifting (PRF) required for ORF1a
 - Merafloxacin (a fluoroquinolone) was reported to inhibit SARS-CoV-2 −1 PRF and restrict replication in cell culture (Sun et al., PNAS 2021; doi:10.1073/pnas.2023051118). MTDB reduced SARS-CoV-2 −1 PRF in reporter assays (Kelly et al., J Biol Chem 2020; doi:10.1074/jbc.AC120.013449; Neupane et al., J Mol Biol 2020; doi:10.1016/j.jmb.2020.09.006).
 
 **Layer 4 findings:**
-- SHAPE reactivity (unpaired probability) correlates with predictions (ρ=0.29–0.55).
-- MEA F1 0.83–0.98 vs unconstrained; MFE F1 0.40–0.96 (Pyle bp distance 30) (benchmarks/outputs/layer4_shape/shape_directed_folding.csv).
+- SHAPE reactivity (unpaired probability) correlates with predictions (ρ = 0.29–0.55 for 4 of 5 datasets; Pyle 0.16, n.s.).
+- SHAPE-directed folding: MEA F1 0.83–0.98 vs unconstrained; MFE F1 0.40–0.96 (Pyle bp distance 30) (benchmarks/outputs/layer4_shape/shape_directed_folding.csv).
 - FSE correlation is not exceptional genome-wide (43rd–82nd percentile; empirical p 0.18–0.57; layer4_shape_results.json).
 
-FoldTrust FIRM tiers help identify stable stem-loop targets for fragment-based drug design or high-throughput screening. However:
+FoldTrust FIRM tiers could help flag candidate stable stem-loops for fragment-based screening or HTS (hypothesis only). However:
 - *Limitation:* Thermodynamic model only; does not predict ligand binding pockets.
 - *Validation needed:* Crystallographic or cryo-EM structure of FSE (available: PDB 6XRZ, Zhang et al., Nat Struct Mol Biol 2021; doi:10.1038/s41594-021-00653-y) for structure-based design.
 
@@ -71,7 +71,7 @@ The HCV IRES mediates cap-independent translation initiation, essential for vira
 - Benzimidazole ligands bind the domain IIa internal loop and inhibit IRES function (Seth et al., J Med Chem 2005; doi:10.1021/jm050815o; Parsons et al., Nat Chem Biol 2009; doi:10.1038/nchembio.217). Note the ligand site is a loop, not a FIRM stem.
 - Domain II adopts a conserved structure (PDB 1P5P; Lukavsky et al., Nat Struct Biol 2003; doi:10.1038/nsb1004).
 
-FoldTrust can prioritize IRES domains for ligand screening. However:
+FoldTrust tiers could help prioritize IRES domains for ligand screening, but here every predicted domain II stem is lost when genomic flanks are added (Layer 5). However:
 - *Limitation:* Tertiary structure (3D folds, long-range interactions) not predicted by secondary-structure models.
 - *Validation needed:* NMR or crystallography to identify binding pockets.
 
@@ -119,7 +119,7 @@ MAPT exon 10 encodes a microtubule-binding repeat. Its inclusion is regulated by
 - FTDP-17 mutations in the hairpin (e.g., S305S, +3, +14, +16) destabilize it and increase exon 10 inclusion (excess 4R tau) (Varani et al., PNAS 1999; doi:10.1073/pnas.96.14.8229; Hutton et al., Nature 1998; doi:10.1038/31508). N279K acts through an exonic splicing enhancer and also increases inclusion (D'Souza et al., PNAS 1999; doi:10.1073/pnas.96.10.5598).
 - ASOs shifting exon 10 splicing altered 4R tau in mice (Schoch et al., Neuron 2016; doi:10.1016/j.neuron.2016.04.042); small molecules that bind the splicing-regulatory hairpin have been reported (Chen et al., JACS 2020; doi:10.1021/jacs.0c00768).
 
-FoldTrust FIRM tiers identify the stable hairpin as a high-confidence target. However:
+FoldTrust does not currently report a tier for the exon 10 / intron 10 splice-site hairpin itself; the case window has 5 FIRM / 2 SOFT / 4 FLOPPY stems (case_metrics.csv), and its FIRM stems are sensitive to 25-nt flanks (retention 0.29, window_context_stem_retention.csv). However:
 - *Limitation:* Splicing also depends on SR proteins, hnRNPs, and cis elements beyond the hairpin.
 - *Validation needed:* Cell-based splicing assays to correlate hairpin stability with exon 10 inclusion.
 
@@ -128,7 +128,7 @@ FoldTrust FIRM tiers identify the stable hairpin as a high-confidence target. Ho
 - Hutton M, Lendon CL, Rizzu P, Baker M, Froelich S, Houlden H, Pickering-Brown S, Chakraverty S, Isaacs A, Grover A, Hackett J, Adamson J, Lincoln S, Dickson D, Davies P, Petersen RC, Stevens M, de Graaff E, Wauters E, van Baren J, Hillebrand M, Joosse M, Kwon JM, Nowotny P, Che LK, Norton J, Morris JC, Reed LA, Trojanowski J, Basun H, Lannfelt L, Neystat M, Fahn S, Dark F, Tannenberg T, Dodd PR, Hayward N, Kwok JBJ, Schofield PR, Andreadis A, Snowden J, Craufurd D, Neary D, Owen F, Oostra BA, Hardy J, Goate A, van Swieten J, Mann D, Lynch T, Heutink P. Association of missense and 5'-splice-site mutations in tau with the inherited dementia FTDP-17. Nature 1998;393:702-705. doi:10.1038/31508
 - D'Souza I, Poorkaj P, Hong M, Nochlin D, Lee VM, Bird TD, Schellenberg GD. Missense and silent tau gene mutations cause frontotemporal dementia with parkinsonism-chromosome 17 type, by affecting multiple alternative RNA splicing regulatory elements. Proc Natl Acad Sci USA 1999;96:5598-5603. doi:10.1073/pnas.96.10.5598
 - Schoch KM, DeVos SL, Miller RL, Chun SJ, Norrbom M, Wozniak DF, Dawson HN, Bennett CF, Rigo F, Miller TM. Increased 4R-Tau Induces Pathological Changes in a Human-Tau Mouse Model. Neuron 2016;90:941-947. doi:10.1016/j.neuron.2016.04.042
-- Chen JL, Zhang P, Abe M, Talukdar I, Wang F, Li S, Varani G, Hecht SM, Angell L, Wan Y, Childs-Disney JL, Disney MD. Design, Optimization, and Study of Small Molecules That Target Tau Pre-mRNA and Affect Splicing. J Am Chem Soc 2020;142:8706-8727. doi:10.1021/jacs.0c00768
+- Chen JL, Zhang P, Abe M, Aikawa H, Zhang L, Frank AJ, Zembryski T, Hubbs C, Park H, Withka J, Steppan C, Rogers L, Cabral S, Pettersson M, Wager TT, Fountain MA, Rumbaugh G, Childs-Disney JL, Disney MD. Design, Optimization, and Study of Small Molecules That Target Tau Pre-mRNA and Affect Splicing. J Am Chem Soc 2020;142:8706-8727. doi:10.1021/jacs.0c00768
 
 ---
 
@@ -154,4 +154,4 @@ However, experimental validation is essential. Tier predictions should complemen
 
 ---
 
-**DOIs checked against Crossref (title + first author); see benchmarks/outputs/doi_check.txt.**
+**DOIs resolve on doi.org/Crossref (scripts/check_dois.py); titles and first authors were checked manually.**
