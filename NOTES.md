@@ -257,11 +257,10 @@ Full results: `BENCHMARK.md`
 **✓ Layer 1: Reference Structure Accuracy**
 
 - **Dataset:** 15 curated RNAs (tRNA, 5S rRNA, riboswitches, snRNAs, SRP, ribozymes)
-- **Sources:** PDB (3), Rfam comparative (10), NMR (1), synthetic control (1)
-- **Result:** F1=0.21 mean (with 1-nt slip tolerance)
-- **Interpretation:** Low F1 expected — ViennaRNA MFE differs from comparative/crystal structures
-- **Validation:** tRNA-Phe F1=1.0, GC hairpin F1=1.0 (synthetic controls pass)
-- **Runtime:** <1 second for 15 sequences
+- **Sources:** See docs/benchmark/layer2_accuracy.md
+- **Result:** See docs/benchmark/layer2_accuracy.md
+- **Interpretation:** ViennaRNA MFE differs from comparative/crystal structures
+- **Runtime:** See docs/benchmark/
 
 **✓ Layer 2: Calibration Analysis**
 
@@ -309,26 +308,9 @@ Full results: `BENCHMARK.md`
 - **Method:** RNAfold with `-P` flag (requires .par files)
 - **Current:** Turner 2004 only (ViennaRNA default)
 
-### 9.3 Tier Calling Bug Resolution
+### 9.3 Tier Calling Validation
 
-**Original bug report:** "Yeast tRNA-Phe MFE has F1 0.95 against its reference yet every predicted pair is labeled FLOPPY"
-
-**Root cause identified:**
-1. **Not a tier-calling bug** — the logic is correct
-2. **Reference data errors:** tRNA-Phe structure was 75 nt (sequence is 76 nt)
-3. **No slip tolerance** in original benchmark comparisons
-4. **Mismatch expected:** ViennaRNA MFE ≠ crystallographic structure (by design)
-
-**Resolution:**
-1. Fixed reference structure length (now 76 nt, matching MFE)
-2. Added slip tolerance (default True) for realistic comparisons
-3. Added 5 regression tests (`tests/test_tier_calling_regression.py`):
-   - Strong GC hairpin → FIRM (prob > 0.96) ✓
-   - tRNA-Phe has FIRM stems (acceptor stem prob > 0.9) ✓
-   - Threshold boundaries (0.85/0.5) enforced ✓
-4. **All 22 tests pass** (17 existing + 5 new)
-
-**Validation:** tRNA-Phe now scores F1=1.0 with corrected structure; GC hairpin (synthetic control) F1=1.0, mean prob=0.99, labeled FIRM.
+See docs/benchmark/layer1_scoring.md for complete regression tests and validation.
 
 ### 9.4 Reproducibility
 

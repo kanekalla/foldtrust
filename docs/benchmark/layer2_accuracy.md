@@ -41,6 +41,7 @@ For each structure:
    - **Centroid**: Centroid structure (`RNA.fold_compound.centroid()`)
 3. Compare predicted pairs to reference pairs (after PK removal)
 4. Compute per-structure sensitivity, PPV, F1, MCC
+   - **MCC** (Matthews Correlation Coefficient): MCC = sqrt(sensitivity × PPV), the standard approximation for RNA secondary structure (Gorodkin, Stricklin & Stormo 2001, *Nucleic Acids Res* 29:2135-2144, [doi:10.1093/nar/29.10.2135](https://doi.org/10.1093/nar/29.10.2135))
 5. Report mean of per-structure F1 (primary metric)
 
 **Matching conventions**:
@@ -63,9 +64,9 @@ python scripts/run_layers_1_2_3.py
 
 | Method | Sensitivity | PPV | F1 | MCC |
 |--------|-------------|-----|----|----|
-| MFE | 0.639 | 0.499 | 0.548 | -0.404 |
-| MEA | 0.641 | 0.521 | 0.563 | -0.396 |
-| CENTROID | 0.622 | 0.551 | 0.570 | -0.388 |
+| MFE | 0.639 | 0.499 | 0.548 | 0.557 |
+| MEA | 0.641 | 0.521 | 0.563 | 0.571 |
+| CENTROID | 0.622 | 0.551 | 0.570 | 0.577 |
 
 ### Per-Dataset F1 (Mean of Per-Structure)
 
@@ -80,7 +81,7 @@ python scripts/run_layers_1_2_3.py
 - **Centroid is the most accurate** single structure (F1 0.570), followed by MEA (0.563) and MFE (0.548)
 - **bpRNA TS0 is hardest** (F1 ~0.52), likely due to higher structural diversity and fewer constraints from covariation
 - **ArchiveII and Rfam are similar** (F1 ~0.58), benefiting from strong comparative-analysis signals
-- All methods show moderate to good correlation (MCC 0.556–0.576)
+- All methods show moderate to good correlation (MCC 0.557–0.577)
 
 ## Limitations
 

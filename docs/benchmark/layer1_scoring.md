@@ -30,6 +30,7 @@ Unit tests implemented in `tests/test_benchmark_layer1.py`:
    - **Exact**: Pair (i,j) correct if (i,j) in reference
    - **Slip-tolerant (±1 on one side)**: Predicted (i,j) matches if any of (i,j), (i±1,j), (i,j±1) in reference; reference pair recovered if any of (i,j), (i±1,j), (i,j±1) predicted
    - Metrics: sensitivity, PPV, F1, MCC
+   - **MCC** (Matthews Correlation Coefficient): MCC = sqrt(sensitivity × PPV), the standard approximation for RNA secondary structure (Gorodkin, Stricklin & Stormo 2001, *Nucleic Acids Res* 29:2135-2144, [doi:10.1093/nar/29.10.2135](https://doi.org/10.1093/nar/29.10.2135))
    - **Invariant**: Slip F1 ≥ exact F1 (tested on toy cases and the full Layer 2 sample)
 
 4. **Energy regression** (ViennaRNA 2.7.x parameter loading):

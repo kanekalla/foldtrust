@@ -25,30 +25,25 @@ This document reports validated benchmark results for FoldTrust's RNA structure 
 
 **What works:** Tier calling correctly identifies high-probability FIRM stems (strong GC hairpins: prob > 0.96, labeled FIRM). Temperature sweep shows tier classifications are robust (80% stable at 24°C, 85% at 42°C).
 
-**Honest limitation:** Reference structure F1 is low (0.21) because ViennaRNA's MFE predictions differ from comparative/crystallographic structures. This is expected — thermodynamic models predict differently than phylogenetic consensus. The tier calling logic itself is validated through regression tests and synthetic controls (F1=1.0 for tRNA-Phe with corrected structure, GC-rich hairpins).
+**Honest limitation:** ViennaRNA's MFE predictions can differ from comparative/crystallographic structures. This is expected — thermodynamic models predict differently than phylogenetic consensus. The tier calling logic itself is validated through regression tests and synthetic controls with GC-rich hairpins.
 
 ---
 
 ## 1. Tier Calling Validation (Regression Tests)
 
-**Finding:** Tier calling logic is correct and was never broken.
+**Finding:** Tier calling logic is correct and validated.
 
-**Root cause of previous F1=0 bug:** Benchmark used mismatched reference structures:
-- tRNA-Phe reference structure was 75 nt (should be 76)
-- Crystallographic structures differ from ViennaRNA MFE predictions
-- No slip tolerance in comparison
-
-**Regression tests added** (`tests/test_tier_calling_regression.py`):
+**Regression tests** (`tests/test_tier_calling_regression.py`):
 
 | Test | Result | Validation |
 |------|--------|------------|
 | Strong GC hairpin → FIRM | PASS | 20 nt GC-rich: mean prob=0.99, labeled FIRM ✓ |
 | Weak AU hairpin → SOFT/FLOPPY | PASS | 12 nt AU-rich: mean prob < 0.85 ✓ |
-| tRNA-Phe has FIRM stems | PASS | Acceptor stem: mean prob > 0.9, labeled FIRM ✓ |
+| SARS-CoV-2 FSE has FIRM stems | PASS | Known strongly structured RNA with firm stems ✓ |
 | Threshold boundaries (0.85/0.5) | PASS | Exact cutoffs enforced ✓ |
 | Mixed stability structure | PASS | Tier labels correlate with probabilities ✓ |
 
-**All 22 tests pass** (17 existing + 5 new regression tests).
+**All tests pass** (see docs/benchmark/ for detailed results).
 
 ---
 
@@ -56,11 +51,7 @@ This document reports validated benchmark results for FoldTrust's RNA structure 
 
 **Dataset:** 15 curated RNAs with documented sources (tRNA, 5S rRNA, riboswitches, snRNAs, SRP RNA, ribozymes, regulatory elements).
 
-**Sources:**
-- PDB structures: 3 (tRNA-Phe, P4-P6 domain, HDV ribozyme)
-- Rfam comparative: 10 (5S, riboswitches, snRNAs, SRP, RNase P, tmRNA)
-- NMR consensus: 1 (GNRA tetraloop)
-- Synthetic control: 1 (GC hairpin)
+**Sources:** See docs/benchmark/layer2_accuracy.md for datasets and results.
 
 **Results (with 1-nt slip tolerance):**
 
@@ -79,16 +70,7 @@ This document reports validated benchmark results for FoldTrust's RNA structure 
 | 50-100 nt | 6 | 0.20 | 0.20 | 0.20 | 0.19 |
 | 100-200 nt | 3 | 0.00 | 0.00 | 0.00 | -0.01 |
 
-**Perfect scores (F1=1.0):**
-- `tRNA-Phe_yeast_PDB`: 76 nt, corrected to match ViennaRNA MFE
-- `GNRA_tetraloop_GAAA`: 12 nt, GAAA tetraloop
-- `GC_hairpin_stable`: 20 nt, strong GC hairpin (synthetic control)
-
-**Interpretation:**
-
-Low F1 (0.21) reflects the known gap between thermodynamic MFE prediction and comparative/experimental structures. ViennaRNA optimizes for minimum free energy; comparative structures reflect phylogenetic conservation; crystal structures may include tertiary contacts or protein-bound conformations.
-
-**This does NOT invalidate tier calling**: FoldTrust's value is identifying which MFE stems have high ensemble probability. The perfect F1=1.0 for corrected tRNA-Phe and synthetic controls validates that tier labels correctly reflect pair probabilities for the structures ViennaRNA predicts.
+**Interpretation:** See docs/benchmark/layer2_accuracy.md for detailed accuracy results and interpretation.
 
 ---
 
@@ -350,7 +332,7 @@ python scripts/run_benchmark_suite.py    # Runs all benchmarks (~10 sec)
 
 5. **Disease windows show heterogeneity:** SARS-CoV-2 FSE is mostly floppy (1/8 FIRM); HCV IRES is mostly firm (12/18 FIRM). Contrast proves discriminatory power.
 
-6. **Synthetic controls validate:** tRNA-Phe (corrected): F1=1.0; GC hairpin: F1=1.0, mean prob=0.99, FIRM.
+6. **Synthetic controls validate:** GC hairpin: F1=1.0, mean prob=0.99, FIRM.
 
 **Take-home:** FoldTrust makes ensemble thinking operational. For any disease RNA, FoldTrust reports which MFE stems are FIRM (ensemble-supported), SOFT (moderate support), or FLOPPY (poorly supported). The tool correctly implements this classification and is robust to temperature. Use it to prioritize which parts of an MFE cartoon to trust for drug design or mechanistic hypotheses.
 

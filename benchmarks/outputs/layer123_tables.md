@@ -8,9 +8,9 @@ Generated from benchmark outputs in `benchmarks/outputs/layer2/` and `layer3/`.
 
 | Method | Sensitivity | PPV | F1 | MCC |
 |--------|-------------|-----|----|----|
-| MFE | 0.639 | 0.499 | 0.548 | -0.404 |
-| MEA | 0.641 | 0.521 | 0.563 | -0.396 |
-| CENTROID | 0.622 | 0.551 | 0.570 | -0.388 |
+| MFE | 0.639 | 0.499 | 0.548 | 0.557 |
+| MEA | 0.641 | 0.521 | 0.563 | 0.571 |
+| CENTROID | 0.622 | 0.551 | 0.570 | 0.577 |
 
 ### Per-Dataset F1 (Mean of Per-Structure)
 

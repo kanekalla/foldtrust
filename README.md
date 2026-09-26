@@ -166,7 +166,7 @@ foldtrust benchmark all -o benchmarks/outputs
 **Key findings:**
 - Tier classifications are perfectly stable (100%) across parameter sets and temperatures
 - When MFE disagrees with reference, FoldTrust correctly assigns low probabilities (FLOPPY tier)
-- tRNA-Phe: F1 = 0.95 (excellent agreement with validated structure)
+- Detailed results in docs/benchmark/
 
 See [`BENCHMARK.md`](BENCHMARK.md) for:
 - Complete methodology and results for each layer

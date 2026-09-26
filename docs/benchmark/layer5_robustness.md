@@ -235,7 +235,7 @@ Ensemble defect change at 42°C vs 37°C baseline:
 | mapt-e10 | 32.99 | 25.16 | -7.83 | -23.7% |
 | hcv-ires-dii | 10.92 | 10.65 | -0.27 | -2.5% |
 
-**Observation:** Only SMN2 shows increased ensemble defect at 42°C (+9.5%). Four of five cases show decreased or stable defect. The claim "42°C ensemble defect 10-15% higher than 37°C" is false.
+**Observation:** Only SMN2 shows increased ensemble defect at 42°C (+9.5%). Four of five cases show decreased or stable defect.
 
 ### Figures
 
@@ -248,7 +248,7 @@ Generated figures in `benchmarks/outputs/figures/`:
 
 1. **FIRM stems are temperature-robust but parameter-sensitive.** 95% of FIRM stems (pooled) are retained from 25-30°C, 100% at 42°C. But only 80% are retained under Andronescu2007, and 60% under Langdon2018.
 
-2. **SOFT stems show moderate stability.** 60% are retained at 25/30°C (pooled). The baseline SOFT retention of 73.3% (not 100%) reflects the MFE-vs-MEA gap: even at the same condition, not all MFE SOFT stems are retained in the MEA structure. This gap is present across all conditions and should not be attributed solely to the perturbation.
+2. **SOFT stems show moderate stability.** 60% are retained at 25/30°C (pooled). The baseline SOFT retention of 73.3% reflects the MFE-vs-MEA gap: even at the same condition, not all MFE SOFT stems are retained in the MEA structure. This gap is present across all conditions.
 
 3. **Window context strongly affects predictions.** Even FIRM stems drop to 45-70% retention when 25-100 nt flanks are added, because competing structures in the extended sequence can sequester nucleotides.
 

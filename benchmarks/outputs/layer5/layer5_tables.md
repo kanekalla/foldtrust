@@ -8,9 +8,9 @@ All numbers below are computed from the CSV outputs, not hand-typed.
 
 | tier   |   37C_baseline |    25.0C |    30.0C |    42.0C |
 |:-------|---------------:|---------:|---------:|---------:|
-| FIRM   |       1        | 0.949985 | 0.949985 | 1        |
-| FLOPPY |       0.363618 | 0.272718 | 0.363655 | 0.363618 |
-| SOFT   |       0.73334  | 0.600007 | 0.600007 | 0.73334  |
+| FIRM   |       1        | 0.95     | 0.95     | 1        |
+| FLOPPY |       0.363636 | 0.272727 | 0.363636 | 0.363636 |
+| SOFT   |       0.733333 | 0.6      | 0.6      | 0.733333 |
 
 ### Per-Case Mean Retention (average across 5 cases)
 
@@ -26,9 +26,9 @@ All numbers below are computed from the CSV outputs, not hand-typed.
 
 | tier   |   Turner2004_baseline |   Andronescu2007 |   Langdon2018 |
 |:-------|----------------------:|-----------------:|--------------:|
-| FIRM   |              1        |        0.79999   |     0.600005  |
-| FLOPPY |              0.363618 |        0.454527  |     0.0909091 |
-| SOFT   |              0.73334  |        0.0666667 |     0.13334   |
+| FIRM   |              1        |        0.8       |     0.6       |
+| FLOPPY |              0.363636 |        0.454545  |     0.0909091 |
+| SOFT   |              0.733333 |        0.0666667 |     0.133333  |
 
 ### Per-Case Mean Retention
 
@@ -44,9 +44,9 @@ All numbers below are computed from the CSV outputs, not hand-typed.
 
 | tier   |        0 |       25 |       50 |      100 |
 |:-------|---------:|---------:|---------:|---------:|
-| FIRM   | 1        | 0.449995 | 0.7      | 0.7      |
-| FLOPPY | 0.363618 | 0.545436 | 0.363655 | 0.454527 |
-| SOFT   | 0.73334  | 0.2      | 0.2      | 0.133333 |
+| FIRM   | 1        | 0.45     | 0.7      | 0.7      |
+| FLOPPY | 0.363636 | 0.545455 | 0.363636 | 0.454545 |
+| SOFT   | 0.733333 | 0.2      | 0.2      | 0.133333 |
 
 ### Per-Case Mean Retention
 

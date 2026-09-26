@@ -32,15 +32,17 @@ def compute_pooled_retention(df: pd.DataFrame, condition_col: str) -> pd.DataFra
             if len(tier_df) == 0:
                 continue
 
-            total_stems = tier_df["n_stems"].sum()
-            total_retained = (tier_df["n_stems"] * tier_df["retention"]).sum()
+            # Compute exact integer counts to avoid float noise
+            total_stems = int(tier_df["n_stems"].sum())
+            total_retained = int(round((tier_df["n_stems"] * tier_df["retention"]).sum()))
             pooled_retention = total_retained / total_stems if total_stems > 0 else None
 
             results.append(
                 {
                     condition_col: condition,
                     "tier": tier,
-                    "total_stems": int(total_stems),
+                    "total_stems": total_stems,
+                    "total_retained": total_retained,
                     "pooled_retention": pooled_retention,
                 }
             )
