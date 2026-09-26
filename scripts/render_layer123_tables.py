@@ -146,7 +146,12 @@ def render_layer3_tables(output_dir: Path) -> str:
 
 def main():
     """Generate markdown tables from benchmark outputs."""
-    output_dir = Path("benchmarks/outputs")
+    import sys
+    
+    if len(sys.argv) > 1:
+        output_dir = Path(sys.argv[1])
+    else:
+        output_dir = Path("benchmarks/outputs")
 
     # Check that required files exist
     required = [

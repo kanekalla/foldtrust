@@ -2,10 +2,11 @@
 
 import json
 import subprocess
+import sys
 from pathlib import Path
 from typing import Dict
 
-from foldtrust.benchmark.layer1_scoring import run_layer1_tests
+from foldtrust.benchmark.scoring import run_layer1_tests
 from foldtrust.benchmark.layer2_accuracy import run_layer2_benchmark
 from foldtrust.benchmark.layer3_calibration import run_layer3_calibration
 from foldtrust.benchmark.layer5_robustness import run_layer5_analysis
@@ -173,20 +174,30 @@ def run_all_benchmarks(
         if render_layer123_script.exists():
             if verbose:
                 print("  Running render_layer123_tables.py...")
-            subprocess.run(
-                ["python3", str(render_layer123_script), str(output_dir)],
-                check=True,
-                capture_output=not verbose,
+            result = subprocess.run(
+                [sys.executable, str(render_layer123_script), str(output_dir)],
+                check=False,
+                capture_output=True,
+                text=True,
             )
+            if result.returncode != 0:
+                raise RuntimeError(f"render_layer123_tables.py failed: {result.stderr}")
+            if verbose and result.stdout:
+                print(result.stdout)
 
         if render_layer5_script.exists():
             if verbose:
                 print("  Running render_layer5_tables.py...")
-            subprocess.run(
-                ["python3", str(render_layer5_script), str(output_dir)],
-                check=True,
-                capture_output=not verbose,
+            result = subprocess.run(
+                [sys.executable, str(render_layer5_script), str(output_dir)],
+                check=False,
+                capture_output=True,
+                text=True,
             )
+            if result.returncode != 0:
+                raise RuntimeError(f"render_layer5_tables.py failed: {result.stderr}")
+            if verbose and result.stdout:
+                print(result.stdout)
 
         if verbose:
             print("✓ Tables rendered")

@@ -251,7 +251,13 @@ def render_tables(output_dir: Path) -> str:
 
 
 def main():
-    output_dir = Path("benchmarks/outputs/layer5")
+    import sys
+    
+    if len(sys.argv) > 1:
+        base_output_dir = Path(sys.argv[1])
+        output_dir = base_output_dir / "layer5"
+    else:
+        output_dir = Path("benchmarks/outputs/layer5")
 
     if not output_dir.exists():
         print(f"Error: {output_dir} does not exist")

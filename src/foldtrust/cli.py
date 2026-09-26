@@ -267,7 +267,7 @@ def benchmark(
         console.print("[dim]This will take several minutes...[/dim]\n")
 
         try:
-            results = run_all_benchmarks(output, verbose=True)
+            results = run_all_benchmarks(output, verbose=True, use_full=full)
 
             console.print("\n[bold green]✓ Benchmark complete![/bold green]")
             console.print(f"Results saved to: [bold]{output}[/bold]")
