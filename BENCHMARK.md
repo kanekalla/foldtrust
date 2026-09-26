@@ -3,7 +3,7 @@
 **Date:** September 25, 2026  
 **Runtime:** ~3 minutes for default subsets (16GB machine)
 
-This document reports FoldTrust's six-layer validation strategy for RNA secondary structure reliability classification. All numbers are computed from saved outputs in `benchmarks/outputs/` — no hand-typed results.
+This document reports FoldTrust's six-layer benchmark for RNA secondary structure reliability classification. All numbers are computed from saved outputs in `benchmarks/outputs/` — no hand-typed results.
 
 ---
 
@@ -29,7 +29,7 @@ The benchmark tests these tiers using:
 | Layer | Question | Data (n) | Headline Metric(s) | Verdict | Doc Link |
 |-------|----------|----------|-------------------|---------|----------|
 | **0** | Are disease windows correctly defined? | 5 cases | FIRM/SOFT/FLOPPY stems per case | All coordinates verified from NCBI records | [layer0_cases.md](docs/benchmark/layer0_cases.md) |
-| **1** | Is tier-calling logic correct? | 5 unit tests | 5/5 passed | Scoring logic validated | [layer1_scoring.md](docs/benchmark/layer1_scoring.md) |
+| **1** | Is tier-calling logic correct? | 5 unit tests | 5/5 passed | Scoring logic passed 5/5 unit tests | [layer1_scoring.md](docs/benchmark/layer1_scoring.md) |
 | **2** | Accuracy vs. reference structures? | 600 structures (200 default) | F1: MFE 0.548, MEA 0.563, Centroid 0.570 | Low absolute agreement reflects thermodynamic vs. comparative differences | [layer2_accuracy.md](docs/benchmark/layer2_accuracy.md) |
 | **3** | Are probabilities calibrated? | 185,653 pairs (21,191 positive) | ECE 0.0664; FIRM PPV 0.674, SOFT 0.299, FLOPPY 0.146 | Higher tiers have higher reference agreement; high-prob pairs overconfident (ECE p≥0.5 = 0.317) | [layer3_calibration.md](docs/benchmark/layer3_calibration.md) |
 | **4** | SHAPE correlation? | FSE + 5 SHAPE datasets | Spearman ρ 0.29–0.55 (4 of 5 significant); AUROC 0.64–0.86 | Weak-to-moderate correlation; Pyle ρ=0.16 n.s.; genome control 43rd–82nd percentile (p 0.18–0.57) | [layer4_shape.md](docs/benchmark/layer4_shape.md) |
@@ -216,8 +216,10 @@ The benchmark tests these tiers using:
 | **SARS-CoV-2 FSE** | 1 FIRM / 2 SOFT / 1 FLOPPY, REDESIGN | SHAPE ρ 0.29–0.55 (4 of 5 sig.); genome control 43rd–82nd %ile, p 0.18–0.57 | FIRM retention 0.50 Andronescu/Langdon, 1.00 at all temps/flanks; ensemble defect 14.68 (37°C) vs 13.55 (42°C) | ViennaRNA cannot represent the FSE pseudoknot; tiers describe a pseudoknot-free approximation | [layer4_shape.md](docs/benchmark/layer4_shape.md) |
 | **SMN2 ISS-N1** | 2 FIRM / 6 SOFT / 1 FLOPPY, REDESIGN | — | FIRM retention 0.00 under Langdon2018, 0.40 with 25–100 nt genomic flanks | No SHAPE data for this locus | [layer5_robustness.md](docs/benchmark/layer5_robustness.md) |
 | **CFTR 5'UTR** | 3 FIRM / 1 SOFT / 6 FLOPPY, REDESIGN | — | 3 FIRM stems retained under every temperature, parameter set and flank; window = 5′UTR nt 1–70 + first 130 nt CDS | Mostly FLOPPY; not a pure 5′UTR window | [layer0_cases.md](docs/benchmark/layer0_cases.md) |
-| **MAPT exon 10** | 5 FIRM / 2 SOFT / 4 FLOPPY, REDESIGN | — | FIRM retention 0.29 at 25-nt flanks, 1.00 at 50/100 nt | Context-sensitive near splice sites | [layer5_robustness.md](docs/benchmark/layer5_robustness.md) |
-| **HCV IRES domain II** | 2 FIRM / 3 SOFT, NEED PROBING | — | Every FIRM and SOFT stem lost with any genomic flank (retention 0.00 at 25/50/100 nt) | Short domain; all stems are window-context artifacts | [layer5_robustness.md](docs/benchmark/layer5_robustness.md) |
+| **MAPT exon 10** | 5 FIRM / 2 SOFT / 4 FLOPPY, REDESIGN | — | FIRM retention 0.29 at 25-nt flanks, 1.00 at 50/100 nt | FIRM stems sensitive to 25-nt genomic flanks (retention 0.29); stable at 50/100 nt | [layer5_robustness.md](docs/benchmark/layer5_robustness.md) |
+| **HCV IRES domain II** | 2 FIRM / 3 SOFT, NEED PROBING | — | Every FIRM and SOFT stem lost with any genomic flank (retention 0.00 at 25/50/100 nt) | Short window; the predicted domain II stems are not stable once genomic flanks are added (retention 0.00), although domain II itself is an NMR-determined structure (Lukavsky 2003) | [layer5_robustness.md](docs/benchmark/layer5_robustness.md) |
+
+**Note:** Tier summary column = case_metrics.csv stem tiers (minimum pair probability per stem); Layer 5 counts use mean-probability stem tiers (layer5 CSVs), so stem counts differ (e.g. FSE 2 FIRM / 3 SOFT, HCV 3 / 3, MAPT 7 FIRM / 1 SOFT).
 
 ---
 
@@ -225,9 +227,9 @@ The benchmark tests these tiers using:
 
 1. **Thermodynamic model only:** ViennaRNA predicts MFE/ensemble structures; does not incorporate phylogenetic covariation or crystallographic constraints. Disagreement with comparative structures is expected and does not invalidate tier reliability for *predicted* stems.
 
-2. **Length caps:** bpRNA/Rfam data filtered to ≤500 nt for Layers 2/3 (Rfam seed projection additionally excluded >400 nt). Full-length 16S/23S rRNA not included.
+2. **Length caps:** ≤500 nt for ArchiveII/bpRNA/Rfam (Rfam seed projection additionally excluded >400 nt). Full-length 16S/23S rRNA not included.
 
-3. **SHAPE coverage:** Layer 4 validates only the SARS-CoV-2 FSE. Other disease cases lack experimental probing data.
+3. **SHAPE coverage:** Layer 4 tests only the SARS-CoV-2 FSE. Other disease cases lack experimental probing data.
 
 4. **FLOPPY tier uninformative:** PPV ≈ 0.15 means FLOPPY pairs rarely match references. This is correct behavior (low probability = low reliability), not a bug. Users should not trust FLOPPY predictions.
 
