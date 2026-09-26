@@ -243,7 +243,7 @@ Full case-level provenance (NCBI accessions, coordinates, landmark tables) in `d
 
 **Updated:** September 25, 2026
 
-FoldTrust's six benchmark layers summarise what the six benchmark layers show about per-stem confidence tiers (FIRM/SOFT/FLOPPY). Full results and methods in `BENCHMARK.md`.
+This section summarises the six benchmark layers that evaluate FoldTrust's per-stem confidence tiers (FIRM/SOFT/FLOPPY). Full results and methods in `BENCHMARK.md`.
 
 ### Key Findings
 

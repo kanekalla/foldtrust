@@ -66,7 +66,7 @@ FoldTrust ships with five curated disease-relevant RNA cases with verified NCBI 
 **Coordinates:** AF009606.1:44-118(+), 75 nt  
 **Disease:** Hepatitis C  
 **Biology:** HCV genotype 1a internal ribosome entry site domain II (5' NTR nt 44-118); structured element for cap-independent translation  
-**Teaching point:** Viral IRES with mostly firm stems; demonstrates FoldTrust can distinguish stable from floppy structures  
+**Teaching point:** 2 FIRM / 3 SOFT, verdict NEED PROBING (case_metrics.csv); every predicted stem is lost when genomic flanks are added (Layer 5), so this window needs probing data before use  
 **References:** [Honda et al. 1999](https://doi.org/10.1128/JVI.73.2.1165-1174.1999), [Lukavsky et al. 2003](https://doi.org/10.1038/nsb1004)
 
 **Provenance note:** Original SMN2, CFTR, and MAPT sequences were invented (no NCBI source). HCV was the wrong region (domain III at 148-415, not domain II at 44-118). All were rebuilt from verified NCBI coordinates. See `docs/benchmark/layer0_cases.md` for audit details.
@@ -154,7 +154,7 @@ foldtrust benchmark all --output benchmarks/outputs
 - **Layer 2:** MEA F1 = 0.563 on 600 ArchiveII/Rfam/bpRNA structures
 - **Layer 3:** FIRM tier PPV = 0.674; AUROC = 0.889; ECE = 0.066
 - **Layer 4:** SHAPE correlation ρ 0.29–0.55 for 4 of 5 datasets (Pyle 0.16 n.s.); SARS-CoV-2 FSE
-- **Layer 5:** FIRM retention 95% at 25-42°C; 60-80% for alt. parameters
+- **Layer 5:** FIRM retention 0.95 at 25/30 °C and 1.00 at 42 °C; 0.60–0.80 with alternate parameter sets
 
 Higher tiers have higher reference agreement. Drug-discovery applications (hypothesis-level): ASO design (SMN2, MAPT), small-molecule targeting (FSE, HCV IRES). See [`docs/benchmark/impact.md`](docs/benchmark/impact.md).
 
@@ -175,7 +175,7 @@ Each report includes:
 
 ### Example: Identifying Floppy Stems
 
-The **SMN2 ISS-N1** case demonstrates a region where the MFE structure contains stems that have low ensemble support (floppy stems), making them potentially better targets for antisense oligonucleotides—accessibility is higher when the structure is less stable.
+The SMN2 ISS-N1 case illustrates a region where most MFE stems have low ensemble support (6 SOFT / 1 FLOPPY of 9; case_metrics.csv), which could make it more accessible to antisense oligonucleotides (hypothesis).
 
 ## Scientific Honesty: Limitations
 
@@ -249,7 +249,7 @@ foldtrust/
 
 ## Roadmap / Future Work
 
-- **Benchmark validation:** Six-layer validation completed (see `BENCHMARK.md` and `NOTES.md` § 9 for full results): unit tests, reference structure accuracy (600 structures from ArchiveII/Rfam/bpRNA), calibration analysis, SHAPE agreement (SARS-CoV-2 FSE, 5 datasets), and robustness checks (temperature, parameter sets, window context).
+- **Benchmark:** Six-layer benchmark completed (see `BENCHMARK.md` and `NOTES.md` § 9 for full results): unit tests, reference structure accuracy (600 structures from ArchiveII/Rfam/bpRNA), calibration analysis, SHAPE agreement (SARS-CoV-2 FSE, 5 datasets), and robustness checks (temperature, parameter sets, window context).
 - Web app deployment for interactive reports
 - Docker container with ViennaRNA pre-installed
 - Integration with SHAPE/DMS reactivity data for constrained folding
