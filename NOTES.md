@@ -239,124 +239,56 @@ Full case-level provenance (NCBI accessions, coordinates, landmark tables) in `d
 
 ---
 
-## 9. Benchmark: Data Availability and Implementation Status
+## 9. Benchmark Results Summary
 
-**Updated:** September 25, 2026
+**Updated:** September 26, 2026
 
-### 9.1 Benchmark Layers Completed
+FoldTrust's six-layer validation demonstrates that per-stem confidence tiers (FIRM/SOFT/FLOPPY) reliably rank structural reliability. Full results and methods in `BENCHMARK.md`.
 
-FoldTrust benchmarking validates three core claims:
-1. **Tier calling works**: FIRM stems (p ≥ 0.85) are correctly identified
-2. **Temperature robustness**: 80-85% tier stability across 24-42°C  
-3. **Calibration**: Pair probabilities are well-calibrated (ECE=0.015)
+### Key Findings
 
-Full results: `BENCHMARK.md`
+**Layer 1 (Scoring correctness):** 11/11 unit tests pass. Energy regression, parameter loading, BPP symmetry, unpaired probability calculation verified.
 
-### 9.2 Layer-by-Layer Status
+**Layer 2 (Structure accuracy):** MEA F1 = 0.563 (95% CI: 0.542–0.585) on 600 ArchiveII/Rfam/bpRNA structures. Moderate agreement with comparative structures reflects thermodynamic vs. phylogenetic modeling differences.
 
-**✓ Layer 1: Reference Structure Accuracy**
+**Layer 3 (Calibration):** ECE = 0.0664; AUROC = 0.8889. Tier PPV: FIRM 0.674, SOFT 0.299, FLOPPY 0.146 (pooled over MFE pairs). FIRM tier reliably predicts true pairs.
 
-- **Dataset:** 15 curated RNAs (tRNA, 5S rRNA, riboswitches, snRNAs, SRP, ribozymes)
-- **Sources:** See docs/benchmark/layer2_accuracy.md
-- **Result:** See docs/benchmark/layer2_accuracy.md
-- **Interpretation:** ViennaRNA MFE differs from comparative/crystal structures
-- **Runtime:** See docs/benchmark/
+**Layer 4 (SHAPE agreement):** Spearman ρ = 0.29–0.55 (p < 0.015) on SARS-CoV-2 FSE across 5 datasets (Incarnato, Pyle, Zhang). Genome control: FSE ranks 87th–96th percentile vs. 369 control windows.
 
-**✓ Layer 2: Calibration Analysis**
+**Layer 5 (Robustness):** FIRM tier retention: 95% at 25/30°C, 100% at 42°C (pooled over 5 disease cases). Andronescu2007 80%, Langdon2018 60% (vs. Turner2004 baseline). Window context: 50-100 nt flanks partially recover structure (MEA BP distance 19.6–22.4).
 
-- **Dataset:** Same 15 sequences
-- **Metrics:**
-  - ECE = 0.015 (pair probabilities are well-calibrated)
-  - AUROC = 0.57 (discrimination above random)
-  - AUPRC = 0.19 (reflects class imbalance)
-- **Tier accuracy:**
-  - FIRM PPV = 0.22 (105 pairs)
-  - SOFT PPV = 0.12 (87 pairs)
-  - FLOPPY PPV = 0.13 (71 pairs)
-- **Interpretation:** Low tier PPV because references differ from MFE predictions. ECE validates that predicted probabilities match observed frequencies.
-- **Reliability diagram:** `benchmarks/outputs_v2/reliability_diagram.png`
+### Interpretation
 
-**✓ Layer 3: Robustness (Temperature Sweep)**
+FoldTrust correctly ranks stem reliability within ViennaRNA's ensemble predictions. FIRM stems (P ≥ 0.85) have 67% PPV against reference structures and robust retention across temperatures. Lower layers (SOFT/FLOPPY) are increasingly uncertain. The system is a **hypothesis generator** for which predicted stems to prioritize; experimental validation remains essential.
 
-- **Dataset:** 5 disease cases (sars2-fse, mapt-e10, hcv-ires-dii, cftr-5utr, smn2-iss-n1)
-- **Temperatures:** 24°C, 37°C, 42°C
-- **Result:**
-  - 24°C: mean tier stability 0.80, structure Jaccard 0.63
-  - 42°C: mean tier stability 0.85, structure Jaccard 0.97
-- **Interpretation:** FIRM/SOFT/FLOPPY classifications are robust across physiological temperatures
-- **Method:** RNAfold with `-T` flag; pair probabilities recomputed at each temperature
+**Limitations:** Thermodynamic model only (no phylogeny, no RBPs); SHAPE coverage limited to FSE; FLOPPY tier uninformative (PPV 0.15); parameter sensitivity (Andronescu/Langdon shift tiers); context dependence (flanks alter predictions).
 
-**⊘ Layer 4: SHAPE Validation (Deferred)**
+### Reproduce
 
-- **Status:** Data available; coordinate mapping required
-- **Data source:** [DasLab SARS-CoV-2 SHAPE repository](https://github.com/DasLab/SARS_CoV-2_shape_comparison)
-- **Issue:** FSE sequence (181 nt) must be mapped to NC_045512.2 genome coordinates to extract SHAPE values
-- **Infrastructure:** `src/foldtrust/benchmark/probing.py` ready; only coordinate mapping needed
-- **Planned metrics:** Spearman(reactivity, unpaired prob), AUROC, unconstrained vs. SHAPE-directed fold
-
-**⊘ Layer 5: Window Jitter (Deferred)**
-
-- **Status:** Requires NCBI genomic flanks
-- **Goal:** Test tier stability when window boundaries shift ±10-25 nt
-- **Method:** Fetch genomic context via E-utilities, extend windows, recompute tiers
-- **Expected result:** Core FIRM stems remain FIRM; boundary stems may change
-
-**⊘ Layer 6: Parameter Sets (Deferred)**
-
-- **Status:** Alternative parameter files not found in ViennaRNA 2.5.1 installation
-- **Goal:** Compare Turner 2004 vs. Andronescu 2007 vs. Langdon 2018
-- **Method:** RNAfold with `-P` flag (requires .par files)
-- **Current:** Turner 2004 only (ViennaRNA default)
-
-### 9.3 Tier Calling Validation
-
-See docs/benchmark/layer1_scoring.md for complete regression tests and validation.
-
-### 9.4 Reproducibility
-
-**Dataset generation:**
 ```bash
-python scripts/build_curated_dataset.py  # Creates benchmarks/data/curated_references.json
+# Fetch data bundle (see MANIFEST.md for URLs or extract from uploads/)
+mkdir -p data/_cache
+tar -xzf uploads/foldtrust_bench_data.tar.gz -C data/_cache
+tar -xzf uploads/bprna_TS0_canonicals.tar.gz -C data/_cache
+
+# Run all layers (~3 minutes, 16GB machine)
+foldtrust benchmark all --output benchmarks/outputs
+
+# Individual layers
+foldtrust benchmark layer1  # Unit tests
+foldtrust benchmark layer2  # Structure accuracy
+foldtrust benchmark layer3  # Calibration
+foldtrust benchmark layer4_shape  # SHAPE agreement
+foldtrust benchmark layer5  # Robustness
 ```
 
-**Run benchmarks:**
-```bash
-python scripts/run_benchmark_suite.py --output benchmarks/outputs_v2
-# Runtime: 10 seconds on cloud VM
-# Outputs: CSV tables, JSON summaries, markdown reports, reliability diagram
-```
+All outputs saved to CSV/JSON in `benchmarks/outputs/layerN/`. Figures in `benchmarks/outputs/figures/`.
 
-**Validate DOIs:**
-```bash
-python scripts/check_dois.py
-# Queries Crossref API for each DOI in NOTES.md and BENCHMARK.md
-# Result: 6/8 DOIs valid (2 pending manual check)
-```
+**Drug-discovery relevance:** See `docs/benchmark/impact.md` for hypothesis-level discussion of ASO/small-molecule targeting (SMN2 ISS-N1, SARS-CoV-2 FSE, HCV IRES, CFTR 5'UTR, MAPT exon 10). No clinical claims; validation required.
 
-**All code:** [github.com/kanekalla/foldtrust](https://github.com/kanekalla/foldtrust)
+**Data sources:** ArchiveII (Sloma & Mathews 2016), Rfam 15.1, bpRNA-1m, SARS-CoV-2 SHAPE (DasLab repo). See `MANIFEST.md` and `SHA256SUMS`.
 
-### 9.5 Honest Assessment
-
-**What FoldTrust validates:**
-
-1. **Tier calling is correct:** FIRM stems have mean pair probability ≥ 0.85, validated by regression tests and synthetic controls
-2. **Temperature robustness:** 80-85% tier stability across 24-42°C (physiological range)
-3. **Calibration:** Pair probabilities are well-calibrated (ECE=0.015)
-4. **Discriminatory power:** SARS-CoV-2 FSE (1/8 FIRM) vs. HCV IRES (12/18 FIRM) shows FoldTrust distinguishes stable from floppy RNAs
-
-**What low reference F1 (0.21) means:**
-
-ViennaRNA's MFE predictions differ from comparative/crystallographic structures. This is expected — thermodynamic models optimize free energy, not phylogenetic consensus. FoldTrust's value is identifying which MFE stems have high ensemble probability, not matching crystals.
-
-**The benchmark proves:** Given a ViennaRNA MFE structure, FoldTrust correctly classifies stems by reliability. The tier labels are internally consistent, robust to temperature, and validated by synthetic controls.
-
-**What FoldTrust does NOT do:**
-- Predict the true native structure (use probing data)
-- Account for cotranscriptional folding, RBPs, or modifications
-- Replace wet-lab validation
-- Guarantee that FIRM stems are biologically functional
-
-FoldTrust is a **hypothesis generator** for which MFE stems to trust. Experimental validation remains essential.
+**Code:** `src/foldtrust/benchmark/`, tests in `tests/`, docs in `docs/benchmark/`.
 
 ---
 

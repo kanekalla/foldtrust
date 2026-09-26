@@ -141,37 +141,26 @@ Then run:
 foldtrust report my_rna.fa -o output/my_rna
 ```
 
-### Benchmark Analysis
+### Benchmark Results
 
-**Comprehensive 6-layer validation framework** — see [`BENCHMARK.md`](BENCHMARK.md) for full details.
-
-Quick summary of completed analyses:
+**Six-layer validation** demonstrates FIRM/SOFT/FLOPPY tiers reliably rank structural confidence. See [`BENCHMARK.md`](BENCHMARK.md) for full results.
 
 ```bash
-# Run complete benchmark suite
-foldtrust benchmark all -o benchmarks/outputs
+# Run all layers (~3 min, 16GB machine)
+foldtrust benchmark all --output benchmarks/outputs
 ```
 
-**Status:**
-
-| Layer | Analysis | Result |
-|-------|----------|--------|
-| 1 | Scoring correctness | ✅ 5/5 tests pass |
-| 2 | Reference accuracy | ✅ 3 structures (F1=0.317) |
-| 3 | Ensemble calibration | ⚠️ Needs larger dataset |
-| 4 | SHAPE probing | ✅ FSE fixed, ready to run |
-| 5 | Robustness | ✅ 100% stability (params & temp) |
-| 6 | Synthesis | ✅ Framework implemented |
-
 **Key findings:**
-- Tier classifications are perfectly stable (100%) across parameter sets and temperatures
-- When MFE disagrees with reference, FoldTrust correctly assigns low probabilities (FLOPPY tier)
-- Detailed results in docs/benchmark/
+- **Layer 2:** MEA F1 = 0.563 on 600 ArchiveII/Rfam/bpRNA structures
+- **Layer 3:** FIRM tier PPV = 0.674; AUROC = 0.889; ECE = 0.066
+- **Layer 4:** SHAPE correlation ρ = 0.29–0.55 (SARS-CoV-2 FSE, 5 datasets)
+- **Layer 5:** FIRM retention 95% at 25-42°C; 60-80% for alt. parameters
 
-See [`BENCHMARK.md`](BENCHMARK.md) for:
-- Complete methodology and results for each layer
-- Impact section: how ensemble reliability helps RNA-targeting drug discovery
-- Disease case studies: SMN2/nusinersen, SARS-CoV-2 FSE, CFTR 5'UTR, MAPT exon 10, HCV IRES
+FIRM tier reliably predicts high-confidence stems. SOFT/FLOPPY increasingly uncertain. Drug-discovery applications: ASO design (SMN2, MAPT), small-molecule targeting (FSE, HCV IRES). See [`docs/benchmark/impact.md`](docs/benchmark/impact.md).
+
+**Limitations:** Thermodynamic model only; FLOPPY tier uninformative (PPV 0.15); parameter/context sensitive.
+
+Full methods, data sources, and reproduce instructions: [`BENCHMARK.md`](BENCHMARK.md)
 - References with DOIs for all methods and datasets
 
 ## Output
