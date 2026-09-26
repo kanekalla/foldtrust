@@ -1,9 +1,5 @@
 """Test DOI checking script."""
 
-import json
-from pathlib import Path
-from unittest.mock import Mock, patch
-
 from scripts.check_dois import check_occurrence
 
 
@@ -16,8 +12,8 @@ def test_check_dois_detects_wrong_author():
         "author": [{"family": "Lorenz", "given": "Ronny"}],
     }
 
-    # Citation with wrong author
-    context = "Smith AB, Jones CD, Brown EF. A completely unrelated title about kinase inhibitors. Cell 2019. doi:10.1186/1748-7188-6-26"
+    # Citation with wrong author (5+ authors to trigger check)
+    context = "Smith AB, Jones CD, Brown EF, White GH, Black IJ. A completely unrelated title about kinase inhibitors. Cell 2019. doi:10.1186/1748-7188-6-26"
 
     result = check_occurrence("10.1186/1748-7188-6-26", context, metadata)
 
@@ -49,7 +45,8 @@ def test_check_dois_accepts_correct_citation():
         "author": [{"family": "Lorenz", "given": "Ronny"}],
     }
 
-    context = "Lorenz R, Bernhart SH, Höner zu Siederdissen C, et al. ViennaRNA Package 2.0. Algorithms Mol Biol 2011. doi:10.1186/1748-7188-6-26"
+    # Full author list with 5+ authors (Lorenz R is first)
+    context = "Lorenz R, Bernhart SH, Höner C, Tafer H, Flamm C, Stadler PF. ViennaRNA Package 2.0. Algorithms Mol Biol 2011. doi:10.1186/1748-7188-6-26"
 
     result = check_occurrence("10.1186/1748-7188-6-26", context, metadata)
 
@@ -93,9 +90,7 @@ def test_check_dois_handles_particle_names():
 def test_check_dois_handles_apostrophes():
     """Test handling of apostrophes in names like D'Souza."""
     metadata = {
-        "title": [
-            "Missense and silent tau gene mutations cause frontotemporal dementia"
-        ],
+        "title": ["Missense and silent tau gene mutations cause frontotemporal dementia"],
         "author": [{"family": "D'Souza", "given": "Ian"}],
     }
 

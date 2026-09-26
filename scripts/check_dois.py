@@ -29,15 +29,15 @@ def extract_dois_from_file(filepath: Path) -> List[tuple]:
     for match in re.finditer(pattern, content):
         doi = match.group(0)
         doi = doi.rstrip(".,;:!?")
-        
+
         # Get context: ±500 characters around the DOI (wider for full author lists)
         start = max(0, match.start() - 500)
         end = min(len(content), match.end() + 300)
         context = content[start:end]
-        
+
         # Find line number
-        line_num = content[:match.start()].count('\n') + 1
-        
+        line_num = content[: match.start()].count("\n") + 1
+
         dois.append((doi, filepath, context, line_num))
 
     return dois
@@ -89,7 +89,7 @@ def normalize_name(name: str) -> str:
 
 def check_author_in_context(first_author_family: str, context: str) -> Tuple[bool, str]:
     """Check if first author appears in citation context.
-    
+
     Returns (passed, reason) where:
     - passed=True: check passed or skipped (bare DOI)
     - passed=False: clear mismatch (full author list present but clearly wrong first author)
@@ -98,16 +98,16 @@ def check_author_in_context(first_author_family: str, context: str) -> Tuple[boo
     # Pattern: "LastName INITIAL" for full author lists
     full_author_pattern = r"\b([A-Z][A-Za-z''\-]+)\s+([A-Z]{1,3})\b"
     full_author_matches = re.findall(full_author_pattern, context)
-    
+
     # Only check if we have a substantial full author list (5+ authors with initials - very conservative)
     if len(full_author_matches) < 5:
         return True, "skip-not-full-list"  # Not checking partial lists
-    
+
     # For particle names like "van Swieten", take last token
     first_author_tokens = first_author_family.split()
     first_author_key = first_author_tokens[-1] if first_author_tokens else first_author_family
     first_author_normalized = normalize_name(first_author_key)
-    
+
     # Check if any candidate matches
     for surname, _ in full_author_matches:
         surname_normalized = normalize_name(surname)
@@ -116,14 +116,14 @@ def check_author_in_context(first_author_family: str, context: str) -> Tuple[boo
         # Also check full name for compound surnames
         if normalize_name(first_author_family) == surname_normalized:
             return True, "ok"
-    
+
     # Clear mismatch: has substantial author list but first author definitely not there
-    return False, f"first-author-not-found"
+    return False, "first-author-not-found"
 
 
 def check_title_in_context(crossref_title: str, context: str) -> Tuple[bool, str]:
     """Check if title appears in citation context.
-    
+
     Returns (passed, reason) where:
     - passed=True: check passed or skipped
     - passed=False: clear mismatch (substantial quoted title present but completely wrong topic)
@@ -132,31 +132,31 @@ def check_title_in_context(crossref_title: str, context: str) -> Tuple[bool, str
     # This is meant to catch only truly wrong citations like in test cases
     title_pattern = r'["\']([^"\']{60,})["\']'
     title_matches = re.findall(title_pattern, context)
-    
+
     # Filter out false matches (markdown bold/italic that look like quotes)
-    title_matches = [m for m in title_matches if not re.search(r'\*\*|__|\|', m)]
-    
+    title_matches = [m for m in title_matches if not re.search(r"\*\*|__|\|", m)]
+
     if not title_matches:
         return True, "skip-no-quoted-title"
-    
+
     # Normalize and tokenize
     def tokenize(text):
-        return set(word.lower() for word in re.findall(r'\b\w{4,}\b', text))
-    
+        return set(word.lower() for word in re.findall(r"\b\w{4,}\b", text))
+
     crossref_words = tokenize(crossref_title)
     if len(crossref_words) < 4:  # Need at least 4 meaningful words
         return True, "skip-short-title"
-    
+
     for candidate in title_matches:
         candidate_words = tokenize(candidate)
         if len(candidate_words) < 4:
             continue
-        
+
         # Check overlap: at least 20% overlap (extremely lenient - just catch completely wrong titles)
         overlap = len(crossref_words & candidate_words) / len(crossref_words)
         if overlap >= 0.2:
             return True, "ok"
-    
+
     # Found substantial quoted title but completely wrong topic - clear mismatch
     return False, "title-mismatch"
 
@@ -171,7 +171,7 @@ def check_occurrence(doi: str, context: str, metadata: Dict) -> Dict:
         "checked": None,
         "error": None,
     }
-    
+
     # DataCite: redirect only
     if doi.startswith("10.5281/"):
         if check_doi_redirect(doi):
@@ -182,24 +182,24 @@ def check_occurrence(doi: str, context: str, metadata: Dict) -> Dict:
         else:
             result["error"] = "redirect-failed"
         return result
-    
+
     if not metadata:
         result["error"] = "doi-not-found"
         return result
-    
+
     # Get Crossref metadata
     title = metadata.get("title", [""])[0]
     author_list = metadata.get("author", [])
     first_author_family = author_list[0].get("family", "") if author_list else ""
-    
+
     # Check author
     author_passed, author_reason = check_author_in_context(first_author_family, context)
     result["author_ok"] = author_reason
-    
+
     # Check title
     title_passed, title_reason = check_title_in_context(title, context)
     result["title_ok"] = title_reason
-    
+
     # Determine if checks passed
     if not author_passed:
         result["error"] = f"author-check-failed:{author_reason}"
@@ -210,11 +210,11 @@ def check_occurrence(doi: str, context: str, metadata: Dict) -> Dict:
     else:
         result["valid"] = True
         # Determine check level
-        if ("skip" in author_reason and "skip" in title_reason):
+        if "skip" in author_reason and "skip" in title_reason:
             result["checked"] = "resolve-only"
         else:
             result["checked"] = "full"
-    
+
     return result
 
 
@@ -263,7 +263,7 @@ def main():
             result = check_occurrence(doi, context, metadata)
             result["filepath"] = str(filepath)
             result["line"] = line_num
-            
+
             if metadata:
                 result["crossref_first_author"] = (
                     metadata.get("author", [{}])[0].get("family", "Unknown")
@@ -272,17 +272,16 @@ def main():
                 )
             else:
                 result["crossref_first_author"] = "n/a"
-            
+
             all_results.append(result)
-            
+
             if not result["valid"]:
-                failed_occurrences.append(
-                    (doi, filepath, line_num, result["error"])
-                )
+                failed_occurrences.append((doi, filepath, line_num, result["error"]))
 
         # Show summary for this DOI
-        valid_count = sum(1 for _, ctx, _ in occurrences 
-                         if check_occurrence(doi, ctx, metadata)["valid"])
+        valid_count = sum(
+            1 for _, ctx, _ in occurrences if check_occurrence(doi, ctx, metadata)["valid"]
+        )
         if valid_count == len(occurrences):
             print(f"  ✓ All {len(occurrences)} occurrence(s) valid")
         else:
