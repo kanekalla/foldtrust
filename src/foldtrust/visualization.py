@@ -1,10 +1,13 @@
 """Visualization functions for structure reports."""
 
+import sys
 from pathlib import Path
 
 import matplotlib
 
-matplotlib.use("Agg")
+# Only set Agg backend if not in an interactive environment (Jupyter/IPython)
+if "ipykernel" not in sys.modules:
+    matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
