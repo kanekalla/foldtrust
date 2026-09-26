@@ -1,32 +1,29 @@
 """Comprehensive benchmark runner for all analysis layers."""
 
 import json
+import subprocess
 from pathlib import Path
-from typing import Dict, Optional
+from typing import Dict
 
-from foldtrust.benchmark.layer5_robustness import run_robustness_analysis
-from foldtrust.benchmark.probing_layer4 import run_probing_analysis
-from foldtrust.benchmark.scoring import run_scoring_tests
-from foldtrust.benchmark.synthesis import run_disease_window_synthesis
-from foldtrust.utils import find_case_directories
+from foldtrust.benchmark.layer1_scoring import run_layer1_tests
+from foldtrust.benchmark.layer2_accuracy import run_layer2_benchmark
+from foldtrust.benchmark.layer3_calibration import run_layer3_calibration
+from foldtrust.benchmark.layer5_robustness import run_layer5_analysis
+from foldtrust.benchmark.shape import run_layer4_shape_analysis
 
 
 def run_all_benchmarks(
     output_dir: Path,
-    cases_dir: Path = Path("data/cases"),
-    reference_dir: Optional[Path] = None,
-    shape_data_dir: Optional[Path] = None,
     verbose: bool = True,
+    use_full: bool = False,
 ) -> Dict:
     """
-    Run complete 6-layer benchmark analysis.
+    Run complete benchmark analysis: layers 1, 2, 3, 4_shape, 5, then render tables.
 
     Args:
         output_dir: Output directory for all results
-        cases_dir: Directory containing disease cases
-        reference_dir: Directory with reference structures (default: benchmarks/reference_data)
-        shape_data_dir: Directory with SHAPE data (default: /tmp/SARS_CoV-2_shape_comparison)
         verbose: Print progress messages
+        use_full: Run full benchmark without subsampling
 
     Returns:
         Dictionary with results from all layers
@@ -38,18 +35,12 @@ def run_all_benchmarks(
     figures_dir = output_dir / "figures"
     figures_dir.mkdir(exist_ok=True)
 
-    if reference_dir is None:
-        reference_dir = Path("benchmarks/reference_data")
-
-    if shape_data_dir is None:
-        shape_data_dir = Path("/tmp/SARS_CoV-2_shape_comparison")
-
-    case_dirs = find_case_directories(cases_dir)
+    cache_dir = Path("data/_cache")
+    cases_dir = Path("data/cases")
 
     results = {
         "output_dir": str(output_dir),
-        "cases_dir": str(cases_dir),
-        "n_cases": len(case_dirs),
+        "use_full": use_full,
         "layers": {},
     }
 
@@ -60,68 +51,88 @@ def run_all_benchmarks(
         print("=" * 70)
 
     try:
-        layer1 = run_scoring_tests(output_dir)
-        results["layers"]["layer1_scoring"] = layer1
+        layer1_output = output_dir / "layer1"
+        layer1_output.mkdir(parents=True, exist_ok=True)
+        layer1 = run_layer1_tests(layer1_output)
+        results["layers"]["layer1"] = layer1
         if verbose:
             print(
                 f"✓ Layer 1 complete: {layer1.get('tests_passed', 0)}/{layer1.get('tests_total', 0)} tests passed"
             )
     except Exception as e:
-        print(f"✗ Layer 1 failed: {e}")
-        results["layers"]["layer1_scoring"] = {"error": str(e)}
+        if verbose:
+            print(f"✗ Layer 1 failed: {e}")
+        results["layers"]["layer1"] = {"error": str(e)}
 
-    # Layer 2: Structure Accuracy vs Reference
+    # Layer 2: Structure Accuracy
     if verbose:
         print("\n" + "=" * 70)
-        print("LAYER 2: STRUCTURE ACCURACY VS REFERENCE")
+        print("LAYER 2: STRUCTURE ACCURACY")
         print("=" * 70)
 
     try:
-        # Use the curated reference set
-        layer2 = {
-            "n_structures": 3,
-            "source": "curated_rfam",
-            "note": "Using existing reference data from benchmarks/reference_data",
+        layer2_output = output_dir / "layer2"
+        layer2_output.mkdir(parents=True, exist_ok=True)
+        layer2 = run_layer2_benchmark(
+            cache_dir=cache_dir,
+            output_dir=layer2_output,
+            use_full=use_full,
+            sample_size=None if use_full else 200,
+        )
+        results["layers"]["layer2"] = layer2
+        if verbose:
+            print(f"✓ Layer 2 complete: {layer2.get('n_structures', 0)} structures analyzed")
+    except Exception as e:
+        if verbose:
+            print(f"✗ Layer 2 failed: {e}")
+        results["layers"]["layer2"] = {"error": str(e)}
+
+    # Layer 3: Calibration
+    if verbose:
+        print("\n" + "=" * 70)
+        print("LAYER 3: CALIBRATION")
+        print("=" * 70)
+
+    try:
+        layer3_output = output_dir / "layer3"
+        layer3_output.mkdir(parents=True, exist_ok=True)
+        layer3 = run_layer3_calibration(
+            cache_dir=cache_dir,
+            output_dir=layer3_output,
+            use_full=use_full,
+            sample_size=None if use_full else 200,
+        )
+        results["layers"]["layer3"] = layer3
+        if verbose:
+            print(
+                f"✓ Layer 3 complete: ECE={layer3.get('ece', 0):.4f}, AUROC={layer3.get('auroc', 0):.4f}"
+            )
+    except Exception as e:
+        if verbose:
+            print(f"✗ Layer 3 failed: {e}")
+        results["layers"]["layer3"] = {"error": str(e)}
+
+    # Layer 4: SHAPE Agreement
+    if verbose:
+        print("\n" + "=" * 70)
+        print("LAYER 4: SHAPE AGREEMENT")
+        print("=" * 70)
+
+    try:
+        layer4_output = output_dir / "layer4_shape"
+        layer4_output.mkdir(parents=True, exist_ok=True)
+        layer4 = run_layer4_shape_analysis(cache_dir, layer4_output)
+        results["layers"]["layer4_shape"] = {
+            "fse_start": layer4.get("fse_start"),
+            "fse_end": layer4.get("fse_end"),
+            "n_datasets": len(layer4.get("datasets", {})),
         }
-        results["layers"]["layer2_reference"] = layer2
         if verbose:
-            print("✓ Layer 2 using existing reference accuracy results")
-            print("  (curated structures from Rfam and comparative analysis)")
+            print(f"✓ Layer 4 complete: {len(layer4.get('datasets', {}))} datasets analyzed")
     except Exception as e:
-        print(f"✗ Layer 2 failed: {e}")
-        results["layers"]["layer2_reference"] = {"error": str(e)}
-
-    # Layer 3: Ensemble Calibration
-    if verbose:
-        print("\n" + "=" * 70)
-        print("LAYER 3: ENSEMBLE CALIBRATION")
-        print("=" * 70)
-
-    try:
-        layer3 = {
-            "note": "Calibration metrics implemented but not run (insufficient reference data)"
-        }
-        results["layers"]["layer3_calibration"] = layer3
         if verbose:
-            print("✓ Layer 3 noted: requires larger reference dataset")
-    except Exception as e:
-        print(f"✗ Layer 3 failed: {e}")
-        results["layers"]["layer3_calibration"] = {"error": str(e)}
-
-    # Layer 4: Experimental Agreement (SHAPE)
-    if verbose:
-        print("\n" + "=" * 70)
-        print("LAYER 4: EXPERIMENTAL AGREEMENT (SHAPE)")
-        print("=" * 70)
-
-    try:
-        layer4 = run_probing_analysis(output_dir, case_dirs, shape_data_dir, figures_dir)
-        results["layers"]["layer4_probing"] = layer4
-        if verbose:
-            print(f"✓ Layer 4 complete: {layer4.get('n_cases_analyzed', 0)} cases with SHAPE data")
-    except Exception as e:
-        print(f"✗ Layer 4 failed: {e}")
-        results["layers"]["layer4_probing"] = {"error": str(e)}
+            print(f"✗ Layer 4 failed: {e}")
+        results["layers"]["layer4_shape"] = {"error": str(e)}
 
     # Layer 5: Robustness
     if verbose:
@@ -130,28 +141,59 @@ def run_all_benchmarks(
         print("=" * 70)
 
     try:
-        layer5 = run_robustness_analysis(output_dir, case_dirs)
-        results["layers"]["layer5_robustness"] = layer5
+        layer5_output = output_dir / "layer5"
+        layer5_output.mkdir(parents=True, exist_ok=True)
+        layer5 = run_layer5_analysis(cases_dir, layer5_output, cache_dir)
+        results["layers"]["layer5"] = {"n_cases": len(layer5)}
         if verbose:
-            print("✓ Layer 5 complete")
-    except Exception as e:
-        print(f"✗ Layer 5 failed: {e}")
-        results["layers"]["layer5_robustness"] = {"error": str(e)}
+            print(f"✓ Layer 5 complete: {len(layer5)} cases analyzed")
 
-    # Layer 6: Disease Window Synthesis
+        # Generate Layer 5 figures
+        if verbose:
+            print("  Generating Layer 5 figures...")
+        from foldtrust.benchmark.layer5_figures import generate_all_layer5_figures
+
+        generate_all_layer5_figures(layer5_output, figures_dir)
+    except Exception as e:
+        if verbose:
+            print(f"✗ Layer 5 failed: {e}")
+        results["layers"]["layer5"] = {"error": str(e)}
+
+    # Render tables
     if verbose:
         print("\n" + "=" * 70)
-        print("LAYER 6: DISEASE WINDOW SYNTHESIS")
+        print("RENDERING TABLES")
         print("=" * 70)
 
     try:
-        layer6 = run_disease_window_synthesis(output_dir, case_dirs, results, figures_dir)
-        results["layers"]["layer6_synthesis"] = layer6
+        # Check if render scripts exist
+        render_layer123_script = Path("scripts/render_layer123_tables.py")
+        render_layer5_script = Path("scripts/render_layer5_tables.py")
+
+        if render_layer123_script.exists():
+            if verbose:
+                print("  Running render_layer123_tables.py...")
+            subprocess.run(
+                ["python3", str(render_layer123_script), str(output_dir)],
+                check=True,
+                capture_output=not verbose,
+            )
+
+        if render_layer5_script.exists():
+            if verbose:
+                print("  Running render_layer5_tables.py...")
+            subprocess.run(
+                ["python3", str(render_layer5_script), str(output_dir)],
+                check=True,
+                capture_output=not verbose,
+            )
+
         if verbose:
-            print(f"✓ Layer 6 complete: {layer6.get('n_cases', 0)} disease windows synthesized")
+            print("✓ Tables rendered")
     except Exception as e:
-        print(f"✗ Layer 6 failed: {e}")
-        results["layers"]["layer6_synthesis"] = {"error": str(e)}
+        if verbose:
+            print(f"✗ Table rendering failed: {e}")
+        results["table_rendering"] = {"error": str(e)}
 
     # Save combined results
     summary_path = output_dir / "benchmark_summary.json"
@@ -164,5 +206,6 @@ def run_all_benchmarks(
         print("=" * 70)
         print(f"\nResults saved to: {output_dir}")
         print(f"Summary: {summary_path}")
+        print(f"Figures: {figures_dir}")
 
     return results
