@@ -27,10 +27,11 @@ Total: 181,390 candidates, 20,437 correct (11.27%).
 
 - ECE: 0.069 (overall), 0.330 (p≥0.5) — **overconfident for high probabilities**
 - AUROC: 0.887 (good discrimination)
-- FIRM PPV (p≥0.85): 0.664 (~66% correct, not 95%)
-- SOFT PPV (0.5≤p<0.85): 0.335
-- FLOPPY PPV (p<0.5): 0.177
+- FIRM PPV (p≥0.85): 0.674 (16,417 MFE pairs; layer3_mfe_tier_summary.csv)
+- SOFT PPV (0.5≤p<0.85): 0.299 (8,518 pairs)
+- FLOPPY PPV (p<0.5): 0.146 (5,504 pairs)
+- Legacy files: layer3_tier_summary.csv and layer3_tier_analysis.csv (from earlier pipeline version)
 
-**Key finding**: Probabilities rank pairs well but are systematically overconfident. A "95% confident" pair is actually ~66% correct.
+**Key finding**: Probabilities rank pairs well but are systematically overconfident. A "95% confident" pair is actually ~67% correct.
 
 See `docs/benchmark/layer3_calibration.md` for full results and interpretation.

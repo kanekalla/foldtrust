@@ -73,9 +73,9 @@ Slip F1 ≥ exact F1 by construction.
 
 | Tier | Pooled PPV | N Structures | N Pairs |
 |------|------------|--------------|---------|
-| FIRM | 0.664 | 600 | 16202 |
-| SOFT | 0.335 | 600 | 8191 |
-| FLOPPY | 0.177 | 600 | 5450 |
+| FIRM | 0.674 | 582 | 16417 |
+| SOFT | 0.299 | 585 | 8518 |
+| FLOPPY | 0.146 | 466 | 5504 |
 
 **Tier definitions**: FIRM = p≥0.85, SOFT = 0.5≤p<0.85, FLOPPY = p<0.5. 
 MFE pairs are binned by their own base-pair probability. 

@@ -43,6 +43,7 @@ def run_all_benchmarks(
         "output_dir": str(output_dir),
         "use_full": use_full,
         "layers": {},
+        "errors": [],
     }
 
     # Layer 1: Scoring Correctness
@@ -64,6 +65,7 @@ def run_all_benchmarks(
         if verbose:
             print(f"✗ Layer 1 failed: {e}")
         results["layers"]["layer1"] = {"error": str(e)}
+        results["errors"].append(f"Layer 1: {e}")
 
     # Layer 2: Structure Accuracy
     if verbose:
@@ -87,6 +89,7 @@ def run_all_benchmarks(
         if verbose:
             print(f"✗ Layer 2 failed: {e}")
         results["layers"]["layer2"] = {"error": str(e)}
+        results["errors"].append(f"Layer 2: {e}")
 
     # Layer 3: Calibration
     if verbose:
@@ -112,6 +115,7 @@ def run_all_benchmarks(
         if verbose:
             print(f"✗ Layer 3 failed: {e}")
         results["layers"]["layer3"] = {"error": str(e)}
+        results["errors"].append(f"Layer 3: {e}")
 
     # Layer 4: SHAPE Agreement
     if verbose:
@@ -122,7 +126,7 @@ def run_all_benchmarks(
     try:
         layer4_output = output_dir / "layer4_shape"
         layer4_output.mkdir(parents=True, exist_ok=True)
-        layer4 = run_layer4_shape_analysis(cache_dir, layer4_output)
+        layer4 = run_layer4_shape_analysis(cache_dir, layer4_output, figures_dir=figures_dir)
         results["layers"]["layer4_shape"] = {
             "fse_start": layer4.get("fse_start"),
             "fse_end": layer4.get("fse_end"),
@@ -134,6 +138,7 @@ def run_all_benchmarks(
         if verbose:
             print(f"✗ Layer 4 failed: {e}")
         results["layers"]["layer4_shape"] = {"error": str(e)}
+        results["errors"].append(f"Layer 4: {e}")
 
     # Layer 5: Robustness
     if verbose:
@@ -159,6 +164,7 @@ def run_all_benchmarks(
         if verbose:
             print(f"✗ Layer 5 failed: {e}")
         results["layers"]["layer5"] = {"error": str(e)}
+        results["errors"].append(f"Layer 5: {e}")
 
     # Render tables
     if verbose:
@@ -205,6 +211,7 @@ def run_all_benchmarks(
         if verbose:
             print(f"✗ Table rendering failed: {e}")
         results["table_rendering"] = {"error": str(e)}
+        results["errors"].append(f"Table rendering: {e}")
 
     # Save combined results
     summary_path = output_dir / "benchmark_summary.json"

@@ -863,6 +863,7 @@ def run_layer4_shape_analysis(
     output_dir: Path,
     fse_start: int = 13462,
     fse_end: int = 13542,
+    figures_dir: Path | None = None,
 ) -> Dict:
     """
     Run complete Layer 4 SHAPE analysis (FULLY CORRECTED).
@@ -870,12 +871,14 @@ def run_layer4_shape_analysis(
     Args:
         cache_dir: Path to data/_cache
         output_dir: Path to benchmarks/outputs/layer4_shape
+        figures_dir: Path for figure output (defaults to benchmarks/outputs/figures)
 
     Returns:
         Summary dictionary
     """
     output_dir.mkdir(parents=True, exist_ok=True)
-    figures_dir = Path("benchmarks/outputs/figures")
+    if figures_dir is None:
+        figures_dir = Path("benchmarks/outputs/figures")
     figures_dir.mkdir(parents=True, exist_ok=True)
 
     print("=== Layer 4: SHAPE Agreement Analysis (CORRECTED) ===\n")

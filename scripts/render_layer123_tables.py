@@ -81,7 +81,7 @@ def render_layer3_tables(output_dir: Path) -> str:
         summary = json.load(f)
 
     cal_curve = pd.read_csv(layer3_dir / "layer3_calibration_curve.csv")
-    tier_df = pd.read_csv(layer3_dir / "layer3_tier_summary.csv")
+    tier_df = pd.read_csv(layer3_dir / "layer3_mfe_tier_summary.csv")
 
     md = ["\n## Layer 3: Calibration\n"]
 
@@ -131,7 +131,7 @@ def render_layer3_tables(output_dir: Path) -> str:
 
     for _, row in tier_df.iterrows():
         md.append(
-            f"| {row['tier']} | {row['ppv_mean']:.3f} | {int(row['n_structures'])} | {int(row['total_pairs'])} |"
+            f"| {row['tier']} | {row['pooled_ppv']:.3f} | {int(row['n_structures'])} | {int(row['total_pairs'])} |"
         )
 
     md.append("\n**Tier definitions**: FIRM = p≥0.85, SOFT = 0.5≤p<0.85, FLOPPY = p<0.5. ")
@@ -160,7 +160,7 @@ def main():
         output_dir / "layer2" / "layer2_summary_dataset.csv",
         output_dir / "layer3" / "layer3_summary.json",
         output_dir / "layer3" / "layer3_calibration_curve.csv",
-        output_dir / "layer3" / "layer3_tier_summary.csv",
+        output_dir / "layer3" / "layer3_mfe_tier_summary.csv",
     ]
 
     missing = [f for f in required if not f.exists()]
@@ -169,7 +169,7 @@ def main():
         for f in missing:
             print(f"  - {f}")
         print("\nRun: python scripts/run_layers_1_2_3.py")
-        return
+        sys.exit(1)
 
     # Render tables
     md_lines = [

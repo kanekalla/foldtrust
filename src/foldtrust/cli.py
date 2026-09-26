@@ -269,6 +269,12 @@ def benchmark(
         try:
             results = run_all_benchmarks(output, verbose=True, use_full=full)
 
+            if results.get("errors"):
+                console.print("\n[bold red]✗ Benchmark finished with errors:[/bold red]")
+                for error in results["errors"]:
+                    console.print(f"  - {error}")
+                raise typer.Exit(1)
+
             console.print("\n[bold green]✓ Benchmark complete![/bold green]")
             console.print(f"Results saved to: [bold]{output}[/bold]")
             console.print(f"Summary: {output / 'benchmark_summary.json'}")

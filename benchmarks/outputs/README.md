@@ -95,9 +95,10 @@ Generated from benchmark run on 2026-09-25 (ViennaRNA 2.7.2, Turner2004, 37°C, 
 - ECE: 0.069 (overall), 0.330 (restricted to p≥0.5)
 - AUROC: 0.887
 - AUPRC: 0.603
-- FIRM PPV (p≥0.85): 0.664 (16,202 pairs)
-- SOFT PPV (0.5≤p<0.85): 0.335 (8,191 pairs)
-- FLOPPY PPV (p<0.5): 0.177 (5,450 pairs)
+- FIRM PPV (p≥0.85): 0.674 (16,417 MFE pairs; layer3_mfe_tier_summary.csv)
+- SOFT PPV (0.5≤p<0.85): 0.299 (8,518 pairs)
+- FLOPPY PPV (p<0.5): 0.146 (5,504 pairs)
+- Legacy files: layer3_tier_summary.csv and layer3_tier_analysis.csv (from earlier pipeline version)
 
 ## Integrity
 
