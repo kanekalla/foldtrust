@@ -6,7 +6,8 @@ import hashlib
 import os
 
 root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-os.chdir(root)
+cache_dir = os.path.join(root, "data", "_cache")
+os.chdir(cache_dir)
 DAS = "75cb3151e200dd7ea62600db50026ce179181fa3"
 VIE = "1ffec79f5e258896160f7362ced8263450f371dc"
 C = {

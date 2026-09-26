@@ -1,13 +1,15 @@
 ## Layout
 
-- `archiveII/` — ArchiveII (Mathews lab) original tarball + derived JSONL of all 3975 .ct structures.
-- `tool_data_releases/mxfold2_zenodo_4430150/` — MXfold2 datasets (Zenodo), split into 3 parts (<20 MB each). Includes ArchiveII (3966 bpseq), bpRNA-1m TR0/VL0/TS0 (canonical pairs only), bpRNA-new, TrainSetA/TestSetA/B, RNAStrAlign.
-- `tool_data_releases/spot_rna/` — SPOT-RNA PDB-derived dataset (TR1/VL1/TS1/TS2).
-- `rfam/raw/` — 19 Rfam seed Stockholm alignments; `rfam/rfam_seed_ss.jsonl` = projected per-sequence structures (primary); `rfam/rfam_seed_ss.round_angle_only.jsonl` = literal-instruction variant.
-- `shape/` — SARS-CoV-2 SHAPE/icSHAPE reactivity CSVs + README/citations + structure tracks, from DasLab/SARS_CoV-2_shape_comparison pinned at commit 75cb3151e200dd7ea62600db50026ce179181fa3 (committed 2021-06-22 19:53 MT).
-- `genome/` — NC_045512.2 FASTA + GenBank, `fse_coordinates.json`.
-- `vienna_params/` — ViennaRNA rna_turner2004/andronescu2007/langdon2018 .par files (pinned at ViennaRNA commit 1ffec79f5e258896160f7362ced8263450f371dc) + API check result.
-- `scripts/` — all conversion/verification scripts.
+All paths relative to `data/_cache/`:
+
+- `data/_cache/archiveII/` — ArchiveII (Mathews lab) original tarball + derived JSONL of all 3975 .ct structures.
+- `data/_cache/tool_data_releases/mxfold2_zenodo_4430150/` — MXfold2 datasets (Zenodo), split into 3 parts (<20 MB each). Includes ArchiveII (3966 bpseq), bpRNA-1m TR0/VL0/TS0 (canonical pairs only), bpRNA-new, TrainSetA/TestSetA/B, RNAStrAlign.
+- `data/_cache/tool_data_releases/spot_rna/` — SPOT-RNA PDB-derived dataset (TR1/VL1/TS1/TS2).
+- `data/_cache/rfam/raw/` — 19 Rfam seed Stockholm alignments; `rfam/rfam_seed_ss.jsonl` = projected per-sequence structures (primary); `rfam/rfam_seed_ss.round_angle_only.jsonl` = literal-instruction variant.
+- `data/_cache/shape/` — SARS-CoV-2 SHAPE/icSHAPE reactivity CSVs + README/citations + structure tracks, from DasLab/SARS_CoV-2_shape_comparison pinned at commit 75cb3151e200dd7ea62600db50026ce179181fa3 (committed 2021-06-22 19:53 MT).
+- `data/_cache/genome/` — NC_045512.2 FASTA + GenBank, `fse_coordinates.json`.
+- `data/_cache/vienna_params/` — ViennaRNA rna_turner2004/andronescu2007/langdon2018 .par files (pinned at ViennaRNA commit 1ffec79f5e258896160f7362ced8263450f371dc) + API check result.
+- `data/_cache/scripts/` — all conversion/verification scripts.
 
 ## Reference-structure record counts
 

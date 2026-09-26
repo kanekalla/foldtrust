@@ -8,7 +8,8 @@ import os
 import sys
 
 root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-os.chdir(root)
+cache_dir = os.path.join(root, "data", "_cache")
+os.chdir(cache_dir)
 ok = True
 
 
