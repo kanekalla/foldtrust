@@ -3,9 +3,9 @@
 import numpy as np
 import RNA
 
-from foldtrust.benchmark.shape import compute_unpaired_probabilities
-from foldtrust._core import FoldData
 import foldtrust as ft
+from foldtrust._core import FoldData
+from foldtrust.benchmark.shape import compute_unpaired_probabilities
 
 
 def test_unpaired_prob_vs_vienna_fse():

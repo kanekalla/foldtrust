@@ -252,7 +252,7 @@ def render_tables(output_dir: Path) -> str:
 
 def main():
     import sys
-    
+
     if len(sys.argv) > 1:
         base_output_dir = Path(sys.argv[1])
         output_dir = base_output_dir / "layer5"

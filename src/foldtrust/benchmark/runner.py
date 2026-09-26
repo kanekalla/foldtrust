@@ -6,10 +6,10 @@ import sys
 from pathlib import Path
 from typing import Dict
 
-from foldtrust.benchmark.scoring import run_layer1_tests
 from foldtrust.benchmark.layer2_accuracy import run_layer2_benchmark
 from foldtrust.benchmark.layer3_calibration import run_layer3_calibration
 from foldtrust.benchmark.layer5_robustness import run_layer5_analysis
+from foldtrust.benchmark.scoring import run_layer1_tests
 from foldtrust.benchmark.shape import run_layer4_shape_analysis
 
 
