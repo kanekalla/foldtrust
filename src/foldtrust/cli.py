@@ -130,8 +130,6 @@ def benchmark(
     ),
     output: Path = typer.Option("benchmarks/outputs", "-o", "--output", help="Output directory"),
     full: bool = typer.Option(False, "--full", help="Run full benchmark (no subsampling)"),
-    n_windows: int = typer.Option(50, help="Number of genome control windows (layer4_shape)"),
-    seed: int = typer.Option(42, help="Random seed"),
 ):
     """Run benchmark analyses to validate FoldTrust predictions."""
     output.mkdir(parents=True, exist_ok=True)
@@ -252,7 +250,7 @@ def benchmark(
             raise typer.Exit(1)
 
         layer4_output = output / "layer4_shape"
-        run_layer4_shape_analysis(cache_dir, layer4_output, n_genome_windows=n_windows, seed=seed)
+        run_layer4_shape_analysis(cache_dir, layer4_output)
         console.print(f"\n[green]✓ Layer 4 complete. Results in {layer4_output}[/green]")
         return
 
