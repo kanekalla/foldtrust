@@ -180,7 +180,7 @@ def run_all_benchmarks(
 
         if not render_layer123_script.exists():
             raise RuntimeError(f"render_layer123_tables.py not found at {render_layer123_script}")
-        
+
         if verbose:
             print("  Running render_layer123_tables.py...")
         result = subprocess.run(
@@ -197,7 +197,7 @@ def run_all_benchmarks(
 
         if not render_layer5_script.exists():
             raise RuntimeError(f"render_layer5_tables.py not found at {render_layer5_script}")
-        
+
         if verbose:
             print("  Running render_layer5_tables.py...")
         result = subprocess.run(
