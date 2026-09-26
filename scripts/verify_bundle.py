@@ -107,6 +107,9 @@ if os.path.exists("data/bpRNA_dataset-canonicals/TS0"):
     else:
         print("TS0-canonicals.lst: missing")
         ok = False
+else:
+    print("data/bpRNA_dataset-canonicals/TS0: missing")
+    ok = False
 
 print("ALL OK" if ok else "FAILURES")
 sys.exit(0 if ok else 1)

@@ -165,7 +165,7 @@ The benchmark tests these tiers using:
 
 **Verdict:** Weak-to-moderate correlation for 4 of 5 datasets (ρ 0.29–0.55; Pyle ρ 0.16, n.s.); AUROC 0.64–0.86. SHAPE-directed folding: MEA F1 0.83–0.98, MFE F1 0.40–0.96 vs unconstrained (`shape_directed_folding.csv`).
 
-([Full results](benchmarks/outputs/layer4_shape/), [Figures](benchmarks/outputs/figures/layer4*.png), [Docs](docs/benchmark/layer4_shape.md))
+([Full results](benchmarks/outputs/layer4_shape/), [Figures](benchmarks/outputs/figures/), [Docs](docs/benchmark/layer4_shape.md))
 
 ---
 
@@ -205,7 +205,7 @@ The benchmark tests these tiers using:
 
 **Verdict:** FIRM tier is robust to temperature (95% retention at 25/30°C) but sensitive to alternative parameter sets (60-80% retention). Context matters: 25-nt flanks disrupt many stems (MEA BP distance = 30.4); 50-100 nt partially recover (distance = 19.6–22.4). SOFT/FLOPPY tiers are less stable.
 
-([Full results](benchmarks/outputs/layer5/), [Figures](benchmarks/outputs/figures/layer5*.png), [Docs](docs/benchmark/layer5_robustness.md))
+([Full results](benchmarks/outputs/layer5/), [Figures](benchmarks/outputs/figures/), [Docs](docs/benchmark/layer5_robustness.md))
 
 ---
 

@@ -173,37 +173,44 @@ def run_all_benchmarks(
         print("=" * 70)
 
     try:
-        # Check if render scripts exist
-        render_layer123_script = Path("scripts/render_layer123_tables.py")
-        render_layer5_script = Path("scripts/render_layer5_tables.py")
+        # Resolve render scripts relative to repo root (3 levels up from this file)
+        repo_root = Path(__file__).resolve().parents[3]
+        render_layer123_script = repo_root / "scripts" / "render_layer123_tables.py"
+        render_layer5_script = repo_root / "scripts" / "render_layer5_tables.py"
 
-        if render_layer123_script.exists():
-            if verbose:
-                print("  Running render_layer123_tables.py...")
-            result = subprocess.run(
-                [sys.executable, str(render_layer123_script), str(output_dir)],
-                check=False,
-                capture_output=True,
-                text=True,
-            )
-            if result.returncode != 0:
-                raise RuntimeError(f"render_layer123_tables.py failed: {result.stderr}")
-            if verbose and result.stdout:
-                print(result.stdout)
+        if not render_layer123_script.exists():
+            raise RuntimeError(f"render_layer123_tables.py not found at {render_layer123_script}")
+        
+        if verbose:
+            print("  Running render_layer123_tables.py...")
+        result = subprocess.run(
+            [sys.executable, str(render_layer123_script), str(output_dir)],
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        if result.returncode != 0:
+            error_msg = result.stderr or result.stdout or "(no output)"
+            raise RuntimeError(f"render_layer123_tables.py failed: {error_msg}")
+        if verbose and result.stdout:
+            print(result.stdout)
 
-        if render_layer5_script.exists():
-            if verbose:
-                print("  Running render_layer5_tables.py...")
-            result = subprocess.run(
-                [sys.executable, str(render_layer5_script), str(output_dir)],
-                check=False,
-                capture_output=True,
-                text=True,
-            )
-            if result.returncode != 0:
-                raise RuntimeError(f"render_layer5_tables.py failed: {result.stderr}")
-            if verbose and result.stdout:
-                print(result.stdout)
+        if not render_layer5_script.exists():
+            raise RuntimeError(f"render_layer5_tables.py not found at {render_layer5_script}")
+        
+        if verbose:
+            print("  Running render_layer5_tables.py...")
+        result = subprocess.run(
+            [sys.executable, str(render_layer5_script), str(output_dir)],
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        if result.returncode != 0:
+            error_msg = result.stderr or result.stdout or "(no output)"
+            raise RuntimeError(f"render_layer5_tables.py failed: {error_msg}")
+        if verbose and result.stdout:
+            print(result.stdout)
 
         if verbose:
             print("✓ Tables rendered")

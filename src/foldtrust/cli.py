@@ -280,6 +280,8 @@ def benchmark(
             console.print(f"Summary: {output / 'benchmark_summary.json'}")
             console.print(f"Figures: {output / 'figures'}")
 
+        except typer.Exit:
+            raise
         except Exception as e:
             console.print(f"[red]Error running benchmark: {e}[/red]")
             raise typer.Exit(1)
