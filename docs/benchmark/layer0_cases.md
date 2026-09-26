@@ -85,7 +85,7 @@ Test suite `tests/test_verify_cases.py`:
 
 **References:**
 - Riordan JR et al. 1989. Science 245:1066. DOI: [10.1126/science.2475911](https://doi.org/10.1126/science.2475911) — CFTR identification
-- Zielenski J & Tsui LC. 1991. Genomics 10:214. DOI: [10.1016/0888-7543(91)90503-7](https://doi.org/10.1016/0888-7543(91)90503-7) — Gene structure
+- Zielenski J et al. 1991. Genomics 10:214. DOI: [10.1016/0888-7543(91)90503-7](https://doi.org/10.1016/0888-7543(91)90503-7) — Gene structure
 
 ---
 

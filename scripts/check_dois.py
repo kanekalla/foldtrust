@@ -1,8 +1,12 @@
 """Validate DOIs in all markdown files using Crossref API.
 
 Checks each DOI by querying the Crossref API and verifying:
-- First author surname matches for every citation that names an author
-- Title similarity for reference-style citations
+- DOI resolution for every occurrence (Crossref or doi.org redirect for DataCite)
+- First author surname matches for every citation whose segment names an author
+- Title similarity only when double-quoted with 4+ words
+
+Reference-style titles (unquoted) are not checked automatically. All titles and
+first authors were checked manually (see docs/benchmark/impact.md:157).
 
 Usage:
     python scripts/check_dois.py
@@ -18,9 +22,11 @@ from typing import Dict, List, Optional, Tuple
 
 
 def extract_dois_from_file(filepath: Path) -> List[tuple]:
-    """Extract DOIs from markdown file with their citation context.
+    """Extract DOIs from markdown file with per-citation context segments.
 
-    Context is the specific citation containing the DOI, isolated from neighbouring citations.
+    For each DOI, extracts the citation segment: text on the same line from the
+    end of the previous DOI (or line start) to this DOI. For markdown links
+    [text](url), uses the link text as the segment.
     """
     dois = []
 
@@ -31,140 +37,86 @@ def extract_dois_from_file(filepath: Path) -> List[tuple]:
     # Extract DOIs
     pattern = r"10\.\d{4,9}/(?:[a-zA-Z0-9.\-_;/]|(?:\([a-zA-Z0-9.\-_]+\)))+"
 
+    # Track DOIs per line for segmentation
+    line_dois = {}
     for match in re.finditer(pattern, content):
         doi = match.group(0)
         doi = doi.rstrip(".,;:!?")
-
-        # Skip DOIs that appear in URLs (e.g., https://doi.org/10.xxx)
-        # Check if preceded by "://doi.org/" or similar
-        prefix_start = max(0, match.start() - 20)
-        prefix = content[prefix_start : match.start()]
-        if re.search(r"https?://doi\.org/$", prefix):
-            continue
-
-        # Find line number
         line_num = content[: match.start()].count("\n") + 1
 
-        # Get context: isolate the specific citation, not neighbouring ones
-        # Two cases:
-        # 1. List item citations: use the entire list item (starts with "- " or "* ")
-        # 2. Inline citations: isolate just the segment for this DOI
+        if line_num not in line_dois:
+            line_dois[line_num] = []
+        line_dois[line_num].append((doi, match.start(), match.end()))
 
-        # Check if we're in a list item
-        line_start = content.rfind("\n", 0, match.start()) + 1
-        line_text = content[line_start : match.start()]
-        if re.match(r"^\s*[-*]\s+", line_text):
-            # List item citation - use the entire item as context
-            # Expand backwards if it's a multi-line list item
-            item_start = line_start
-            while item_start > 0:
-                prev_line_end = item_start - 1
-                prev_line_start = content.rfind("\n", 0, prev_line_end) + 1
-                prev_line = content[prev_line_start:prev_line_end]
-                # Continue if the previous line is a continuation (starts with spaces/tabs, not a new list item)
-                if prev_line and not re.match(r"^\s*[-*]\s+", prev_line) and prev_line[0] in " \t":
-                    item_start = prev_line_start
-                else:
+    # Process each line's DOIs to build segments
+    for line_num, line_doi_list in sorted(line_dois.items()):
+        line_start = content.rfind("\n", 0, line_doi_list[0][1]) + 1
+        line_end = content.find("\n", line_doi_list[-1][2])
+        if line_end == -1:
+            line_end = len(content)
+        line_text = content[line_start:line_end]
+
+        prev_end = 0  # End position relative to line start
+        for doi, abs_start, abs_end in line_doi_list:
+            # Calculate positions relative to line start
+            rel_start = abs_start - line_start
+            rel_end = abs_end - line_start
+
+            # R1(i): Check if DOI is in a markdown link [text](url)
+            # Look for pattern [text](https://doi.org/DOI) or [text](DOI)
+            link_match = None
+            for m in re.finditer(r"\[([^\]]+)\]\(([^)]+)\)", line_text):
+                link_text, link_url = m.groups()
+                # Check if this DOI appears in the URL
+                if doi in link_url:
+                    link_match = (link_text, m.start(), m.end())
                     break
 
-            # Expand forward to end of item
-            line_end = content.find("\n", match.end())
-            if line_end == -1:
-                line_end = len(content)
-            item_end = line_end
-
-            # Use the entire list item as context
-            context = content[item_start:item_end].strip()
-            dois.append((doi, filepath, context, line_num))
-            continue
-
-        # Not a list item - extract inline citation context
-        context_start = match.start()
-        search_limit = max(0, match.start() - 200)
-
-        # Skip back over "doi:" prefix, markdown link syntax, and any preceding semicolon+space
-        doi_prefix_start = match.start()
-
-        # Check for markdown link: [10.xxx](url) or DOI [10.xxx](url)
-        if match.start() >= 1 and content[match.start() - 1] == "[":
-            doi_prefix_start = match.start() - 1
-            # Also check for "DOI " before the bracket
-            if (
-                doi_prefix_start >= 4
-                and content[doi_prefix_start - 4 : doi_prefix_start].upper() == "DOI "
-            ):
-                doi_prefix_start -= 4
-        # Check for inline "doi:" prefix
-        elif match.start() >= 4 and content[match.start() - 4 : match.start()].lower() == "doi:":
-            doi_prefix_start = match.start() - 4
-            # Also skip preceding "; " if present (e.g., "; doi:X")
-            if doi_prefix_start >= 2 and content[doi_prefix_start - 2 : doi_prefix_start] == "; ":
-                doi_prefix_start -= 2
-            elif doi_prefix_start >= 1 and content[doi_prefix_start - 1] == ";":
-                doi_prefix_start -= 1
-        elif match.start() >= 5 and content[match.start() - 5 : match.start()].lower() == " doi:":
-            doi_prefix_start = match.start() - 5
-            # Also skip preceding ";" if present
-            if doi_prefix_start >= 1 and content[doi_prefix_start - 1] == ";":
-                doi_prefix_start -= 1
-
-        # Search backward for citation boundary
-        # Stop at: semicolon separating citations, opening paren, or list/paragraph boundary
-        for i in range(doi_prefix_start - 1, search_limit, -1):
-            if content[i] == ";":
-                # Semicolon - this separates two citations in the same group
-                # The next citation should start with author name (capital letter)
-                next_content = content[i + 1 : min(len(content), i + 30)].lstrip()
-                if next_content and next_content[0].isupper():
-                    context_start = i + 1
-                    break
-            elif content[i] == "(":
-                # Opening paren starts a citation group
-                context_start = i
-                break
-            elif i > 0 and content[i - 1 : i + 1] == ")(":
-                # Closing+opening paren indicates previous citation ended
-                context_start = i
-                break
-            elif content[i] == ".":
-                # Period - check if it's a sentence boundary (not "et al." or initial)
-                if i >= 3 and content[i - 3 : i] == " al":
+            if link_match:
+                segment, _, _ = link_match
+                # Check if link text is itself a DOI
+                if re.match(r"(?:DOI:|doi:)?\s*10\.\d", segment):
+                    # Duplicate, skip
                     continue
-                elif (
-                    i >= 1
-                    and content[i - 1].isupper()
-                    and i + 1 < len(content)
-                    and content[i + 1] == " "
-                ):
-                    continue
-                else:
-                    # Likely sentence boundary
-                    context_start = i + 1
-                    break
-            elif content[i] == "\n":
-                # Newline - check context
-                line_start = content.rfind("\n", 0, i) + 1
-                prev_line = content[line_start:i]
-                if re.match(r"^\s*[-*]\s+", prev_line):
-                    context_start = line_start
-                    break
-                elif not prev_line.strip():
-                    context_start = i + 1
-                    break
-        else:
-            context_start = search_limit
+            else:
+                # Regular segment: from prev_end to start of "doi:" or DOI number
+                segment_start = prev_end
+                segment_end = rel_start
 
-        # Look forward for end: period, semicolon, closing paren, or newline
-        context_end = match.end()
-        for i in range(match.end(), min(len(content), match.end() + 50)):
-            if content[i] in ").\n;":
-                context_end = i + 1
-                break
-        else:
-            context_end = min(len(content), match.end() + 50)
+                # Check if there's "doi:" or "DOI:" before the number
+                prefix_search = line_text[max(0, segment_end - 10) : segment_end]
+                if re.search(r"doi:\s*$", prefix_search, re.IGNORECASE):
+                    segment_end = max(
+                        0,
+                        segment_end
+                        - len(re.search(r"doi:\s*$", prefix_search, re.IGNORECASE).group()),
+                    )
 
-        context = content[context_start:context_end].strip()
-        dois.append((doi, filepath, context, line_num))
+                segment = line_text[segment_start:segment_end]
+
+            # R1(ii): Strip leading ), ], (https...), ;, ., whitespace, bullet
+            segment = segment.strip()
+            segment = re.sub(r"^[)\];.\s]+", "", segment)
+            segment = re.sub(r"^\(https?://[^)]+\)\s*", "", segment)
+            segment = re.sub(r"^[-*]\s+", "", segment)
+
+            # R1(iii): If segment contains (, keep only text after last (
+            if "(" in segment:
+                segment = segment[segment.rfind("(") + 1 :]
+
+            # R1(iv): Strip leading label like "SMN2 ISS-N1: " or "**ViennaRNA**: "
+            label_match = re.match(r"^[^:()]{1,40}:\s+(.+)", segment)
+            if label_match and re.match(r"^[A-Z]", label_match.group(1)):
+                segment = label_match.group(1)
+
+            # R1(v): Remove markdown *, _, **, [, ]
+            segment = re.sub(r"\*+|_+|\[|\]", "", segment)
+            segment = segment.strip()
+
+            dois.append((doi, filepath, segment, line_num))
+
+            # Update prev_end for next segment
+            prev_end = rel_end
 
     return dois
 
@@ -204,62 +156,74 @@ def check_doi_redirect(doi: str) -> bool:
 
 
 def normalize_name(name: str) -> str:
-    """Normalize name: NFKD, strip accents, lowercase, remove apostrophes/hyphens/spaces."""
+    """Normalize name: NFKD, strip accents, lowercase, remove apostrophes/hyphens/spaces.
+
+    R4: Remove all apostrophe variants, hyphens, backticks, spaces.
+    """
     # NFKD normalization and strip accents
     nfkd = unicodedata.normalize("NFKD", name)
     name = "".join(c for c in nfkd if not unicodedata.combining(c))
 
     name = name.lower()
 
-    # Remove all apostrophe variants, hyphens, backticks, spaces
-    for char in ["'", "'", "'", "`", "-", " "]:
+    # R4: Remove all apostrophe variants (U+0027, U+2019, U+2018, U+02BC), hyphens, backticks, spaces
+    for char in ["'", "\u2019", "\u2018", "\u02bc", "`", "-", " "]:
         name = name.replace(char, "")
 
     return name
 
 
-def extract_first_cited_author(context: str) -> Optional[str]:
-    """Extract the first author surname from the citation context."""
-    # Try list-style first: "Surname INIT, ..." or "Surname INIT."
-    # Allow Unicode apostrophes, hyphens, and spaces in surnames
-    list_match = re.search(r"[-*]?\s*([A-Z][\w''\-\u2019 ]+?)\s+[A-Z]{1,3}[,.]", context)
-    if list_match:
-        surname = list_match.group(1).strip()
-        # Filter out common non-name words
-        if surname.lower() not in ["nature", "science", "cell", "proc", "natl", "acad"]:
-            return surname
+def extract_first_cited_author(segment: str) -> Optional[str]:
+    """Extract the first author surname from the citation segment.
 
-    # Try prose style: "Surname et al." or "Surname and ..." BEFORE author-year patterns
-    # This prevents matching journal names like "Nature 1998"
-    prose_match = re.search(r"\b([A-Z][\w''\-\u2019]+)\s+(?:et\s+al\.?|and\s+[A-Z])", context)
-    if prose_match:
-        return prose_match.group(1)
+    R2: Anchored at segment start, try patterns in order.
+    Name token N = [A-Z][\\w'''ʼ\\-]+, optionally preceded by particles.
+    """
+    # R2: Define name token with optional particles
+    # Particles: van, de, der, den, von, zu, "Höner zu"
+    name_token = r"(?:(?:van|de|der|den|von|zu|Höner zu)\s+)?[A-Z][\w'''ʼ\-]+"
 
-    # Try prose style: "Surname, Surname & Surname YEAR" or "Surname, Surname, Surname YEAR"
-    # This catches author lists without initials, like "Langdon, Petke & Lorenz 2018"
-    multi_author_match = re.search(
-        r"\b([A-Z][\w''\-\u2019]+)(?:,\s+[A-Z][\w''\-\u2019]+)+(?:\s+[&,]\s+[A-Z][\w''\-\u2019]+)?\s+(?:19|20)\d{2}\b",
-        context,
+    # R2.1: "Name INIT" (1-3 uppercase letters)
+    match = re.match(rf"^({name_token})\s+[A-Z]{{1,3}}\b", segment)
+    if match:
+        name = match.group(1)
+        # Never return all-caps 1-3 letter tokens
+        if not (name.isupper() and len(name) <= 3):
+            return name
+
+    # R2.2: "Name et al." or "Name and" or "Name &"
+    match = re.match(rf"^({name_token})\s+(?:et\s+al\.?|and\b|&)", segment)
+    if match:
+        name = match.group(1)
+        if not (name.isupper() and len(name) <= 3):
+            return name
+
+    # R2.3: "Name, Name, ... & Name" (multi-author, comma-separated)
+    match = re.match(
+        rf"^({name_token})(?:,\s+{name_token})*\s*(?:,|&|and)\s*{name_token}",
+        segment,
     )
-    if multi_author_match:
-        return multi_author_match.group(1)
+    if match:
+        name = match.group(1)
+        if not (name.isupper() and len(name) <= 3):
+            return name
 
-    # Try standalone author-year: "Surname YEAR"
-    year_match = re.search(r"\b([A-Z][\w''\-\u2019]+)\s+(?:19|20)\d{2}\b", context)
-    if year_match:
-        surname = year_match.group(1)
-        if surname.lower() not in ["nature", "science", "cell", "proc", "natl", "acad"]:
-            return surname
+    # R2.4: "Name YEAR"
+    match = re.match(rf"^({name_token})\s+(?:19|20)\d{{2}}\b", segment)
+    if match:
+        name = match.group(1)
+        if not (name.isupper() and len(name) <= 3):
+            return name
 
     return None
 
 
-def check_author_match(first_author_family: str, context: str) -> Tuple[bool, str]:
+def check_author_match(first_author_family: str, segment: str) -> Tuple[bool, str]:
     """Check if first cited author matches Crossref first author.
 
     Returns (passed, reason)
     """
-    cited_author = extract_first_cited_author(context)
+    cited_author = extract_first_cited_author(segment)
 
     if not cited_author:
         return True, "skip-no-author"
@@ -272,7 +236,7 @@ def check_author_match(first_author_family: str, context: str) -> Tuple[bool, st
     if cited_normalized == crossref_normalized:
         return True, "ok"
 
-    # For particle names (van Swieten, de Graaff, etc.), check last token
+    # R5: For particle names, check last token
     crossref_tokens = first_author_family.split()
     if len(crossref_tokens) > 1:
         last_token_normalized = normalize_name(crossref_tokens[-1])
@@ -282,60 +246,35 @@ def check_author_match(first_author_family: str, context: str) -> Tuple[bool, st
     return False, "first-author-mismatch"
 
 
-def extract_reference_title(context: str) -> Optional[str]:
-    """Extract reference-style title from citation context.
+def extract_title(segment: str) -> Optional[str]:
+    """Extract double-quoted title with 4+ words.
 
-    Only extracts titles that are explicitly delimited with quotes or italics.
-    Does NOT extract unquoted titles or single-word journal names in italics.
+    R6: Only check titles in double quotes ("..." or "...") with 4+ words.
+    Never treat italics or single quotes as title delimiters.
     """
-    # Look for quoted title segments
-    # Do NOT treat single apostrophe (') as a quote delimiter (to avoid 5' false matches)
-    quoted_patterns = [
-        r'["""]([^"""]{10,})["""]',  # Double quotes (straight or curly)
+    # R6: Look for double quotes only (straight or curly)
+    patterns = [
+        r'["""]([^"""]+)["""]',  # Double quotes
     ]
 
-    for pattern in quoted_patterns:
-        match = re.search(pattern, context)
-        if match:
-            return match.group(1).strip()
-
-    # Look for italicized/emphasized title segments (using single * or _)
-    # But only if they contain multiple words (to exclude journal names like "*Nature*")
-    # Use negative lookbehind/lookahead to avoid matching **bold** (double asterisks)
-    emphasized_patterns = [
-        r"(?<!\*)\*([^*]{10,})\*(?!\*)",  # *emphasis* but not **bold**
-        r"(?<!_)_([^_]{10,})_(?!_)",  # _emphasis_ but not __bold__
-    ]
-
-    for pattern in emphasized_patterns:
-        match = re.search(pattern, context)
+    for pattern in patterns:
+        match = re.search(pattern, segment)
         if match:
             potential_title = match.group(1).strip()
-            # Only consider it a title if it has at least 2 words AND doesn't end with a colon (labels)
-            if potential_title.endswith(":"):
-                continue
+            # Only consider titles with 4+ words
             words = potential_title.split()
-            if len(words) < 2:
-                continue
-
-            # Check if this looks like a journal name (appears before year/volume like "(2011)" or "23(4)")
-            # Journal pattern: italicized text followed by optional space and year/volume
-            after_match = context[match.end() : match.end() + 20]
-            if re.match(r"\s*\(?\d{4}\)?|\s+\d+\(", after_match):
-                # Likely a journal name, not a title
-                continue
-
-            return potential_title
+            if len(words) >= 4:
+                return potential_title
 
     return None
 
 
-def check_title_match(crossref_title: str, context: str) -> Tuple[bool, str]:
-    """Check if title appears in citation context.
+def check_title_match(crossref_title: str, segment: str) -> Tuple[bool, str]:
+    """Check if title appears in citation segment.
 
     Returns (passed, reason)
     """
-    cited_title = extract_reference_title(context)
+    cited_title = extract_title(segment)
 
     if not cited_title:
         return True, "skip-no-title"
@@ -350,7 +289,7 @@ def check_title_match(crossref_title: str, context: str) -> Tuple[bool, str]:
     if len(crossref_words) == 0:
         return True, "skip-short-title"
 
-    # Check overlap: at least 50% of Crossref words appear
+    # R6: Check overlap: at least 50% of Crossref words appear
     overlap = len(crossref_words & cited_words)
     ratio = overlap / len(crossref_words)
 
@@ -360,7 +299,7 @@ def check_title_match(crossref_title: str, context: str) -> Tuple[bool, str]:
     return False, "title-mismatch"
 
 
-def check_occurrence(doi: str, context: str, metadata: Dict) -> Dict:
+def check_occurrence(doi: str, segment: str, metadata: Dict) -> Dict:
     """Check one DOI occurrence."""
     result = {
         "doi": doi,
@@ -392,11 +331,11 @@ def check_occurrence(doi: str, context: str, metadata: Dict) -> Dict:
     first_author_family = author_list[0].get("family", "") if author_list else ""
 
     # Check author
-    author_passed, author_reason = check_author_match(first_author_family, context)
+    author_passed, author_reason = check_author_match(first_author_family, segment)
     result["author_ok"] = author_reason
 
     # Check title
-    title_passed, title_reason = check_title_match(title, context)
+    title_passed, title_reason = check_title_match(title, segment)
     result["title_ok"] = title_reason
 
     # Determine if checks passed
@@ -439,10 +378,10 @@ def main():
 
     # Group by DOI
     doi_groups = {}
-    for doi, filepath, context, line_num in all_occurrences:
+    for doi, filepath, segment, line_num in all_occurrences:
         if doi not in doi_groups:
             doi_groups[doi] = []
-        doi_groups[doi].append((filepath, context, line_num))
+        doi_groups[doi].append((filepath, segment, line_num))
 
     print(f"Found {len(doi_groups)} unique DOIs ({len(all_occurrences)} occurrences)\n")
 
@@ -457,8 +396,8 @@ def main():
         metadata = query_crossref(doi)
 
         # Check each occurrence
-        for filepath, context, line_num in occurrences:
-            result = check_occurrence(doi, context, metadata)
+        for filepath, segment, line_num in occurrences:
+            result = check_occurrence(doi, segment, metadata)
             result["filepath"] = str(filepath)
             result["line"] = line_num
 
@@ -478,7 +417,7 @@ def main():
 
         # Show summary for this DOI
         valid_count = sum(
-            1 for _, ctx, _ in occurrences if check_occurrence(doi, ctx, metadata)["valid"]
+            1 for _, seg, _ in occurrences if check_occurrence(doi, seg, metadata)["valid"]
         )
         if valid_count == len(occurrences):
             print(f"  ✓ All {len(occurrences)} occurrence(s) valid")

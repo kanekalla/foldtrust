@@ -15,50 +15,54 @@ Author check: skip-no-author
 Title check: skip-no-title
 Status: VALID (resolve-only)
 
-DOI: 10.1007/978-3-319-77553-1_14
-File: benchmarks/outputs/layer5/README.md:112
-Crossref first author: Langdon
-Author check: ok
-Title check: ok
-Status: VALID (full)
-
-DOI: 10.1007/978-3-319-77553-1_14
-File: docs/benchmark/layer5_robustness.md:63
-Crossref first author: Langdon
-Author check: ok
-Title check: ok
-Status: VALID (full)
-
-DOI: 10.1007/978-3-319-77553-1_14
-File: docs/benchmark/layer5_robustness.md:276
-Crossref first author: Langdon
-Author check: ok
-Title check: title-mismatch
-Status: FAILED
-Error: title-check-failed:title-mismatch
+DOI: 10.1016/0888-7543(91)90503-7
+File: NOTES.md:234
+Crossref first author: Zielenski
+Author check: skip-no-author
+Title check: skip-no-title
+Status: VALID (resolve-only)
 
 DOI: 10.1016/0888-7543(91)90503-7
 File: NOTES.md:234
 Crossref first author: Zielenski
-Author check: first-author-mismatch
-Title check: title-mismatch
-Status: FAILED
-Error: author-check-failed:first-author-mismatch
+Author check: skip-no-author
+Title check: skip-no-title
+Status: VALID (resolve-only)
+
+DOI: 10.1016/0888-7543(91)90503-7
+File: README.md:56
+Crossref first author: Zielenski
+Author check: skip-no-author
+Title check: skip-no-title
+Status: VALID (resolve-only)
 
 DOI: 10.1016/0888-7543(91)90503-7
 File: docs/benchmark/layer0_cases.md:88
 Crossref first author: Zielenski
-Author check: first-author-mismatch
+Author check: ok
 Title check: skip-no-title
-Status: FAILED
-Error: author-check-failed:first-author-mismatch
+Status: VALID (full)
+
+DOI: 10.1016/0888-7543(91)90503-7
+File: docs/benchmark/layer0_cases.md:88
+Crossref first author: Zielenski
+Author check: skip-no-author
+Title check: skip-no-title
+Status: VALID (resolve-only)
 
 DOI: 10.1016/0888-7543(91)90503-7
 File: docs/benchmark/layer0_cases.md:205
 Crossref first author: Zielenski
-Author check: ok
+Author check: skip-no-author
 Title check: skip-no-title
-Status: VALID (full)
+Status: VALID (resolve-only)
+
+DOI: 10.1016/0888-7543(91)90503-7
+File: examples/out/cftr-5utr/report.md:86
+Crossref first author: Zielenski
+Author check: skip-no-author
+Title check: skip-no-title
+Status: VALID (resolve-only)
 
 DOI: 10.1016/0888-7543(91)90503-7
 File: examples/out/cftr-5utr/report.md:86
@@ -84,10 +88,9 @@ Status: VALID (resolve-only)
 DOI: 10.1016/j.jmb.2020.09.006
 File: docs/benchmark/impact.md:42
 Crossref first author: Neupane
-Author check: first-author-mismatch
+Author check: ok
 Title check: skip-no-title
-Status: FAILED
-Error: author-check-failed:first-author-mismatch
+Status: VALID (full)
 
 DOI: 10.1016/j.jmb.2020.09.006
 File: docs/benchmark/impact.md:56
@@ -120,10 +123,9 @@ Status: VALID (full)
 DOI: 10.1021/jacs.0c00768
 File: docs/benchmark/impact.md:120
 Crossref first author: Chen
-Author check: first-author-mismatch
+Author check: ok
 Title check: skip-no-title
-Status: FAILED
-Error: author-check-failed:first-author-mismatch
+Status: VALID (full)
 
 DOI: 10.1021/jacs.0c00768
 File: docs/benchmark/impact.md:131
@@ -147,19 +149,18 @@ Title check: skip-no-title
 Status: VALID (full)
 
 DOI: 10.1038/31508
-File: NOTES.md:235
+File: README.md:63
 Crossref first author: Hutton
-Author check: skip-no-author
+Author check: ok
 Title check: skip-no-title
-Status: VALID (resolve-only)
+Status: VALID (full)
 
 DOI: 10.1038/31508
 File: docs/benchmark/impact.md:119
 Crossref first author: Hutton
-Author check: first-author-mismatch
+Author check: ok
 Title check: skip-no-title
-Status: FAILED
-Error: author-check-failed:first-author-mismatch
+Status: VALID (full)
 
 DOI: 10.1038/31508
 File: docs/benchmark/impact.md:128
@@ -169,21 +170,7 @@ Title check: skip-no-title
 Status: VALID (full)
 
 DOI: 10.1038/31508
-File: docs/benchmark/layer0_cases.md:115
-Crossref first author: Hutton
-Author check: skip-no-author
-Title check: skip-no-title
-Status: VALID (resolve-only)
-
-DOI: 10.1038/31508
 File: docs/benchmark/layer0_cases.md:208
-Crossref first author: Hutton
-Author check: ok
-Title check: skip-no-title
-Status: VALID (full)
-
-DOI: 10.1038/31508
-File: examples/out/mapt-e10/report.md:84
 Crossref first author: Hutton
 Author check: skip-no-author
 Title check: skip-no-title
@@ -192,10 +179,9 @@ Status: VALID (resolve-only)
 DOI: 10.1038/nchembio.217
 File: docs/benchmark/impact.md:71
 Crossref first author: Parsons
-Author check: first-author-mismatch
+Author check: ok
 Title check: skip-no-title
-Status: FAILED
-Error: author-check-failed:first-author-mismatch
+Status: VALID (full)
 
 DOI: 10.1038/nchembio.217
 File: docs/benchmark/impact.md:81
@@ -205,19 +191,18 @@ Title check: skip-no-title
 Status: VALID (full)
 
 DOI: 10.1038/nsb1004
-File: NOTES.md:236
-Crossref first author: Lukavsky
-Author check: first-author-mismatch
-Title check: title-mismatch
-Status: FAILED
-Error: author-check-failed:first-author-mismatch
-
-DOI: 10.1038/nsb1004
-File: docs/benchmark/impact.md:72
+File: README.md:70
 Crossref first author: Lukavsky
 Author check: ok
 Title check: skip-no-title
 Status: VALID (full)
+
+DOI: 10.1038/nsb1004
+File: docs/benchmark/impact.md:72
+Crossref first author: Lukavsky
+Author check: skip-no-author
+Title check: skip-no-title
+Status: VALID (resolve-only)
 
 DOI: 10.1038/nsb1004
 File: docs/benchmark/impact.md:82
@@ -227,22 +212,7 @@ Title check: skip-no-title
 Status: VALID (full)
 
 DOI: 10.1038/nsb1004
-File: docs/benchmark/layer0_cases.md:139
-Crossref first author: Lukavsky
-Author check: first-author-mismatch
-Title check: skip-no-title
-Status: FAILED
-Error: author-check-failed:first-author-mismatch
-
-DOI: 10.1038/nsb1004
 File: docs/benchmark/layer0_cases.md:210
-Crossref first author: Lukavsky
-Author check: ok
-Title check: skip-no-title
-Status: VALID (full)
-
-DOI: 10.1038/nsb1004
-File: examples/out/hcv-ires-dii/report.md:74
 Crossref first author: Lukavsky
 Author check: skip-no-author
 Title check: skip-no-title
@@ -251,60 +221,23 @@ Status: VALID (resolve-only)
 DOI: 10.1038/s41594-021-00653-y
 File: docs/benchmark/impact.md:51
 Crossref first author: Zhang
-Author check: ok
-Title check: skip-no-title
-Status: VALID (full)
-
-DOI: 10.1056/NEJMoa1702752
-File: NOTES.md:116
-Crossref first author: Finkel
 Author check: skip-no-author
 Title check: skip-no-title
 Status: VALID (resolve-only)
 
 DOI: 10.1056/NEJMoa1702752
-File: NOTES.md:233
+File: README.md:49
 Crossref first author: Finkel
-Author check: first-author-mismatch
+Author check: ok
 Title check: skip-no-title
-Status: FAILED
-Error: author-check-failed:first-author-mismatch
-
-DOI: 10.1056/NEJMoa1702752
-File: docs/benchmark/layer0_cases.md:65
-Crossref first author: Finkel
-Author check: first-author-mismatch
-Title check: skip-no-title
-Status: FAILED
-Error: author-check-failed:first-author-mismatch
+Status: VALID (full)
 
 DOI: 10.1056/NEJMoa1702752
 File: docs/benchmark/layer0_cases.md:203
 Crossref first author: Finkel
-Author check: ok
-Title check: skip-no-title
-Status: VALID (full)
-
-DOI: 10.1056/NEJMoa1702752
-File: examples/out/smn2-iss-n1/report.md:80
-Crossref first author: Finkel
 Author check: skip-no-author
 Title check: skip-no-title
 Status: VALID (resolve-only)
-
-DOI: 10.1073/pnas.0401799101
-File: NOTES.md:231
-Crossref first author: Mathews
-Author check: ok
-Title check: skip-no-title
-Status: VALID (full)
-
-DOI: 10.1073/pnas.0401799101
-File: README.md:274
-Crossref first author: Mathews
-Author check: ok
-Title check: skip-no-title
-Status: VALID (full)
 
 DOI: 10.1073/pnas.2023051118
 File: docs/benchmark/impact.md:42
@@ -323,25 +256,23 @@ Status: VALID (full)
 DOI: 10.1073/pnas.96.10.5598
 File: docs/benchmark/impact.md:119
 Crossref first author: D’Souza
-Author check: first-author-mismatch
+Author check: ok
 Title check: skip-no-title
-Status: FAILED
-Error: author-check-failed:first-author-mismatch
+Status: VALID (full)
 
 DOI: 10.1073/pnas.96.10.5598
 File: docs/benchmark/impact.md:129
 Crossref first author: D’Souza
-Author check: first-author-mismatch
+Author check: ok
 Title check: skip-no-title
-Status: FAILED
-Error: author-check-failed:first-author-mismatch
+Status: VALID (full)
 
 DOI: 10.1073/pnas.96.14.8229
-File: NOTES.md:235
+File: README.md:63
 Crossref first author: Varani
-Author check: skip-no-author
+Author check: ok
 Title check: skip-no-title
-Status: VALID (resolve-only)
+Status: VALID (full)
 
 DOI: 10.1073/pnas.96.14.8229
 File: docs/benchmark/impact.md:119
@@ -358,311 +289,116 @@ Title check: skip-no-title
 Status: VALID (full)
 
 DOI: 10.1073/pnas.96.14.8229
-File: docs/benchmark/layer0_cases.md:114
+File: docs/benchmark/layer0_cases.md:207
 Crossref first author: Varani
 Author check: skip-no-author
 Title check: skip-no-title
 Status: VALID (resolve-only)
 
-DOI: 10.1073/pnas.96.14.8229
-File: docs/benchmark/layer0_cases.md:207
-Crossref first author: Varani
+DOI: 10.1074/jbc.274.21.15134
+File: README.md:63
+Crossref first author: Grover
 Author check: ok
 Title check: skip-no-title
 Status: VALID (full)
-
-DOI: 10.1073/pnas.96.14.8229
-File: examples/out/mapt-e10/report.md:83
-Crossref first author: Varani
-Author check: skip-no-author
-Title check: skip-no-title
-Status: VALID (resolve-only)
-
-DOI: 10.1074/jbc.274.21.15134
-File: NOTES.md:118
-Crossref first author: Grover
-Author check: skip-no-author
-Title check: skip-no-title
-Status: VALID (resolve-only)
-
-DOI: 10.1074/jbc.274.21.15134
-File: NOTES.md:235
-Crossref first author: Grover
-Author check: skip-no-author
-Title check: skip-no-title
-Status: VALID (resolve-only)
-
-DOI: 10.1074/jbc.274.21.15134
-File: docs/benchmark/layer0_cases.md:113
-Crossref first author: Grover
-Author check: skip-no-author
-Title check: skip-no-title
-Status: VALID (resolve-only)
 
 DOI: 10.1074/jbc.274.21.15134
 File: docs/benchmark/layer0_cases.md:206
 Crossref first author: Grover
-Author check: ok
-Title check: skip-no-title
-Status: VALID (full)
-
-DOI: 10.1074/jbc.274.21.15134
-File: examples/out/mapt-e10/report.md:82
-Crossref first author: Grover
 Author check: skip-no-author
 Title check: skip-no-title
 Status: VALID (resolve-only)
 
 DOI: 10.1074/jbc.AC120.013449
-File: NOTES.md:232
+File: README.md:42
 Crossref first author: Kelly
-Author check: first-author-mismatch
+Author check: ok
 Title check: skip-no-title
-Status: FAILED
-Error: author-check-failed:first-author-mismatch
+Status: VALID (full)
 
 DOI: 10.1074/jbc.AC120.013449
 File: docs/benchmark/impact.md:42
 Crossref first author: Kelly
-Author check: first-author-mismatch
+Author check: ok
 Title check: skip-no-title
-Status: FAILED
-Error: author-check-failed:first-author-mismatch
+Status: VALID (full)
 
 DOI: 10.1074/jbc.AC120.013449
 File: docs/benchmark/impact.md:55
 Crossref first author: Kelly
-Author check: ok
+Author check: skip-no-author
 Title check: skip-no-title
-Status: VALID (full)
-
-DOI: 10.1074/jbc.AC120.013449
-File: docs/benchmark/layer0_cases.md:161
-Crossref first author: Kelly
-Author check: first-author-mismatch
-Title check: skip-no-title
-Status: FAILED
-Error: author-check-failed:first-author-mismatch
+Status: VALID (resolve-only)
 
 DOI: 10.1074/jbc.AC120.013449
 File: docs/benchmark/layer0_cases.md:211
 Crossref first author: Kelly
-Author check: ok
-Title check: skip-no-title
-Status: VALID (full)
-
-DOI: 10.1074/jbc.AC120.013449
-File: examples/out/sars2-fse/report.md:73
-Crossref first author: Kelly
-Author check: skip-no-author
-Title check: skip-no-title
-Status: VALID (resolve-only)
-
-DOI: 10.1093/bioinformatics/btm223
-File: benchmarks/outputs/layer5/README.md:111
-Crossref first author: Andronescu
-Author check: ok
-Title check: ok
-Status: VALID (full)
-
-DOI: 10.1093/bioinformatics/btm223
-File: docs/benchmark/layer5_robustness.md:62
-Crossref first author: Andronescu
-Author check: ok
-Title check: ok
-Status: VALID (full)
-
-DOI: 10.1093/bioinformatics/btm223
-File: docs/benchmark/layer5_robustness.md:275
-Crossref first author: Andronescu
-Author check: ok
-Title check: skip-no-title
-Status: VALID (full)
-
-DOI: 10.1093/nar/29.10.2135
-File: docs/benchmark/layer1_scoring.md:33
-Crossref first author: Gorodkin
-Author check: ok
-Title check: title-mismatch
-Status: FAILED
-Error: title-check-failed:title-mismatch
-
-DOI: 10.1093/nar/29.10.2135
-File: docs/benchmark/layer2_accuracy.md:44
-Crossref first author: Gorodkin
-Author check: ok
-Title check: title-mismatch
-Status: FAILED
-Error: title-check-failed:title-mismatch
-
-DOI: 10.1093/nar/gkae1023
-File: docs/benchmark/layer2_accuracy.md:23
-Crossref first author: Ontiveros-Palacios
-Author check: ok
-Title check: skip-no-title
-Status: VALID (full)
-
-DOI: 10.1126/science.2475911
-File: NOTES.md:117
-Crossref first author: Riordan
 Author check: skip-no-author
 Title check: skip-no-title
 Status: VALID (resolve-only)
 
 DOI: 10.1126/science.2475911
-File: NOTES.md:234
+File: README.md:56
 Crossref first author: Riordan
-Author check: first-author-mismatch
-Title check: title-mismatch
-Status: FAILED
-Error: author-check-failed:first-author-mismatch
-
-DOI: 10.1126/science.2475911
-File: docs/benchmark/layer0_cases.md:87
-Crossref first author: Riordan
-Author check: first-author-mismatch
+Author check: ok
 Title check: skip-no-title
-Status: FAILED
-Error: author-check-failed:first-author-mismatch
+Status: VALID (full)
 
 DOI: 10.1126/science.2475911
 File: docs/benchmark/layer0_cases.md:204
 Crossref first author: Riordan
+Author check: skip-no-author
+Title check: skip-no-title
+Status: VALID (resolve-only)
+
+DOI: 10.1126/science.abf3546
+File: README.md:42
+Crossref first author: Bhatt
 Author check: ok
 Title check: skip-no-title
 Status: VALID (full)
-
-DOI: 10.1126/science.2475911
-File: examples/out/cftr-5utr/report.md:85
-Crossref first author: Riordan
-Author check: skip-no-author
-Title check: skip-no-title
-Status: VALID (resolve-only)
-
-DOI: 10.1126/science.abf3546
-File: NOTES.md:115
-Crossref first author: Bhatt
-Author check: skip-no-author
-Title check: skip-no-title
-Status: VALID (resolve-only)
-
-DOI: 10.1126/science.abf3546
-File: NOTES.md:232
-Crossref first author: Bhatt
-Author check: first-author-mismatch
-Title check: skip-no-title
-Status: FAILED
-Error: author-check-failed:first-author-mismatch
-
-DOI: 10.1126/science.abf3546
-File: docs/benchmark/layer0_cases.md:162
-Crossref first author: Bhatt
-Author check: first-author-mismatch
-Title check: skip-no-title
-Status: FAILED
-Error: author-check-failed:first-author-mismatch
 
 DOI: 10.1126/science.abf3546
 File: docs/benchmark/layer0_cases.md:212
 Crossref first author: Bhatt
+Author check: skip-no-author
+Title check: skip-no-title
+Status: VALID (resolve-only)
+
+DOI: 10.1128/JVI.73.2.1165-1174.1999
+File: README.md:70
+Crossref first author: Honda
 Author check: ok
 Title check: skip-no-title
 Status: VALID (full)
-
-DOI: 10.1126/science.abf3546
-File: examples/out/sars2-fse/report.md:74
-Crossref first author: Bhatt
-Author check: skip-no-author
-Title check: skip-no-title
-Status: VALID (resolve-only)
-
-DOI: 10.1128/JVI.73.2.1165-1174.1999
-File: NOTES.md:119
-Crossref first author: Honda
-Author check: skip-no-author
-Title check: skip-no-title
-Status: VALID (resolve-only)
-
-DOI: 10.1128/JVI.73.2.1165-1174.1999
-File: NOTES.md:236
-Crossref first author: Honda
-Author check: first-author-mismatch
-Title check: title-mismatch
-Status: FAILED
-Error: author-check-failed:first-author-mismatch
-
-DOI: 10.1128/JVI.73.2.1165-1174.1999
-File: docs/benchmark/layer0_cases.md:138
-Crossref first author: Honda
-Author check: skip-no-author
-Title check: skip-no-title
-Status: VALID (resolve-only)
 
 DOI: 10.1128/JVI.73.2.1165-1174.1999
 File: docs/benchmark/layer0_cases.md:209
 Crossref first author: Honda
-Author check: ok
-Title check: skip-no-title
-Status: VALID (full)
-
-DOI: 10.1128/JVI.73.2.1165-1174.1999
-File: examples/out/hcv-ires-dii/report.md:73
-Crossref first author: Honda
 Author check: skip-no-author
 Title check: skip-no-title
 Status: VALID (resolve-only)
 
 DOI: 10.1128/MCB.26.4.1333-1346.2006
-File: NOTES.md:233
+File: README.md:49
 Crossref first author: Singh
-Author check: first-author-mismatch
+Author check: ok
 Title check: skip-no-title
-Status: FAILED
-Error: author-check-failed:first-author-mismatch
+Status: VALID (full)
 
 DOI: 10.1128/MCB.26.4.1333-1346.2006
 File: docs/benchmark/impact.md:19
 Crossref first author: Singh
-Author check: ok
-Title check: skip-no-title
-Status: VALID (full)
-
-DOI: 10.1128/MCB.26.4.1333-1346.2006
-File: docs/benchmark/layer0_cases.md:64
-Crossref first author: Singh
-Author check: first-author-mismatch
-Title check: skip-no-title
-Status: FAILED
-Error: author-check-failed:first-author-mismatch
-
-DOI: 10.1128/MCB.26.4.1333-1346.2006
-File: docs/benchmark/layer0_cases.md:202
-Crossref first author: Singh
-Author check: ok
-Title check: skip-no-title
-Status: VALID (full)
-
-DOI: 10.1128/MCB.26.4.1333-1346.2006
-File: examples/out/smn2-iss-n1/report.md:79
-Crossref first author: Singh
 Author check: skip-no-author
 Title check: skip-no-title
 Status: VALID (resolve-only)
 
-DOI: 10.1186/1748-7188-6-26
-File: NOTES.md:230
-Crossref first author: Lorenz
-Author check: ok
+DOI: 10.1128/MCB.26.4.1333-1346.2006
+File: docs/benchmark/layer0_cases.md:202
+Crossref first author: Singh
+Author check: skip-no-author
 Title check: skip-no-title
-Status: VALID (full)
-
-DOI: 10.1186/1748-7188-6-26
-File: README.md:273
-Crossref first author: Lorenz
-Author check: ok
-Title check: title-mismatch
-Status: FAILED
-Error: title-check-failed:title-mismatch
+Status: VALID (resolve-only)
 
 DOI: 10.1186/1748-7188-6-26
 File: docs/API.md:273
@@ -671,24 +407,9 @@ Author check: ok
 Title check: skip-no-title
 Status: VALID (full)
 
-DOI: 10.1186/1748-7188-6-26
-File: docs/benchmark/layer5_robustness.md:277
-Crossref first author: Lorenz
-Author check: ok
-Title check: title-mismatch
-Status: FAILED
-Error: title-check-failed:title-mismatch
-
 DOI: 10.1186/s13059-017-1382-0
 File: docs/API.md:272
 Crossref first author: Wolf
-Author check: ok
-Title check: skip-no-title
-Status: VALID (full)
-
-DOI: 10.1261/rna.053694.115
-File: docs/benchmark/layer2_accuracy.md:13
-Crossref first author: Sloma
 Author check: ok
 Title check: skip-no-title
 Status: VALID (full)
@@ -714,14 +435,7 @@ Author check: n/a-datacite
 Title check: n/a-datacite
 Status: VALID (resolve-only)
 
-DOI: 10.5281/zenodo.4430150
-File: docs/benchmark/layer2_accuracy.md:18
-Crossref first author: n/a
-Author check: n/a-datacite
-Title check: n/a-datacite
-Status: VALID (resolve-only)
-
 ======================================================================
-Total occurrences: 99
-Valid: 72
-Failed: 27
+Total occurrences: 62
+Valid: 62
+Failed: 0

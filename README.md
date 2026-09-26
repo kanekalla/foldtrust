@@ -53,7 +53,7 @@ FoldTrust ships with five curated disease-relevant RNA cases with verified NCBI 
 **Disease:** Cystic Fibrosis  
 **Biology:** Complete 5' UTR (1-70) + first 130 nt of CDS; structure around start codon affects translation efficiency  
 **Teaching point:** UTR structure influences ribosome loading; start codon accessibility matters for expression  
-**References:** [Riordan et al. 1989](https://doi.org/10.1126/science.2475911), [Zielenski & Tsui 1991](https://doi.org/10.1016/0888-7543(91)90503-7)
+**References:** [Riordan et al. 1989](https://doi.org/10.1126/science.2475911), [Zielenski et al. 1991](https://doi.org/10.1016/0888-7543(91)90503-7)
 
 ### 4. MAPT Exon 10 5'ss Stem-Loop (mapt-e10)
 **Coordinates:** NG_007398.2:120818-121000(+), 183 nt  
