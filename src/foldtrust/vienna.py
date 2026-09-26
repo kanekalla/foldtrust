@@ -1,15 +1,15 @@
 """ViennaRNA integration for RNA folding."""
 
 import json
-import re
 import subprocess
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Tuple
 
 import numpy as np
 
 try:
     import RNA
+
     HAS_RNA_PYTHON = True
 except ImportError:
     HAS_RNA_PYTHON = False
@@ -24,7 +24,8 @@ class ViennaRNAError(Exception):
 def check_viennarna() -> bool:
     """Check if ViennaRNA is available (Python API)."""
     try:
-        import RNA
+        import RNA  # noqa: F401
+
         return True
     except ImportError:
         return False
@@ -42,16 +43,16 @@ def fold_mfe(sequence: str) -> Tuple[str, float]:
 
     try:
         import RNA
-        
+
         md = RNA.md()
         md.uniq_ML = 1
         fc = RNA.fold_compound(sequence, md)
-        
+
         # MFE returns [structure, energy]
         result = fc.mfe()
         structure = result[0]
         energy = result[1] if len(result) > 1 else 0.0
-        
+
         return structure, energy
 
     except Exception as e:
@@ -78,13 +79,13 @@ def compute_pair_probabilities(sequence: str) -> np.ndarray:
         md = RNA.md()
         md.uniq_ML = 1
         fc = RNA.fold_compound(sequence, md)
-        
+
         # Compute partition function
         fc.pf()
-        
+
         # Get base-pair probabilities
         bpp = fc.bpp()
-        
+
         # Convert to matrix (ViennaRNA uses 1-based indexing)
         # bpp[i][j] is upper-triangular (only i < j has values)
         # Make it symmetric by copying to both (i,j) and (j,i)
@@ -178,33 +179,33 @@ def fold_with_params(
 ) -> Tuple[str, float]:
     """
     Fold RNA with specific parameter set and temperature using Python API.
-    
+
     ViennaRNA has persistent global state for parameters that doesn't fully
     reset between calls in the same process. To get reliable parameter switching,
     we run each fold in a fresh subprocess.
-    
+
     Args:
         sequence: RNA sequence
         param_set: One of "Turner2004", "Andronescu2007", "Langdon2018"
         temperature: Temperature in Celsius
-    
+
     Returns:
         (structure, mfe_energy) tuple
-        
+
     Raises:
         ViennaRNAError: If Python API not available or parameters invalid
     """
     if not HAS_RNA_PYTHON:
         raise ViennaRNAError(
-            "ViennaRNA Python bindings not available. "
-            "Install with: pip install ViennaRNA"
+            "ViennaRNA Python bindings not available. " "Install with: pip install ViennaRNA"
         )
-    
+
     if param_set not in ["Turner2004", "Andronescu2007", "Langdon2018"]:
         raise ViennaRNAError(f"Unknown parameter set: {param_set}")
-    
+
     # Run in subprocess to avoid parameter state issues
     import sys
+
     code = f"""
 import RNA
 import sys
@@ -231,7 +232,7 @@ structure, mfe = fc.mfe()
 
 print(f"{{structure}}|{{mfe}}")
 """
-    
+
     try:
         result = subprocess.run(
             [sys.executable, "-c", code],
@@ -240,13 +241,13 @@ print(f"{{structure}}|{{mfe}}")
             timeout=30,
             check=True,
         )
-        
+
         output = result.stdout.strip()
         structure, mfe_str = output.split("|")
         mfe = float(mfe_str)
-        
+
         return structure, mfe
-        
+
     except subprocess.CalledProcessError as e:
         raise ViennaRNAError(f"Fold failed: {e.stderr}")
     except subprocess.TimeoutExpired:
@@ -257,37 +258,36 @@ print(f"{{structure}}|{{mfe}}")
 
 def compute_pair_probs_with_params(
     sequence: str,
-    param_set: str = "Turner2004", 
+    param_set: str = "Turner2004",
     temperature: float = 37.0,
 ) -> np.ndarray:
     """
     Compute base-pair probabilities with specific parameters.
-    
+
     Uses subprocess to avoid ViennaRNA parameter state issues.
-    
+
     Args:
         sequence: RNA sequence
         param_set: One of "Turner2004", "Andronescu2007", "Langdon2018"
         temperature: Temperature in Celsius
-        
+
     Returns:
         NxN probability matrix
-        
+
     Raises:
         ViennaRNAError: If Python API not available
     """
     if not HAS_RNA_PYTHON:
         raise ViennaRNAError(
-            "ViennaRNA Python bindings not available. "
-            "Install with: pip install ViennaRNA"
+            "ViennaRNA Python bindings not available. " "Install with: pip install ViennaRNA"
         )
-    
+
     if param_set not in ["Turner2004", "Andronescu2007", "Langdon2018"]:
         raise ViennaRNAError(f"Unknown parameter set: {param_set}")
-    
+
     # Run in subprocess
     import sys
-    import json
+
     code = f"""
 import RNA
 import json
@@ -326,7 +326,7 @@ for i in range(1, n + 1):
 
 print(json.dumps({{"n": n, "pairs": pairs}}))
 """
-    
+
     try:
         result = subprocess.run(
             [sys.executable, "-c", code],
@@ -335,19 +335,19 @@ print(json.dumps({{"n": n, "pairs": pairs}}))
             timeout=60,
             check=True,
         )
-        
+
         data = json.loads(result.stdout)
         n = data["n"]
         pairs = data["pairs"]
-        
+
         # Reconstruct matrix
         prob_matrix = np.zeros((n, n))
         for i, j, prob in pairs:
             prob_matrix[i, j] = prob
             prob_matrix[j, i] = prob
-        
+
         return prob_matrix
-        
+
     except subprocess.CalledProcessError as e:
         raise ViennaRNAError(f"Partition function failed: {e.stderr}")
     except subprocess.TimeoutExpired:
@@ -359,20 +359,19 @@ print(json.dumps({{"n": n, "pairs": pairs}}))
 def load_param_file(param_file: Path) -> None:
     """
     Load ViennaRNA parameter file.
-    
+
     Args:
         param_file: Path to .par file
-        
+
     Raises:
         ViennaRNAError: If Python API not available or file not found
     """
     if not HAS_RNA_PYTHON:
         raise ViennaRNAError(
-            "ViennaRNA Python bindings not available. "
-            "Install with: pip install ViennaRNA"
+            "ViennaRNA Python bindings not available. " "Install with: pip install ViennaRNA"
         )
-    
+
     if not param_file.exists():
         raise ViennaRNAError(f"Parameter file not found: {param_file}")
-    
+
     RNA.params_load(str(param_file))

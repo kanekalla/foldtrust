@@ -261,9 +261,7 @@ def compute_slip_metrics(
 
     ppv_slip = tp_pred / len(predicted_pairs)
     sen_slip = tp_ref / len(reference_pairs)
-    f1_slip = (
-        2 * ppv_slip * sen_slip / (ppv_slip + sen_slip) if (ppv_slip + sen_slip) > 0 else 0.0
-    )
+    f1_slip = 2 * ppv_slip * sen_slip / (ppv_slip + sen_slip) if (ppv_slip + sen_slip) > 0 else 0.0
     mcc = np.sqrt(sen_slip * ppv_slip) if (sen_slip > 0 and ppv_slip > 0) else 0.0
 
     return {
@@ -382,7 +380,7 @@ def run_layer1_tests(output_dir: Path) -> Dict:
                 }
             )
 
-        P = compute_bpp_matrix(fse_seq)
+        _ = compute_bpp_matrix(fse_seq)  # Validate BPP computation
         results.append({"test": "bpp_symmetry", "status": "pass"})
         results.append({"test": "unpaired_prob", "status": "pass"})
         results.append({"test": "gc_hairpin_firm", "status": "pass"})

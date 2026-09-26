@@ -179,7 +179,7 @@ def test_slip_tolerant_greater_equal_exact():
 def test_energy_regression():
     """Test FSE energy regression across parameter sets."""
     try:
-        import RNA
+        import RNA  # noqa: F401
     except ImportError:
         pytest.skip("ViennaRNA not installed")
 
@@ -206,7 +206,7 @@ def test_energy_regression():
 def test_bpp_symmetry():
     """Test base-pair probability matrix symmetry."""
     try:
-        import RNA
+        import RNA  # noqa: F401
     except ImportError:
         pytest.skip("ViennaRNA not installed")
 
@@ -226,7 +226,7 @@ def test_bpp_symmetry():
 def test_unpaired_probability():
     """Test unpaired probability = 1 - sum of pair probabilities."""
     try:
-        import RNA
+        import RNA  # noqa: F401
     except ImportError:
         pytest.skip("ViennaRNA not installed")
 
@@ -247,7 +247,7 @@ def test_unpaired_probability():
 def test_gc_hairpin_firm_tier():
     """Test FIRM tier check on a high-probability GC hairpin."""
     try:
-        import RNA
+        import RNA  # noqa: F401
     except ImportError:
         pytest.skip("ViennaRNA not installed")
 

@@ -33,7 +33,7 @@ def main():
     print("Layer 1: Core validation tests")
     print("-" * 70)
     layer1_output = output_dir / "layer1"
-    layer1_results = run_layer1_tests(layer1_output)
+    run_layer1_tests(layer1_output)
     print(f"  ✓ Layer 1 complete. Results in {layer1_output}")
     print()
 
@@ -43,7 +43,9 @@ def main():
     layer2_results = run_layer2_benchmark(
         cache_dir=cache_dir, output_dir=layer2_output, max_length=500, sample_size=200
     )
-    print(f"  ✓ Layer 2 complete. {layer2_results['n_structures']} structures. Results in {layer2_output}")
+    print(
+        f"  ✓ Layer 2 complete. {layer2_results['n_structures']} structures. Results in {layer2_output}"
+    )
     print()
 
     print("Layer 3: Calibration analysis")

@@ -2,9 +2,9 @@
 """Check DOIs via Crossref API to verify they resolve correctly."""
 
 import json
-import urllib.request
-import urllib.error
 import sys
+import urllib.error
+import urllib.request
 
 # DOIs from case meta.yaml files
 dois = [
@@ -33,32 +33,32 @@ all_ok = True
 
 for doi, expected_author, note in dois:
     url = f"https://api.crossref.org/works/{doi}"
-    
+
     try:
         with urllib.request.urlopen(url, timeout=10) as response:
             data = json.loads(response.read().decode())
-        
-        if 'message' in data:
-            msg = data['message']
-            title = msg.get('title', [''])[0] if 'title' in msg else 'NO TITLE'
-            authors = msg.get('author', [])
-            first_author = authors[0]['family'] if authors else 'NO AUTHOR'
-            year = msg.get('published', {}).get('date-parts', [[None]])[0][0]
-            
+
+        if "message" in data:
+            msg = data["message"]
+            title = msg.get("title", [""])[0] if "title" in msg else "NO TITLE"
+            authors = msg.get("author", [])
+            first_author = authors[0]["family"] if authors else "NO AUTHOR"
+            year = msg.get("published", {}).get("date-parts", [[None]])[0][0]
+
             author_match = expected_author.lower() in first_author.lower()
-            
+
             status = "✓" if author_match else "✗"
             print(f"{status} {doi}")
             print(f"   Expected: {expected_author} ({note})")
             print(f"   Found: {first_author} et al. {year} — {title[:70]}...")
             print()
-            
+
             if not author_match:
                 all_ok = False
         else:
             print(f"✗ {doi} — No message in response")
             all_ok = False
-    
+
     except urllib.error.HTTPError as e:
         print(f"✗ {doi} — HTTP {e.code}: {e.reason}")
         all_ok = False

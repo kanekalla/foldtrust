@@ -4,8 +4,7 @@ import hashlib
 import json
 import urllib.request
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
-import gzip
+from typing import Dict, List, Optional
 
 
 def compute_sha256(filepath: Path) -> str:
@@ -26,12 +25,12 @@ def download_file(url: str, dest: Path, expected_sha256: Optional[str] = None) -
         elif not expected_sha256:
             print(f"  ✓ {dest.name} already exists")
             return
-    
+
     print(f"  Downloading {url}")
     dest.parent.mkdir(parents=True, exist_ok=True)
-    
+
     urllib.request.urlretrieve(url, dest)
-    
+
     if expected_sha256:
         actual = compute_sha256(dest)
         if actual != expected_sha256:
@@ -45,29 +44,29 @@ def download_file(url: str, dest: Path, expected_sha256: Optional[str] = None) -
 def fetch_archiveii(data_dir: Path, max_length: Optional[int] = 500) -> Path:
     """
     Fetch ArchiveII dataset (or subset).
-    
+
     ArchiveII is a curated database of RNA structures from comparative analysis.
     Source: RNA STRAND v2.0 / ArchiveII subset
-    
+
     For Mac-16GB friendliness, we use a filtered subset.
-    
+
     Returns:
         Path to the local dataset file
     """
     archive_dir = data_dir / "archiveii"
     archive_dir.mkdir(parents=True, exist_ok=True)
-    
+
     output_file = archive_dir / "archiveii_subset.json"
-    
+
     if output_file.exists():
         print(f"  ✓ ArchiveII subset already exists at {output_file}")
         return output_file
-    
+
     print("  Fetching RNA STRAND database (ArchiveII subset)...")
-    
+
     url = "https://www.rnasoft.ca/strand/RNAStrands.txt"
     raw_file = archive_dir / "RNAStrands.txt"
-    
+
     try:
         download_file(url, raw_file)
     except Exception as e:
@@ -75,60 +74,62 @@ def fetch_archiveii(data_dir: Path, max_length: Optional[int] = 500) -> Path:
         print("  Creating minimal test dataset instead...")
         create_minimal_reference_set(output_file)
         return output_file
-    
+
     entries = parse_rna_strand(raw_file, max_length=max_length)
-    
+
     with open(output_file, "w") as f:
         json.dump(entries, f, indent=2)
-    
+
     print(f"  ✓ Parsed {len(entries)} sequences (max length {max_length})")
-    
+
     return output_file
 
 
 def parse_rna_strand(filepath: Path, max_length: Optional[int] = None) -> List[Dict]:
     """Parse RNA STRAND format file."""
     entries = []
-    
+
     with open(filepath, "r") as f:
         lines = f.readlines()
-    
+
     i = 0
     while i < len(lines):
         line = lines[i].strip()
-        
+
         if line.startswith(">"):
             name = line[1:].strip()
             i += 1
-            
+
             sequence = ""
             structure = ""
-            
+
             while i < len(lines) and not lines[i].startswith(">"):
                 content = lines[i].strip()
                 if not content:
                     i += 1
                     continue
-                
+
                 if all(c in "ACGTU" for c in content.upper()):
                     sequence += content.upper().replace("U", "T")
                 elif all(c in ".()[]{}|&" for c in content):
                     structure += content.replace("|", ".").replace("&", ".")
-                
+
                 i += 1
-            
+
             if sequence and structure and len(sequence) == len(structure):
                 if max_length is None or len(sequence) <= max_length:
-                    entries.append({
-                        "name": name,
-                        "sequence": sequence,
-                        "structure": structure,
-                        "length": len(sequence),
-                        "source": "RNA_STRAND"
-                    })
+                    entries.append(
+                        {
+                            "name": name,
+                            "sequence": sequence,
+                            "structure": structure,
+                            "length": len(sequence),
+                            "source": "RNA_STRAND",
+                        }
+                    )
         else:
             i += 1
-    
+
     return entries
 
 
@@ -140,105 +141,105 @@ def create_minimal_reference_set(output_file: Path) -> None:
             "sequence": "GCCUGGCGGCCGUAGCGCGGUGGUCCCACCUGACCCCAUGCCGAACUCAGAAGUGAAACGCCGUAGC",
             "structure": "(((((((((...(((((.......))))).......(((((.......)))))....))))))))).",
             "length": 68,
-            "source": "Comparative"
+            "source": "Comparative",
         },
         {
             "name": "hairpin_ribozyme",
             "sequence": "CGAAACAUUCCGGUGUUUCGCCGAAGGUGC",
             "structure": "((((((((((........)))))))))).",
             "length": 30,
-            "source": "Comparative"
+            "source": "Comparative",
         },
         {
             "name": "SRP_domain_IV",
             "sequence": "GGGCGGCAUGGCGCCGGGGAGCAUCCGUGUGCCGCUCUCCCGCGGGGCCGCC",
             "structure": "((((((((((.....(((((.......))))).....))))))))))....",
             "length": 52,
-            "source": "Comparative"
+            "source": "Comparative",
         },
         {
             "name": "ribozyme_p5abc",
             "sequence": "GGCAAAGCCCAGCGAGCAUGUUUGGGCCGCCUGG",
             "structure": "(((((..((((((...)))))).....))))).",
             "length": 35,
-            "source": "Comparative"
+            "source": "Comparative",
         },
         {
             "name": "hammerhead_ribozyme",
             "sequence": "CUGUGAUAUGCCAGGUACGAAACUGAAGAGG",
             "structure": "((((((((....)))).)))(((....))).",
             "length": 31,
-            "source": "Comparative"
+            "source": "Comparative",
         },
         {
             "name": "hairpin_small",
             "sequence": "CGAAACGAAACG",
             "structure": "((((....))))",
             "length": 12,
-            "source": "Manual"
+            "source": "Manual",
         },
         {
             "name": "pseudoknot_simple",
             "sequence": "GGAAACCCCUUUUGGGGAAA",
             "structure": "((((....))))........",
             "length": 20,
-            "source": "Manual"
+            "source": "Manual",
         },
         {
             "name": "rnase_p_fragment",
             "sequence": "CGGAGGCGCAGGACCGGCGCCGUCUGCCU",
             "structure": "(((((((((.....))))).....)))).",
             "length": 29,
-            "source": "Comparative"
+            "source": "Comparative",
         },
         {
             "name": "iron_response_element",
             "sequence": "CAGUGCUUCCGGUGCUUCCCCGCAA",
             "structure": "(((((.((((......)))).)))))",
             "length": 25,
-            "source": "NMR"
+            "source": "NMR",
         },
         {
             "name": "selenocysteine_insertion",
             "sequence": "AAUUUGAAUGGGCUGGGAUUGAAACCA",
             "structure": "...(((((......))))).......  ",
             "length": 27,
-            "source": "Comparative"
+            "source": "Comparative",
         },
         {
             "name": "sarcin_ricin_loop",
             "sequence": "AGUACGAGAGGAACCGCAGGUU",
             "structure": ".(((((..........))))).",
             "length": 22,
-            "source": "NMR"
+            "source": "NMR",
         },
         {
             "name": "tetraloop_GNRA",
             "sequence": "CGCGAAAGCGCG",
             "structure": "((((....))))",
             "length": 12,
-            "source": "NMR"
+            "source": "NMR",
         },
         {
             "name": "kissing_hairpin",
             "sequence": "GCACGUGCGCGCACGUGC",
             "structure": "((((....))))((....))",
             "length": 18,
-            "source": "Comparative"
+            "source": "Comparative",
         },
         {
             "name": "internal_loop_2x2",
             "sequence": "CGGAAUUAGCCG",
             "structure": "(((....)))  ",
             "length": 12,
-            "source": "Manual"
+            "source": "Manual",
         },
     ]
-    
+
     output_file.parent.mkdir(parents=True, exist_ok=True)
     with open(output_file, "w") as f:
         json.dump(test_sequences, f, indent=2)
-    
+
     print(f"  ✓ Created curated reference set with {len(test_sequences)} sequences")
 
 
@@ -246,47 +247,47 @@ def load_reference_dataset(filepath: Path) -> List[Dict]:
     """Load reference dataset from JSON."""
     with open(filepath, "r") as f:
         data = json.load(f)
-    
+
     for entry in data:
         entry["structure"] = entry["structure"].strip()
-    
+
     return data
 
 
 def fetch_shape_data_sars2_fse(data_dir: Path) -> Optional[Path]:
     """
     Fetch SHAPE-MaP data for SARS-CoV-2 frameshift element.
-    
+
     Source: Huston et al. 2021, doi:10.1371/journal.ppat.1009265
     or Manfredonia et al. 2020, doi:10.1038/s41586-020-2681-1
-    
+
     Returns path to reactivity file or None if unavailable.
     """
     shape_dir = data_dir / "shape"
     shape_dir.mkdir(parents=True, exist_ok=True)
-    
+
     output_file = shape_dir / "sars2_fse_shape.json"
-    
+
     if output_file.exists():
-        print(f"  ✓ SARS2 FSE SHAPE data already exists")
+        print("  ✓ SARS2 FSE SHAPE data already exists")
         return output_file
-    
+
     print("  Note: Public SHAPE data for SARS-CoV-2 FSE requires manual extraction from papers")
     print("  Skipping SHAPE analysis for SARS2-FSE (no open single-file source available)")
-    
+
     return None
 
 
 def create_mock_shape_data(output_file: Path, sequence_length: int) -> None:
     """Create mock SHAPE data for testing (DO NOT USE FOR REAL RESULTS)."""
     import numpy as np
-    
+
     mock_data = {
         "sequence_length": sequence_length,
         "reactivities": list(np.random.rand(sequence_length) * 2),
         "source": "MOCK_DATA_FOR_TESTING_ONLY",
-        "note": "This is synthetic data for code testing only"
+        "note": "This is synthetic data for code testing only",
     }
-    
+
     with open(output_file, "w") as f:
         json.dump(mock_data, f, indent=2)

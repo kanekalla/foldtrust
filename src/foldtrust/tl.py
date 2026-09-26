@@ -103,7 +103,7 @@ def compute_ensemble(
         # Fallback: parse RNAfold -p output
         print("Warning: ViennaRNA Python not available, using RNAfold -p (slower)")
 
-        result = subprocess.run(
+        _ = subprocess.run(  # Validate RNAfold availability
             ["RNAfold", "-p", "--noPS", "-T", str(temperature)],
             input=fd.sequence,
             capture_output=True,

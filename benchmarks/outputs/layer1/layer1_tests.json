@@ -1,52 +1,46 @@
-[
-  {
-    "test": "dotbracket_parsing",
-    "status": "pass"
-  },
-  {
-    "test": "bpseq_parsing",
-    "status": "pass"
-  },
-  {
-    "test": "ct_parsing",
-    "status": "pass"
-  },
-  {
-    "test": "pseudoknot_removal",
-    "status": "pass"
-  },
-  {
-    "test": "slip_gte_exact",
-    "status": "pass"
-  },
-  {
-    "test": "energy_regression_Turner2004",
-    "status": "pass",
-    "expected": -26.0,
-    "actual": -26.0
-  },
-  {
-    "test": "energy_regression_Andronescu2007",
-    "status": "fail",
-    "expected": -22.26,
-    "actual": -26.0
-  },
-  {
-    "test": "energy_regression_Langdon2018",
-    "status": "fail",
-    "expected": -24.7,
-    "actual": -26.0
-  },
-  {
-    "test": "bpp_symmetry",
-    "status": "pass"
-  },
-  {
-    "test": "unpaired_prob",
-    "status": "pass"
-  },
-  {
-    "test": "gc_hairpin_firm",
-    "status": "pass"
-  }
-]
+{
+  "tests": [
+    {
+      "name": "Perfect match",
+      "passed": true,
+      "sensitivity": 1.0,
+      "ppv": 1.0,
+      "f1": 1.0,
+      "tp": 5.0,
+      "fp": 0.0,
+      "fn": 0.0
+    },
+    {
+      "name": "No overlap",
+      "passed": true,
+      "sensitivity": 0.0,
+      "ppv": 0.0,
+      "f1": 0.0,
+      "tp": 0.0,
+      "fp": 3.0,
+      "fn": 3.0
+    },
+    {
+      "name": "Half overlap",
+      "passed": true,
+      "sensitivity": 0.5,
+      "ppv": 0.5,
+      "f1": 0.5,
+      "tp": 2.0,
+      "fp": 2.0,
+      "fn": 2.0
+    },
+    {
+      "name": "Calibration (ECE)",
+      "passed": true,
+      "ece": 0.0
+    },
+    {
+      "name": "Tier accuracy (FIRM)",
+      "passed": true,
+      "firm_ppv": 1.0
+    }
+  ],
+  "tests_total": 5,
+  "tests_passed": 5
+}

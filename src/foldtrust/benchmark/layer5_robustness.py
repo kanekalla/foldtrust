@@ -19,7 +19,7 @@ import numpy as np
 import pandas as pd
 
 try:
-    import RNA
+    import RNA  # noqa: F401
 
     HAS_RNA = True
 except ImportError:

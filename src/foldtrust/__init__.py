@@ -17,7 +17,7 @@ Workflow::
     fd = ft.io.read_fasta("sequence.fa")
     fd = ft.io.read_case_directory("data/cases/sars2-fse")
     collection = ft.io.read_case_batch("data/cases")
-    
+
     # Analysis tools
     ft.tl.fold_mfe(fd)
     ft.tl.compute_ensemble(fd)
@@ -25,7 +25,7 @@ Workflow::
     ft.tl.compute_unpaired_probs(fd)
     # Or run complete pipeline:
     fd = ft.tl.run_pipeline(fd, temperature=37.0)
-    
+
     # Plotting
     ft.pl.arc_plot(fd, save="arc.png")
     ft.pl.heatmap(fd, save="heatmap.png")
@@ -43,16 +43,14 @@ Data persistence::
 __version__ = "0.2.0"
 
 # Core data structures
+# Namespace imports
+from foldtrust import io, pl, tl
 from foldtrust._core import FoldData, FoldDataCollection
 
-# Namespace imports
-from foldtrust import io
-from foldtrust import tl
-from foldtrust import pl
-
-# Legacy CLI support
-from foldtrust.core import process_sequence
-from foldtrust.utils import read_fasta as _legacy_read_fasta, find_case_directories
+# Legacy CLI support (kept for backward compatibility)
+from foldtrust.core import process_sequence  # noqa: F401
+from foldtrust.utils import find_case_directories  # noqa: F401
+from foldtrust.utils import read_fasta as _legacy_read_fasta  # noqa: F401
 
 __all__ = [
     # Core
