@@ -25,10 +25,10 @@ def extract_dois_from_file(filepath: Path) -> List[tuple]:
     # Extract DOIs - use negative lookahead to stop before markdown closing )
     # DOI suffix can contain alphanumerics, dots, hyphens, underscores, slashes
     # and balanced parentheses (e.g., 10.1016/0888-7543(91)90503-7)
-    
+
     # Basic pattern: 10.xxxx/yyy where yyy doesn't contain ) unless preceded by (
     pattern = r"10\.\d{4,9}/(?:[a-zA-Z0-9.\-_;/]|(?:\([a-zA-Z0-9.\-_]+\)))+"
-    
+
     for match in re.finditer(pattern, content):
         doi = match.group(0)
         # Strip any trailing punctuation
@@ -183,11 +183,11 @@ def main():
             f.write(f"DOI: {result['doi']}\n")
             f.write(f"File: {result['filepath']}\n")
             if result["valid"]:
-                f.write(f"Status: VALID\n")
+                f.write("Status: VALID\n")
                 f.write(f"Title: {result['title']}\n")
                 f.write(f"Authors: {result['authors']}\n")
             else:
-                f.write(f"Status: FAILED\n")
+                f.write("Status: FAILED\n")
                 f.write(f"Error: {result['error']}\n")
             f.write("\n")
 
