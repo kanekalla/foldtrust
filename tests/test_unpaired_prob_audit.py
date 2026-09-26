@@ -4,6 +4,8 @@ import numpy as np
 import RNA
 
 from foldtrust.benchmark.shape import compute_unpaired_probabilities
+from foldtrust._core import FoldData
+import foldtrust as ft
 
 
 def test_unpaired_prob_vs_vienna_fse():
@@ -118,3 +120,77 @@ def test_unpaired_prob_sum_constraint():
 
         # Should sum to 1 (within numerical precision)
         assert abs(total - 1.0) < 1e-6, f"Position {i}: unpaired + paired = {total:.10f} != 1.0"
+
+
+def test_unpaired_prob_tl_path_fse():
+    """Test ft.tl.compute_unpaired_probs path on FSE matches ViennaRNA."""
+    # SARS-CoV-2 FSE sequence
+    fse_seq = "UUUAAACGGGUUUGCGGUGUAAGUGCAGCCCGUCUUACACCGUGCGGCACAGGCACUAGUACUGAUGUCGUAUACAGGGCU"
+
+    # Create FoldData and compute ensemble
+    fd = FoldData(sequence=fse_seq, name="fse-test")
+    ft.tl.compute_ensemble(fd)
+    ft.tl.compute_unpaired_probs(fd)
+
+    tl_unpaired = fd.obs["unpaired_prob"].values
+
+    # Compute using ViennaRNA directly
+    fc = RNA.fold_compound(fse_seq)
+    fc.pf()
+    bpp = fc.bpp()
+    n = len(fse_seq)
+
+    vienna_unpaired = np.zeros(n)
+    for i in range(1, n + 1):
+        paired_prob = 0.0
+        for j in range(1, n + 1):
+            if i != j:
+                if i < j:
+                    paired_prob += bpp[i][j]
+                else:
+                    paired_prob += bpp[j][i]
+        vienna_unpaired[i - 1] = 1.0 - paired_prob
+
+    # Check they match
+    assert np.allclose(tl_unpaired, vienna_unpaired, atol=1e-6), (
+        f"ft.tl unpaired probabilities don't match ViennaRNA on FSE!\n"
+        f"Max difference: {np.max(np.abs(tl_unpaired - vienna_unpaired))}"
+    )
+
+
+def test_unpaired_prob_tl_path_random():
+    """Test ft.tl.compute_unpaired_probs path on random sequence matches ViennaRNA."""
+    # Random 120-nt sequence
+    np.random.seed(42)
+    bases = ["A", "C", "G", "U"]
+    seq = "".join(np.random.choice(bases, 120))
+
+    # Create FoldData and compute ensemble
+    fd = FoldData(sequence=seq, name="random-test")
+    ft.tl.compute_ensemble(fd)
+    ft.tl.compute_unpaired_probs(fd)
+
+    tl_unpaired = fd.obs["unpaired_prob"].values
+
+    # Compute using ViennaRNA directly
+    fc = RNA.fold_compound(seq)
+    fc.pf()
+    bpp = fc.bpp()
+    n = len(seq)
+
+    vienna_unpaired = np.zeros(n)
+    for i in range(1, n + 1):
+        paired_prob = 0.0
+        for j in range(1, n + 1):
+            if i != j:
+                if i < j:
+                    paired_prob += bpp[i][j]
+                else:
+                    paired_prob += bpp[j][i]
+        vienna_unpaired[i - 1] = 1.0 - paired_prob
+
+    # Check they match
+    assert np.allclose(tl_unpaired, vienna_unpaired, atol=1e-6), (
+        f"ft.tl unpaired probabilities don't match ViennaRNA on random sequence!\n"
+        f"Max difference: {np.max(np.abs(tl_unpaired - vienna_unpaired))}"
+    )
