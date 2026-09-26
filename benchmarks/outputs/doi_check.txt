@@ -1,101 +1,98 @@
-DOI Validation Results
+======================================================================
+DOI Validation
 ======================================================================
 
-DOI: 10.1006/jmbi.1999.2918
-File: BENCHMARK.md
-Status: VALID
-Title: The structure of pyruvate kinase from Leishmania mexicana reveals details of the allosteric transition and unusual effector specificity
-Authors: Rigden et al.
+Searching 38 markdown files...
+Found 32 unique DOIs
 
-DOI: 10.1007/978-3-319-77553-1_14
-File: benchmarks/outputs/layer5/README.md
-Status: VALID
-Title: Evolving Better RNAfold Structure Prediction
-Authors: Langdon et al.
+[1/32] Checking 10.1002/j.1460-2075.1993.tb05813.x...
+  ✓ Sadoshima et al.: Mechanical stretch rapidly activates multiple signal transdu...
+[2/32] Checking 10.1007/978-3-319-77553-1_14...
+  ✓ Langdon et al.: Evolving Better RNAfold Structure Prediction...
+[3/32] Checking 10.1016/0888-7543(91)90503-7...
+  ✓ Zielenski et al.: Genomic DNA sequence of the cystic fibrosis transmembrane co...
+[4/32] Checking 10.1016/j.antiviral.2007.03.007...
+  ✓ Bauer et al.: Neuraminidase inhibitor susceptibility of porcine H3N2 influ...
+[5/32] Checking 10.1017/s1355838201001790...
+  ✓ KIEFT et al.: Mechanism of ribosome recruitment by hepatitis C IRES RNA...
+[6/32] Checking 10.1038/11701...
+  ✗ DOI not found or inaccessible
+[7/32] Checking 10.1038/31508...
+  ✓ Hutton et al.: Association of missense and 5′-splice-site mutations in tau ...
+[8/32] Checking 10.1038/nature10485...
+  ✓ Hua et al.: Peripheral SMN restoration is essential for long-term rescue...
+[9/32] Checking 10.1038/nbt1285...
+  ✓ Baker et al.: Adaptation to culture of human embryonic stem cells and onco...
+[10/32] Checking 10.1038/nsb1004...
+  ✓ Lukavsky et al.: Structure of HCV IRES domain II determined by NMR...
+[11/32] Checking 10.1038/s41467-020-18676-4...
+  ✗ DOI not found or inaccessible
+[12/32] Checking 10.1038/s41593-017-0022-z...
+  ✓ Apicco et al.: Reducing the RNA binding protein TIA1 protects against tau-m...
+[13/32] Checking 10.1056/NEJMoa1702752...
+  ✓ Finkel et al.: Nusinersen versus Sham Control in Infantile-Onset Spinal Mus...
+[14/32] Checking 10.1073/pnas.0401799101...
+  ✓ Mathews et al.: Incorporating chemical modification constraints into a dynam...
+[15/32] Checking 10.1073/pnas.89.11.5171...
+  ✓ Cozens et al.: Characterization of immortal cystic fibrosis tracheobronchia...
+[16/32] Checking 10.1073/pnas.96.10.5598...
+  ✓ D’Souza et al.: Missense and silent tau gene mutations cause frontotemporal ...
+[17/32] Checking 10.1073/pnas.96.14.8229...
+  ✓ Varani et al.: Structure of tau exon 10 splicing regulatory element RNA and...
+[18/32] Checking 10.1074/jbc.274.21.15134...
+  ✓ Grover et al.: 5′ Splice Site Mutations in tau Associated with the Inherite...
+[19/32] Checking 10.1074/jbc.AC120.013449...
+  ✓ Kelly et al.: Structural and functional conservation of the programmed −1 ...
+[20/32] Checking 10.1093/bioinformatics/btm223...
+  ✓ Andronescu et al.: Efficient parameter estimation for RNA secondary structure p...
+[21/32] Checking 10.1093/nar/29.10.2135...
+  ✓ Gorodkin, J.: Discovering common stem-loop motifs in unaligned RNA sequenc...
+[22/32] Checking 10.1093/nar/gkae1023...
+  ✓ Ontiveros-Palacios et al.: Rfam 15: RNA families database in 2025...
+[23/32] Checking 10.1126/sciadv.abf7172...
+  ✗ DOI not found or inaccessible
+[24/32] Checking 10.1126/science.2475911...
+  ✓ Riordan et al.: Identification of the Cystic Fibrosis Gene: Cloning and Char...
+[25/32] Checking 10.1126/science.abf3546...
+  ✓ Bhatt et al.: Structural basis of ribosomal frameshifting during translati...
+[26/32] Checking 10.1126/scitranslmed.aao7560...
+  ✗ DOI not found or inaccessible
+[27/32] Checking 10.1128/JVI.73.2.1165-1174.1999...
+  ✓ Honda et al.: A Phylogenetically Conserved Stem-Loop Structure at the 5′ B...
+[28/32] Checking 10.1128/MCB.26.4.1333-1346.2006...
+  ✓ Singh et al.: Splicing of a Critical Exon of Human
+                    <i>...
+[29/32] Checking 10.1186/1748-7188-6-26...
+  ✓ Lorenz et al.: ViennaRNA Package 2.0...
+[30/32] Checking 10.1186/s13059-017-1382-0...
+  ✓ Wolf et al.: SCANPY: large-scale single-cell gene expression data analysi...
+[31/32] Checking 10.1261/rna.053694.115...
+  ✓ Sloma et al.: Exact calculation of loop formation probability identifies f...
+[32/32] Checking 10.5281/zenodo.4430150...
+  ✓ (not available): (DataCite/Zenodo - redirect OK)...
 
-DOI: 10.1016/0888-7543(91)90503-7
-File: NOTES.md
-Status: VALID
-Title: Genomic DNA sequence of the cystic fibrosis transmembrane conductance regulator (CFTR) gene
-Authors: Zielenski et al.
+======================================================================
+SUMMARY
+======================================================================
+Total DOIs: 32
+Valid: 28
+Failed: 4
 
-DOI: 10.1038/31508
-File: NOTES.md
-Status: VALID
-Title: Association of missense and 5′-splice-site mutations in tau  with the inherited dementia FTDP-17
-Authors: Hutton et al.
+Results written to benchmarks/outputs/doi_check.txt
 
-DOI: 10.1038/nsb1004
-File: NOTES.md
-Status: VALID
-Title: Structure of HCV IRES domain II determined by NMR
-Authors: Lukavsky et al.
-
-DOI: 10.1056/NEJMoa1702752
-File: BENCHMARK.md
-Status: VALID
-Title: Nusinersen versus Sham Control in Infantile-Onset Spinal Muscular Atrophy
-Authors: Finkel et al.
-
-DOI: 10.1073/pnas.0401799101
-File: BENCHMARK.md
-Status: VALID
-Title: Incorporating chemical modification constraints into a dynamic programming algorithm for prediction of RNA secondary structure
-Authors: Mathews et al.
-
-DOI: 10.1073/pnas.96.14.8229
-File: NOTES.md
-Status: VALID
-Title: Structure of tau exon 10 splicing regulatory element RNA and destabilization by mutations of frontotemporal dementia and parkinsonism linked to chromosome 17
-Authors: Varani et al.
-
-DOI: 10.1074/jbc.274.21.15134
-File: NOTES.md
-Status: VALID
-Title: 5′ Splice Site Mutations in tau Associated with the Inherited Dementia FTDP-17 Affect a Stem-Loop Structure That Regulates Alternative Splicing of Exon 10
-Authors: Grover et al.
-
-DOI: 10.1074/jbc.AC120.013449
-File: NOTES.md
-Status: VALID
-Title: Structural and functional conservation of the programmed −1 ribosomal frameshift signal of SARS coronavirus 2 (SARS-CoV-2)
-Authors: Kelly et al.
-
-DOI: 10.1093/bioinformatics/btm223
-File: benchmarks/outputs/layer5/README.md
-Status: VALID
-Title: Efficient parameter estimation for RNA secondary structure prediction
-Authors: Andronescu et al.
-
-DOI: 10.1093/hmg/10.10.1029
-File: BENCHMARK.md
-Status: VALID
-Title: Contrasting effects on HIF-1alpha regulation by disease-causing pVHL mutations correlate with patterns of tumourigenesis in von Hippel-Lindau disease
-Authors: Clifford, S. C.
-
-DOI: 10.1093/nar/29.10.2135
-File: docs/benchmark/layer1_scoring.md
-Status: VALID
-Title: Discovering common stem-loop motifs in unaligned RNA sequences
-Authors: Gorodkin, J.
-
-DOI: 10.1093/nar/gkae1023
-File: docs/benchmark/layer2_accuracy.md
-Status: VALID
-Title: Rfam 15: RNA families database in 2025
-Authors: Ontiveros-Palacios et al.
-
-DOI: 10.1126/science.2475911
-File: NOTES.md
-Status: VALID
-Title: Identification of the Cystic Fibrosis Gene: Cloning and Characterization of Complementary DNA
-Authors: Riordan et al.
-
-DOI: 10.1126/science.abf3546
-File: NOTES.md
-Status: VALID
+❌ Failed DOIs:
+  - 10.1038/11701 (in docs/benchmark/impact.md): DOI not found or inaccessible
+  - 10.1038/s41467-020-18676-4 (in docs/benchmark/impact.md): DOI not found or inaccessible
+  - 10.1126/sciadv.abf7172 (in docs/benchmark/impact.md): DOI not found or inaccessible
+  - 10.1126/scitranslmed.aao7560 (in docs/benchmark/impact.md): DOI not found or inaccessible
+VALID
 Title: Structural basis of ribosomal frameshifting during translation of the SARS-CoV-2 RNA genome
 Authors: Bhatt et al.
+
+DOI: 10.1126/scitranslmed.aao7560
+File: docs/benchmark/impact.md
+Status: FAILED
+Error: DOI not found or inaccessible
 
 DOI: 10.1128/JVI.73.2.1165-1174.1999
 File: NOTES.md
@@ -111,14 +108,8 @@ Title: Splicing of a Critical Exon of Human
                     Is Regulated by a Unique Silencer Element Located in the Last Intron
 Authors: Singh et al.
 
-DOI: 10.1152/physrev.00025.2017
-File: BENCHMARK.md
-Status: VALID
-Title: Intracellular cAMP Sensor EPAC: Physiology, Pathophysiology, and Therapeutics Development
-Authors: Robichaux et al.
-
 DOI: 10.1186/1748-7188-6-26
-File: BENCHMARK.md
+File: NOTES.md
 Status: VALID
 Title: ViennaRNA Package 2.0
 Authors: Lorenz et al.
@@ -142,6 +133,6 @@ Title: (DataCite/Zenodo - redirect OK)
 Authors: (not available)
 
 ======================================================================
-Total DOIs: 23
-Valid: 23
-Failed: 0
+Total DOIs: 32
+Valid: 28
+Failed: 4

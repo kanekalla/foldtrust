@@ -1,10 +1,7 @@
 """Test benchmark all command."""
 
 import json
-from pathlib import Path
-from unittest.mock import MagicMock, patch
-
-import pytest
+from unittest.mock import patch
 
 from foldtrust.benchmark.runner import run_all_benchmarks
 
@@ -18,7 +15,7 @@ def test_benchmark_all_dispatches_layers(tmp_path, monkeypatch):
         patch("foldtrust.benchmark.runner.run_layer3_calibration") as mock_layer3,
         patch("foldtrust.benchmark.runner.run_layer4_shape_analysis") as mock_layer4,
         patch("foldtrust.benchmark.runner.run_layer5_analysis") as mock_layer5,
-        patch("foldtrust.benchmark.runner.subprocess.run") as mock_subprocess,
+        patch("foldtrust.benchmark.runner.subprocess.run"),
         patch(
             "foldtrust.benchmark.layer5_figures.generate_all_layer5_figures"
         ) as mock_layer5_figures,

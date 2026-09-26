@@ -113,12 +113,8 @@ def test_unpaired_prob_sum_constraint():
 
     for i in range(1, n + 1):
         # Sum all pairing probabilities for position i
-        paired_prob = sum(
-            bpp[min(i, j)][max(i, j)] for j in range(1, n + 1) if i != j
-        )
+        paired_prob = sum(bpp[min(i, j)][max(i, j)] for j in range(1, n + 1) if i != j)
         total = unpaired[i - 1] + paired_prob
 
         # Should sum to 1 (within numerical precision)
-        assert abs(total - 1.0) < 1e-6, (
-            f"Position {i}: unpaired + paired = {total:.10f} != 1.0"
-        )
+        assert abs(total - 1.0) < 1e-6, f"Position {i}: unpaired + paired = {total:.10f} != 1.0"
