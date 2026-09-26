@@ -120,9 +120,7 @@ def check_author_match(first_author_family: str, context: str) -> bool:
     first_author_normalized = normalize_name(first_author_family)
 
     # For compound surnames (e.g., "Ontiveros-Palacios"), check each part separately
-    first_author_parts = [
-        p for p in re.split(r"[-\s]", first_author_family.lower()) if len(p) > 2
-    ]
+    first_author_parts = [p for p in re.split(r"[-\s]", first_author_family.lower()) if len(p) > 2]
 
     for candidate in author_candidates:
         candidate_normalized = normalize_name(candidate)
@@ -148,9 +146,6 @@ def check_doi(doi: str, context: str = "") -> Dict:
         "authors": None,
         "first_author_family": None,
     }
-
-    # Skip author checks for DataCite DOIs (10.5281/*)
-    is_datacite = doi.startswith("10.5281/")
 
     # Try Crossref first
     metadata = query_crossref(doi)

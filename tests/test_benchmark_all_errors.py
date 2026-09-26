@@ -3,8 +3,6 @@
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
-import pytest
-
 from foldtrust.benchmark.runner import run_all_benchmarks
 
 
